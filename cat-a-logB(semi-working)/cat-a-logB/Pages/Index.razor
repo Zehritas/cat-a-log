@@ -65,6 +65,15 @@
 
     private async Task AddTask()
     {
+        if (string.IsNullOrWhiteSpace(newTask.Name))
+        {
+            return; 
+        }
+        if (newTask.StartDate >= newTask.EndDate)
+        {
+    
+                return; 
+        }
 
         var newTaskData = new GanttData
             {
