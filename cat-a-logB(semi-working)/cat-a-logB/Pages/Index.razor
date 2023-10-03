@@ -13,13 +13,26 @@
     }
     else
     {
-        <ApexChart @ref=chart TItem="GanttData" Title="Projects" Options="options" XAxisType="XAxisType.Datetime">
+        <ApexChart OnClick=OnClick @ref=chart TItem="GanttData" Title="Projects" Options="options" XAxisType="XAxisType.Datetime">
             <ApexRangeSeries TItem="GanttData" Items="project" XValue="@(e => e.Name)"
                 YMinValue="@(e => e.StartDate.ToUnixTimeMilliseconds())"
                 YMaxValue="@(e => e.EndDate.ToUnixTimeMilliseconds())" />
         </ApexChart>
     }
 </DemoContainer>
+
+@if (selectedData != null && selectedData.DataPoint != null)
+{
+    <Alert>
+        <h3>You clicked @selectedData.DataPoint.X</h3>
+    </Alert>
+}
+else if (selectedData != null)
+{
+    <Alert>
+        <h3>You clicked the chart but not a data point</h3>
+    </Alert>
+}
 
 <form>
     <label for="taskName">Task Name:</label>
@@ -39,6 +52,8 @@
     private GanttData newTask = new GanttData();
     private List<GanttData> project;
     private ApexChartOptions<GanttData> options;
+
+    private SelectedData<GanttData> selectedData;
 
     protected override async Task OnInitializedAsync()
     {
@@ -77,9 +92,16 @@
         project.Add(newTaskData);
 
 
-        await chart.RenderAsync();
+        await chart.UpdateSeriesAsync();
         StateHasChanged();
     }
+
+    private void OnClick(SelectedData<GanttData> data)
+    {
+        selectedData = data;
+
+    }
+
 
 
 }
