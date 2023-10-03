@@ -1,0 +1,57 @@
+is_global = true
+build_property.TargetFramework = net6.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = cat_a_log
+build_property.RootNamespace = cat_a_log
+build_property.ProjectDir = C:\Users\Marijonas\source\repos\cat-a-log\
+build_property.RazorLangVersion = 6.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = C:\Users\Marijonas\source\repos\cat-a-log
+build_property._RazorSourceGeneratorDebug = 
+
+[C:/Users/Marijonas/source/repos/cat-a-log/cat-a-logB/App.razor]
+build_metadata.AdditionalFiles.TargetPath = Y2F0LWEtbG9nQlxBcHAucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Marijonas/source/repos/cat-a-log/cat-a-logB/Pages/Counter.razor]
+build_metadata.AdditionalFiles.TargetPath = Y2F0LWEtbG9nQlxQYWdlc1xDb3VudGVyLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Marijonas/source/repos/cat-a-log/cat-a-logB/Pages/FetchData.razor]
+build_metadata.AdditionalFiles.TargetPath = Y2F0LWEtbG9nQlxQYWdlc1xGZXRjaERhdGEucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Marijonas/source/repos/cat-a-log/cat-a-logB/Pages/Index.razor]
+build_metadata.AdditionalFiles.TargetPath = Y2F0LWEtbG9nQlxQYWdlc1xJbmRleC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Marijonas/source/repos/cat-a-log/cat-a-logB/Shared/SurveyPrompt.razor]
+build_metadata.AdditionalFiles.TargetPath = Y2F0LWEtbG9nQlxTaGFyZWRcU3VydmV5UHJvbXB0LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Marijonas/source/repos/cat-a-log/cat-a-logB/_Imports.razor]
+build_metadata.AdditionalFiles.TargetPath = Y2F0LWEtbG9nQlxfSW1wb3J0cy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Marijonas/source/repos/cat-a-log/cat-a-logB/Shared/MainLayout.razor]
+build_metadata.AdditionalFiles.TargetPath = Y2F0LWEtbG9nQlxTaGFyZWRcTWFpbkxheW91dC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-asl0f2tzzw
+
+[C:/Users/Marijonas/source/repos/cat-a-log/cat-a-logB/Shared/NavMenu.razor]
+build_metadata.AdditionalFiles.TargetPath = Y2F0LWEtbG9nQlxTaGFyZWRcTmF2TWVudS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-ey42m4lx3n
+
+[C:/Users/Marijonas/source/repos/cat-a-log/cat-a-logB/Pages/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Y2F0LWEtbG9nQlxQYWdlc1xFcnJvci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Marijonas/source/repos/cat-a-log/cat-a-logB/Pages/_Host.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Y2F0LWEtbG9nQlxQYWdlc1xfSG9zdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 

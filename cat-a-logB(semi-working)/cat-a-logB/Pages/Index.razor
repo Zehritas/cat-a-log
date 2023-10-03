@@ -1,11 +1,11 @@
 ﻿@page "/";
-@using cat_a_logB; 
-@using ApexCharts; 
+@using cat_a_logB;
+@using ApexCharts;
 
-<PageTitle>Index</PageTitle>
+<PageTitle>Gantt Chart</PageTitle>
 
 <DemoContainer>
-    @if (projects == null)
+    @if (project == null)
     {
         <div class="text-center text-muted" style="min-height: 300px">
             <h3>Loading chart<span class="animated-dots"></span></h3>
@@ -13,10 +13,10 @@
     }
     else
     {
-        <ApexChart TItem="GanttData" Title="Projects" Options="options" XAxisType="XAxisType.Datetime">
-            <ApexRangeSeries TItem="GanttData" Items="projects" XValue="@(e => e.Name)"
-                             YMinValue="@(e => e.StartDate.ToUnixTimeMilliseconds())"
-                             YMaxValue="@(e => e.EndDate.ToUnixTimeMilliseconds())" />
+        <ApexChart @ref=chart TItem="GanttData" Title="Projects" Options="options" XAxisType="XAxisType.Datetime">
+            <ApexRangeSeries TItem="GanttData" Items="project" XValue="@(e => e.Name)"
+                YMinValue="@(e => e.StartDate.ToUnixTimeMilliseconds())"
+                YMaxValue="@(e => e.EndDate.ToUnixTimeMilliseconds())" />
         </ApexChart>
     }
 </DemoContainer>
@@ -35,30 +35,9 @@
 </form>
 
 @code {
+    private ApexChart<GanttData> chart;
     private GanttData newTask = new GanttData();
-    private List<GanttData> tasks = new List<GanttData>();
-
-    private void AddTask()
-    {
-       
-        var newProject = new GanttData
-            {
-                Name = newTask.Name,
-                StartDate = newTask.StartDate,
-                EndDate = newTask.EndDate
-            };
-
-     
-        projects.Add(newProject);
-
-       
-        newTask = new GanttData();
-
-   
-        StateHasChanged();
-    }
-
-    private List<GanttData> projects;
+    private List<GanttData> project;
     private ApexChartOptions<GanttData> options;
 
     protected override async Task OnInitializedAsync()
@@ -76,12 +55,31 @@
                 {
                     X = new TooltipX
                     {
-                        Format = "dd MMM yyyy HH:mm"
+                        Format = "dd MMM yyyy HH:mm",
+
                     }
                 }
             };
-        projects = SampleData.GetProjects();
+        project = SampleData.GetProject();
     }
 
-    
+    private async Task AddTask()
+    {
+
+        var newTaskData = new GanttData
+            {
+                Name = newTask.Name,
+                StartDate = newTask.StartDate,
+                EndDate = newTask.EndDate
+            };
+
+
+        project.Add(newTaskData);
+
+
+        await chart.RenderAsync();
+        StateHasChanged();
+    }
+
+
 }

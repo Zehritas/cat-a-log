@@ -2,7 +2,7 @@
 {
     public class SampleData
     {
-        private static List<GanttData> projects = new List<GanttData>
+        private static List<GanttData> tasks = new List<GanttData>
         {
             new GanttData
             {
@@ -24,14 +24,9 @@
             },
         };
 
-        public static List<GanttData> GetProjects()
+        public static List<GanttData> GetProject()
         {
-            return projects;
-        }
-
-        public static void AddProject(GanttData project)
-        {
-            projects.Add(project);
+            return tasks;
         }
     }
 }
