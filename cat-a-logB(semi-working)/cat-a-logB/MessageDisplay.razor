@@ -1,0 +1,16 @@
+﻿<h3>MessageDisplay</h3>
+
+@if (!string.IsNullOrEmpty(message))
+{
+    <div class="alert alert-@messageType">
+        @message
+    </div>
+}
+
+@code {
+    [Parameter]
+    public string message { get; set; }
+
+    [Parameter]
+    public string messageType { get; set; }
+}
