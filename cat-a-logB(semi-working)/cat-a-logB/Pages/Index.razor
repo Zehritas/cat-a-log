@@ -13,7 +13,8 @@
     }
     else
     {
-        <ApexChart OnClick=OnClick @ref=chart TItem="GanttData" Title="Projects" Options="options" XAxisType="XAxisType.Datetime">
+        <ApexChart OnClick=OnClick @ref=chart TItem="GanttData" Title="Projects" Options="options"
+            XAxisType="XAxisType.Datetime">
             <ApexRangeSeries TItem="GanttData" Items="project" XValue="@(e => e.Name)"
                 YMinValue="@(e => e.StartDate.ToUnixTimeMilliseconds())"
                 YMaxValue="@(e => e.EndDate.ToUnixTimeMilliseconds())" />
@@ -26,6 +27,12 @@
     <Alert>
         <h3>You clicked @selectedData.DataPoint.X</h3>
     </Alert>
+    <form>
+        <!-- Buttons for editing tasks -->
+        <button type="button" @onclick="RemoveTask">Remove Task</button>
+        <button type="button" @onclick="EditTaskName">Edit Task Name</button>
+        <button type="button" @onclick="EditTaskTime">Edit Task Time</button>
+    </form>
 }
 else if (selectedData != null)
 {
@@ -33,6 +40,8 @@ else if (selectedData != null)
         <h3>You clicked the chart but not a data point</h3>
     </Alert>
 }
+<br>
+
 
 <form>
     <label for="taskName">Task Name:</label>
@@ -52,8 +61,8 @@ else if (selectedData != null)
     private GanttData newTask = new GanttData();
     private List<GanttData> project;
     private ApexChartOptions<GanttData> options;
-
     private SelectedData<GanttData> selectedData;
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -70,7 +79,7 @@ else if (selectedData != null)
                 {
                     X = new TooltipX
                     {
-                        Format = "dd MMM yyyy HH:mm",
+                        Format = "dd MMM yyyy",
 
                     }
                 }
@@ -82,12 +91,12 @@ else if (selectedData != null)
     {
         if (string.IsNullOrWhiteSpace(newTask.Name))
         {
-            return; 
+            return;
         }
         if (newTask.StartDate >= newTask.EndDate)
         {
-    
-                return; 
+
+            return;
         }
 
         var newTaskData = new GanttData
@@ -109,6 +118,31 @@ else if (selectedData != null)
     {
         selectedData = data;
 
+    }
+    private async Task RemoveTask()
+    {
+        if (selectedData != null && selectedData.DataPoint != null)
+        {
+            // @* project.Remove(selectedData.DataPoint); *@
+            selectedData = null; // Reset selected data after removal
+        }
+        await chart.UpdateSeriesAsync();
+        StateHasChanged();
+    }
+
+    private void EditTaskName()
+    {
+        // Add logic to edit the task name
+        // For example: selectedData.DataPoint.Name = "New Task Name";
+        StateHasChanged();
+    }
+
+    private void EditTaskTime()
+    {
+        // Add logic to edit the task time
+        // For example: selectedData.DataPoint.StartDate = newStartDate;
+        // selectedData.DataPoint.EndDate = newEndDate;
+        StateHasChanged();
     }
 
 
