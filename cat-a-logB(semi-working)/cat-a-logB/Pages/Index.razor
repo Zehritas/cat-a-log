@@ -5,6 +5,7 @@
 <PageTitle>Gantt Chart</PageTitle>
 
 <DemoContainer>
+
     @if (project == null)
     {
         <div class="text-center text-muted" style="min-height: 300px">
@@ -20,6 +21,7 @@
                 YMaxValue="@(e => e.EndDate.ToUnixTimeMilliseconds())" />
         </ApexChart>
     }
+
 </DemoContainer>
 
 @if (selectedData != null && selectedData.DataPoint != null)
@@ -64,19 +66,31 @@ else if (selectedData != null)
 <h3> Add a new task: </h3>
 
 <form>
-    <label for="taskName">Task Name:</label>
-    <input type="text" id="taskName" @bind="newTask.Name" />
+    <div class="form-group">
+        <label for="taskName">Task Name:</label>
+        <input class="form-control" type="text" id="taskName" @bind="newTask.Name" />
+    </div>
 
-    <label for="startDate">Start Date:</label>
-    <input type="date" id="startDate" @bind="newTask.StartDate" />
+    <div class="form-group">
+        <label for="startDate">Start Date:</label>
+        <input class="form-control" type="date" id="startDate" @bind="newTask.StartDate" />
+    </div>
 
-    <label for="endDate">End Date:</label>
-    <input type="date" id="endDate" @bind="newTask.EndDate" />
+    <div class="form-group">
+        <label for="endDate">End Date:</label>
+        <input class="form-control" type="date" id="endDate" @bind="newTask.EndDate" />
+    </div>
 
-    <button type="button" @onclick="AddTask">Add Task</button>
+    <button class="btn btn-primary" type="button" @onclick="AddTask">Add Task</button>
 </form>
 
+@if (!string.IsNullOrWhiteSpace(errorMessage))
+{
+    <div class="alert alert-danger mt-2">@errorMessage</div>
+}
+
 @code {
+    private string errorMessage = "";
     private ApexChart<GanttData> chart;
     private GanttData newTask = new GanttData();
     private List<GanttData> project;
@@ -91,23 +105,22 @@ else if (selectedData != null)
     protected override async Task OnInitializedAsync()
     {
         options = new ApexChartOptions<GanttData>
+        {
+            PlotOptions = new PlotOptions
             {
-                PlotOptions = new PlotOptions
+                Bar = new PlotOptionsBar
                 {
-                    Bar = new PlotOptionsBar
-                    {
-                        Horizontal = true
-                    }
-                },
-                Tooltip = new ApexCharts.Tooltip
-                {
-                    X = new TooltipX
-                    {
-                        Format = "dd MMM yyyy",
-
-                    }
+                    Horizontal = true
                 }
-            };
+            },
+            Tooltip = new ApexCharts.Tooltip
+            {
+                X = new TooltipX
+                {
+                    Format = "dd MMM yyyy HH:mm",
+                }
+            }
+        };
         project = SampleData.GetProject();
     }
 
@@ -115,23 +128,26 @@ else if (selectedData != null)
     {
         if (string.IsNullOrWhiteSpace(newTask.Name))
         {
+            errorMessage = "Task name is required.";
             return;
         }
+
         if (newTask.StartDate >= newTask.EndDate)
         {
-
+            errorMessage = "End date must be greater than start date.";
             return;
         }
-        var newTaskData = new GanttData
-            {
-                Name = newTask.Name,
-                StartDate = newTask.StartDate,
-                EndDate = newTask.EndDate
-            };
 
+        errorMessage = "";
+
+        var newTaskData = new GanttData
+        {
+            Name = newTask.Name,
+            StartDate = newTask.StartDate,
+            EndDate = newTask.EndDate
+        };
 
         project.Add(newTaskData);
-
 
         await chart.UpdateSeriesAsync();
         StateHasChanged();
@@ -140,7 +156,6 @@ else if (selectedData != null)
     private void OnClick(SelectedData<GanttData> data)
     {
         selectedData = data;
-
     }
     private async Task RemoveTask()
     {
@@ -248,8 +263,5 @@ else if (selectedData != null)
         showEditTaskNameInput = false;
         showEditTaskTimeInput = !showEditTaskTimeInput;
     }
-
-
-
 
 }
