@@ -14,7 +14,8 @@
     }
     else
     {
-        <ApexChart OnClick=OnClick @ref=chart TItem="GanttData" Title="Projects" Options="options" XAxisType="XAxisType.Datetime">
+        <ApexChart OnClick=OnClick @ref=chart TItem="GanttData" Title="Projects" Options="options"
+            XAxisType="XAxisType.Datetime">
             <ApexRangeSeries TItem="GanttData" Items="project" XValue="@(e => e.Name)"
                 YMinValue="@(e => e.StartDate.ToUnixTimeMilliseconds())"
                 YMaxValue="@(e => e.EndDate.ToUnixTimeMilliseconds())" />
@@ -26,8 +27,32 @@
 @if (selectedData != null && selectedData.DataPoint != null)
 {
     <Alert>
-        <h3>You clicked @selectedData.DataPoint.X</h3>
+        <h3>Edit: @selectedData.DataPoint.X</h3>
     </Alert>
+    <form>
+        <!-- Buttons for editing tasks -->
+        <button type="button" @onclick="RemoveTask">Remove Task</button>
+        <button type="button" @onclick="ToggleEditTaskName">Edit Task Name</button>
+        <button type="button" @onclick="ToggleEditTaskTime">Edit Task Time</button>
+    </form>
+    @if (showEditTaskNameInput)
+    {
+        <form>
+            <label for="newTaskName">New Task Name:</label>
+            <input type="text" id="newTaskName" @bind="newTaskName" />
+            <button type="button" @onclick="UpdateTaskName">Update Task Name</button>
+        </form>
+    }
+    @if (showEditTaskTimeInput)
+    {
+        <form>
+            <label for="startDate">Start Date:</label>
+            <input type="date" id="newTaskStartTime" @bind="newTaskStartTime" />
+            <label for="endDate">End Date:</label>
+            <input type="date" id="newTaskEndTime" @bind="newTaskEndTime" />
+            <button type="button" @onclick="UpdateTaskTime">Update Task Time</button>
+        </form>
+    }
 }
 else if (selectedData != null)
 {
@@ -35,6 +60,10 @@ else if (selectedData != null)
         <h3>You clicked the chart but not a data point</h3>
     </Alert>
 }
+<br>
+
+
+<h3> Add a new task: </h3>
 
 <form>
     <div class="form-group">
@@ -66,8 +95,12 @@ else if (selectedData != null)
     private GanttData newTask = new GanttData();
     private List<GanttData> project;
     private ApexChartOptions<GanttData> options;
-
     private SelectedData<GanttData> selectedData;
+    private bool showEditTaskNameInput = false;
+    private bool showEditTaskTimeInput = false;
+    private string newTaskName;
+    private DateTime newTaskStartTime = DateTime.Today;
+    private DateTime newTaskEndTime = DateTime.Today.AddDays(1);
 
     protected override async Task OnInitializedAsync()
     {
@@ -124,4 +157,111 @@ else if (selectedData != null)
     {
         selectedData = data;
     }
+    private async Task RemoveTask()
+    {
+        if (selectedData != null && selectedData.DataPoint != null)
+        {
+            if (selectedData.DataPoint.X is string selectedTaskName)
+            {
+                // Use LINQ to create a new list of tasks excluding the one with the matching name
+                project = project.Where(task => task.Name != selectedTaskName).ToList(); // LINQ EXPRESSION
+            }
+            selectedData = null; // Reset selected data after removal
+        }
+        await chart.UpdateSeriesAsync();
+        StateHasChanged();
+    }
+
+
+
+
+    private async Task EditTaskName(string newTaskName) // Strictly to edit the name and refresh
+    {
+        if (selectedData != null && selectedData.DataPoint != null &&
+        selectedData.DataPoint.X is string selectedTaskName)
+        {
+            GanttData taskToUpdate = project.FirstOrDefault(task => task.Name == selectedTaskName);
+            if (taskToUpdate != null)
+            {
+                taskToUpdate.Name = newTaskName;
+            }
+        }
+
+        await chart.UpdateSeriesAsync();
+        StateHasChanged();
+    }
+
+    private async Task UpdateTaskName() // To do checks wether the input is valid, if yes update the name
+    {
+        if (!string.IsNullOrWhiteSpace(newTaskName))
+        {
+            if (!project.Any(task => task.Name == newTaskName))
+            {
+                await EditTaskName(newTaskName);
+                showEditTaskNameInput = false;
+                newTaskName = string.Empty;
+            }
+            else
+            {
+                // Handle case where the name is already in use
+            }
+        }
+
+        else
+        {
+            // handle case where name is whiteSpace
+        }
+    }
+
+    private void ToggleEditTaskName()
+    {
+        newTaskName = "";
+        showEditTaskTimeInput = false;
+        showEditTaskNameInput = !showEditTaskNameInput;
+    }
+
+    private async Task EditTaskTime(DateTime newStartDate, DateTime newEndDate)
+    {
+        if (selectedData != null && selectedData.DataPoint != null)
+        {
+            if (selectedData.DataPoint.X is string selectedTaskName)
+            {
+                // Find the task in the project list with the matching name and update its StartDate and EndDate properties
+                GanttData taskToUpdate = project.FirstOrDefault(task => task.Name == selectedTaskName);
+                if (taskToUpdate != null)
+                {
+                    taskToUpdate.StartDate = newStartDate;
+                    taskToUpdate.EndDate = newEndDate;
+                }
+            }
+            selectedData = null; // Reset selected data after modification
+        }
+        await chart.UpdateSeriesAsync();
+        StateHasChanged();
+    }
+
+
+    private async Task UpdateTaskTime()
+    {
+        if (newTaskStartTime < newTaskEndTime) // Add a check to ensure the start date is before the end date
+        {
+            await EditTaskTime(newTaskStartTime, newTaskEndTime);
+            showEditTaskTimeInput = false;
+        }
+        else
+        {
+            // Handle case where the start date is not before the end date
+            // You may want to display a message or take appropriate action
+        }
+    }
+
+
+    private void ToggleEditTaskTime()
+    {
+        newTaskStartTime = DateTime.Today;
+        newTaskEndTime = DateTime.Today.AddDays(1);
+        showEditTaskNameInput = false;
+        showEditTaskTimeInput = !showEditTaskTimeInput;
+    }
+
 }
