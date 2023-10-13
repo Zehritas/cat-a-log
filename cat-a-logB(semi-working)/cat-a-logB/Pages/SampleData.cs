@@ -8,7 +8,7 @@
             {
                 Name = "Task 1",
                 StartDate = DateTime.Now.Date.AddDays(-4),
-                EndDate = DateTime.Now.AddDays(-1),
+                EndDate = DateTime.Now.Date.AddDays(1),
                 Phase = GanttData.ProjectPhase.Planning,
                 PointColor = GanttData.GetColorForPhase(GanttData.ProjectPhase.Planning)
             },
@@ -16,7 +16,7 @@
             {
                 Name = "Task 2",
                 StartDate = DateTime.Now.Date.AddDays(-3),
-                EndDate = DateTime.Now.Date.AddHours(2),
+                EndDate = DateTime.Now.Date.AddDays(2),
                 Phase = GanttData.ProjectPhase.Planning,
                 PointColor = GanttData.GetColorForPhase(GanttData.ProjectPhase.Planning)
             },

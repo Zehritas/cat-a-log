@@ -14,11 +14,60 @@
     }
     else
     {
-        <ApexChart OnClick=OnClick @ref=chart TItem="GanttData" Title="Projects" Options="options"
+        <ApexChart OnClick=OnClick @ref=chart TItem="GanttData" Title="Project Gantt chart" Options="options"
             XAxisType="XAxisType.Datetime">
-            <ApexRangeSeries TItem="GanttData" Items="project" XValue="@(e => e.Name)"
-                YMinValue="@(e => e.StartDate.ToUnixTimeMilliseconds())"
-                YMaxValue="@(e => e.EndDate.ToUnixTimeMilliseconds())" PointColor="e=> e.PointColor" />
+
+            <ApexPointTooltip>
+
+                <div class="m-2">
+                    @{
+                        var point = (ListPoint<GanttData>)context.DataPoint;
+
+                        <h4>@point.X</h4>
+                        <span>Deadline: @point.Items.First().EndDate</span>
+                        <br>
+                        <span>Phase: @point.Items.First().Phase</span>
+
+
+                    }
+                </div>
+
+
+                @*<div class="p-1">
+
+            <h3>@context.DataPoint.X</h3>
+            <Row class="mb-2">
+            <RowCol Auto>
+            <Badge style="background-color:#FF0000">Gross Value</Badge>
+            </RowCol>
+            <RowCol Auto>
+            <span class="@(context.SeriesIndex == 0 ? "strong": "")">
+            @context.DataPoint.Items.Sum(e => e.GrossValue).ToString("n0")
+            </span>
+            </RowCol>
+            </Row>
+
+            <Row>
+            <RowCol Auto>
+            <Badge style="background-color:#000080">Net Value</Badge>
+            </RowCol>
+            <RowCol Auto>
+            <span class="@(context.SeriesIndex == 1 ? "strong": "")">
+            @context.DataPoint.Items.Sum(e => e.NetValue).ToString("n0")
+            </span>
+            </RowCol>
+            </Row>
+
+            </div> *@
+            </ApexPointTooltip>
+
+            <ChildContent>
+                <ApexRangeSeries TItem="GanttData" Items="project" XValue="@(e => e.Name)"
+                    YMinValue="@(e => e.StartDate.ToUnixTimeMilliseconds())"
+                    YMaxValue="@(e => e.EndDate.ToUnixTimeMilliseconds())" PointColor="e=> e.PointColor" />
+            </ChildContent>
+
+
         </ApexChart>
     }
 
