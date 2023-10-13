@@ -24,41 +24,13 @@
                         var point = (ListPoint<GanttData>)context.DataPoint;
 
                         <h4>@point.X</h4>
-                        <span>Deadline: @point.Items.First().EndDate</span>
+                        <span>Deadline: @point.Items.First().EndDate.ToShortDateString()</span>
                         <br>
                         <span>Phase: @point.Items.First().Phase</span>
 
 
                     }
                 </div>
-
-
-                @*<div class="p-1">
-
-            <h3>@context.DataPoint.X</h3>
-            <Row class="mb-2">
-            <RowCol Auto>
-            <Badge style="background-color:#FF0000">Gross Value</Badge>
-            </RowCol>
-            <RowCol Auto>
-            <span class="@(context.SeriesIndex == 0 ? "strong": "")">
-            @context.DataPoint.Items.Sum(e => e.GrossValue).ToString("n0")
-            </span>
-            </RowCol>
-            </Row>
-
-            <Row>
-            <RowCol Auto>
-            <Badge style="background-color:#000080">Net Value</Badge>
-            </RowCol>
-            <RowCol Auto>
-            <span class="@(context.SeriesIndex == 1 ? "strong": "")">
-            @context.DataPoint.Items.Sum(e => e.NetValue).ToString("n0")
-            </span>
-            </RowCol>
-            </Row>
-
-            </div> *@
             </ApexPointTooltip>
 
             <ChildContent>
@@ -110,6 +82,17 @@
             <button type="button" class="btn btn-success" @onclick="UpdateTaskTime">Update Task Time</button>
         </form>
     }
+
+    <div class="mt-4">
+        <h4>Task Information:</h4>
+        <ul class="list-group">
+            <li class="list-group-item">Task Name: @selectedData.DataPoint.Items.First().Name</li>
+            <li class="list-group-item">Start Date: @selectedData.DataPoint.Items.First().StartDate.ToShortDateString()</li>
+            <li class="list-group-item">End Date: @selectedData.DataPoint.Items.First().EndDate.ToShortDateString()</li>
+            <li class="list-group-item">Phase: @selectedData.DataPoint.Items.First().Phase</li>
+        </ul>
+    </div>
+
 }
 else if (selectedData != null)
 {
