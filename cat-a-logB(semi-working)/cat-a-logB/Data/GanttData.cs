@@ -5,21 +5,23 @@
     public DateTime EndDate { get; set; }
     public string PointColor { get; set; }
 
-    public enum ProjectPhase // enum reqioement, might change to const strings
+    public enum ProjectPhase
     {
         Planning,
         Execution,
         Testing,
-        Deployment,
+        Deployment
         // Add more phases as needed
     }
 
     public ProjectPhase Phase { get; set; }
+    public int Progress { get; set; } // Add a Progress property
 
     public GanttData()
     {
         StartDate = DateTime.Now.Date;
         EndDate = DateTime.Now.Date;
+        Progress = 0; 
     }
 
     public static string GetColorForPhase(ProjectPhase phase)
@@ -42,5 +44,4 @@
                 return "#000000";
         }
     }
-
 }
