@@ -2,45 +2,60 @@
 {
     public class SampleData
     {
+        private static List<ProjectTeam> teams = new List<ProjectTeam>
+        {
+            new ProjectTeam("#3db821", "Team A"),
+            new ProjectTeam("#b8212b", "Team B"),
+            new ProjectTeam("#2188b8", "Team C")
+        };
+
         private static List<GanttData> tasks = new List<GanttData>
         {
-            new GanttData
-            {
-                Name = "Task 1",
-                StartDate = DateTime.Now.Date.AddDays(-4),
-                EndDate = DateTime.Now.Date.AddDays(1),
-                Phase = GanttData.ProjectPhase.Planning,
-                PointColor = GanttData.GetColorForPhase(GanttData.ProjectPhase.Planning)
-            },
-            new GanttData
-            {
-                Name = "Task 2",
-                StartDate = DateTime.Now.Date.AddDays(-3),
-                EndDate = DateTime.Now.Date.AddDays(2),
-                Phase = GanttData.ProjectPhase.Planning,
-                PointColor = GanttData.GetColorForPhase(GanttData.ProjectPhase.Planning)
-            },
-            new GanttData
-            {
-                Name = "Task 3",
-                StartDate = DateTime.Now.Date.AddDays(-2),
-                EndDate = DateTime.Now.Date.AddDays(5),
-                Phase = GanttData.ProjectPhase.Execution,
-                PointColor = GanttData.GetColorForPhase(GanttData.ProjectPhase.Execution)
-            },
-            new GanttData
-            {
-                Name = "Task 4",
-                StartDate = DateTime.Now.Date.AddDays(-1),
-                EndDate = DateTime.Now.Date.AddDays(8),
-                Phase = GanttData.ProjectPhase.Execution,
-                PointColor = GanttData.GetColorForPhase(GanttData.ProjectPhase.Execution)
-            },
+            new GanttData(
+                "Task 1",
+                DateTime.Now.Date.AddDays(-4),
+                DateTime.Now.Date.AddDays(1),
+                teams[0], // Assigning Task 1 to Team A
+                0
+            ),
+            new GanttData(
+                "Task 2",
+                DateTime.Now.Date.AddDays(-3),
+                DateTime.Now.Date.AddDays(2),
+                teams[0], // Assigning Task 1 to Team A
+                0
+            ),
+            new GanttData(
+                "Task 3",
+                DateTime.Now.Date.AddDays(-2),
+                DateTime.Now.Date.AddDays(5),
+                teams[1], // Assigning Task 1 to Team A
+                0
+            ),
+            new GanttData(
+                "Task 4",
+                DateTime.Now.Date.AddDays(-1),
+                DateTime.Now.Date.AddDays(8),
+                teams[1], // Assigning Task 1 to Team A
+                0
+            ),
+            new GanttData(
+                "Task 5",
+                DateTime.Now.Date.AddDays(-2),
+                DateTime.Now.Date.AddDays(10),
+                teams[2], // Assigning Task 1 to Team A
+                0
+            )
         };
 
         public static List<GanttData> GetProject()
         {
             return tasks;
+        }
+
+        public static List<ProjectTeam> GetTeams()
+        {
+            return teams;
         }
     }
 }
