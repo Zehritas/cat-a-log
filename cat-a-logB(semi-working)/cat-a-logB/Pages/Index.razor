@@ -59,6 +59,7 @@
         <button type="button" class="btn btn-primary" @onclick="RemoveTask">Remove Task</button>
         <button type="button" class="btn btn-primary" @onclick="ToggleEditTaskName">Edit Task Name</button>
         <button type="button" class="btn btn-primary" @onclick="ToggleEditTaskTime">Edit Task Time</button>
+        <button type="button" class="btn btn-primary" @onclick="ToggleEditComments">Comments</button>
 
     </form>
     @if (showEditTaskNameInput)
@@ -102,6 +103,32 @@
             <button type="button" class="btn btn-success" @onclick="() => UpdateProgress(newProgress)">Update Progress</button>
         </form>
     }
+    @if (showEditCommentsModal)
+    {
+        <div class="modal fade show" style="display: block;" tabindex="-1" role="dialog" id="editCommentsModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">@selectedData.DataPoint.Items.First().Name Comments </h5>
+                        <button type="button" class="close" @onclick="CloseEditCommentsModal">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="newComments">Comments:</label>
+                            <textarea class="form-control" id="newComments" @bind="editedComments"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" @onclick="CloseEditCommentsModal">Close</button>
+                        <button type="button" class="btn btn-success" @onclick="UpdateComments">Save Changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-backdrop fade show"></div>
+    }
     
 
     <div class="mt-4">
@@ -140,6 +167,7 @@ else if (selectedData != null)
         <label for="endDate">End Date:</label>
         <input class="form-control" type="date" id="endDate" @bind="newTask.EndDate" />
     </div>
+
     <div class="form-group">
         <label for="taskPhase">Task Phase:</label>
         <select class="form-control" id="taskPhase" @bind="newTask.Phase">
@@ -148,6 +176,11 @@ else if (selectedData != null)
                 <option value="@phase">@phase</option>
             }
         </select>
+    </div>
+
+    <div class="form-group">
+        <label for="comments">Comments:</label>
+        <input class="form-control" id="comments" @bind="newTask.Comments">
     </div>
     <br>
 
@@ -176,6 +209,9 @@ else if (selectedData != null)
     private List<int> progressOptions = new List<int> { 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100 };
     private GanttData selectedTaskForProgress;
     private bool showEditProgressInput = false;
+    private bool showEditCommentsInput = false;
+    private bool showEditCommentsModal = false;
+    private string editedComments;
     
 
     protected override async Task OnInitializedAsync()
@@ -210,7 +246,7 @@ else if (selectedData != null)
 
         if (newTask.StartDate >= newTask.EndDate)
         {
-            errorMessage = "End date must be greater than start date.";
+            errorMessage = "End date must be greater than the start date.";
             return;
         }
 
@@ -222,6 +258,7 @@ else if (selectedData != null)
                 StartDate = newTask.StartDate,
                 EndDate = newTask.EndDate,
                 Phase = newTask.Phase,
+                Comments = newTask.Comments, // Add comments to the new task
                 PointColor = GanttData.GetColorForPhase(newTask.Phase)
             };
 
@@ -331,6 +368,7 @@ else if (selectedData != null)
     {
         newTaskName = "";
         showEditTaskTimeInput = false;
+        showEditCommentsInput = false;
         showEditTaskNameInput = !showEditTaskNameInput;
     }
 
@@ -375,7 +413,41 @@ else if (selectedData != null)
         newTaskStartTime = DateTime.Today;
         newTaskEndTime = DateTime.Today.AddDays(1);
         showEditTaskNameInput = false;
+        showEditCommentsInput = false;
         showEditTaskTimeInput = !showEditTaskTimeInput;
     }
 
+    private void CloseEditCommentsModal()
+    {
+        showEditCommentsModal = false;
+        editedComments = ""; // Clear the edited comments
+    }
+
+    private async Task UpdateComments()
+    {
+        if (selectedData != null && selectedData.DataPoint != null)
+        {
+            if (selectedData.DataPoint.X is string selectedTaskName)
+            {
+                GanttData taskToUpdate = project.FirstOrDefault(task => task.Name == selectedTaskName);
+                if (taskToUpdate != null)
+                {
+                    taskToUpdate.Comments = editedComments;
+                }
+            }
+
+            CloseEditCommentsModal();
+            await chart.UpdateSeriesAsync();
+            StateHasChanged();
+        }
+    }
+
+    private void ToggleEditComments()
+    {
+        editedComments = selectedData.DataPoint.Items.First().Comments; // Initialize the input field with existing comments
+        showEditTaskNameInput = false;
+        showEditTaskTimeInput = false;
+        showEditCommentsInput = false;
+        showEditCommentsModal = true;
+    }
 }

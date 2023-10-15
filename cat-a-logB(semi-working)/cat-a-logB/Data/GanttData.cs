@@ -4,6 +4,7 @@
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
     public string PointColor { get; set; }
+    public string Comments { get; set; }
 
     public enum ProjectPhase
     {

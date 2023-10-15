@@ -10,7 +10,8 @@
                 StartDate = DateTime.Now.Date.AddDays(-4),
                 EndDate = DateTime.Now.Date.AddDays(1),
                 Phase = GanttData.ProjectPhase.Planning,
-                PointColor = GanttData.GetColorForPhase(GanttData.ProjectPhase.Planning)
+                PointColor = GanttData.GetColorForPhase(GanttData.ProjectPhase.Planning),
+                Comments = "Good"
             },
             new GanttData
             {
