@@ -1,6 +1,7 @@
 ﻿@page "/";
 @using cat_a_logB;
 @using ApexCharts;
+@inject cat_a_logB.Pages.SampleData SampleData
 
 <PageTitle>Gantt Chart</PageTitle>
 
@@ -187,6 +188,7 @@ else if (selectedData != null)
 
     protected override async Task OnInitializedAsync()
     {
+
         options = new ApexChartOptions<GanttData>
             {
                 PlotOptions = new PlotOptions
@@ -205,6 +207,7 @@ else if (selectedData != null)
                     }
                 }
             };
+
         project = SampleData.GetProject();
         teams = SampleData.GetTeams();
     }
@@ -224,20 +227,26 @@ else if (selectedData != null)
         }
 
         errorMessage = "";
+        var selectedTeam = teams.FirstOrDefault(t => t.Name == selectedTeamName);
 
-        var newTaskData = new GanttData(
-        newTask.Name,
-        newTask.StartDate,
-        newTask.EndDate,
-        teams.FirstOrDefault(t => t.Name == selectedTeamName),
-        0
-        );
-
-
-        project.Add(newTaskData);
-
-        await chart.UpdateSeriesAsync();
-        StateHasChanged();
+        if (selectedTeam != null)
+        {
+            var newTaskData = new GanttData(
+            newTask.Name,
+            newTask.StartDate,
+            newTask.EndDate,
+            selectedTeam,
+            0
+            );
+            project.Add(newTaskData);
+            await chart.UpdateSeriesAsync();
+            StateHasChanged();
+        }
+        else
+        {
+            // Handle the case where no team with the selected name is found
+            errorMessage = "Selected team not found.";
+        }
     }
 
     private void OnClick(SelectedData<GanttData> data)

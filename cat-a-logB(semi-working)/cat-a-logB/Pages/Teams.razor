@@ -1,18 +1,100 @@
 @page "/teams"
+@inject cat_a_logB.Pages.SampleData SampleData
 
 <PageTitle>Teams</PageTitle>
 
-<h1>Team management</h1>
+<h1 class="mb-4">Team Management</h1>
 
-<p role="status">Current count: @currentCount</p>
+<div class="row">
+   <div class="col-md-6 mb-4">
+      @if (teams != null && teams.Any())
+      {
+         <ul class="list-group">
+            @foreach (var team in teams)
+            {
+               <li class="list-group-item d-flex justify-content-between align-items-center">
+                  <button class="btn btn-link" @onclick="() => ShowTasksForTeam(team)">
+                     @team.Name
+                  </button>
+                  <span style="color: @team.Color;">&#9632;</span>
+               </li>
+            }
+         </ul>
+      }
+      else
+      {
+         <p>No teams found.</p>
+      }
+   </div>
 
-<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+   <div class="col-md-6">
+      <div class="card">
+         <div class="card-body">
+            <h3 class="card-title mb-3">New Team:</h3>
+            <form>
+               <div class="form-group">
+                  <label for="teamName">Team Name:</label>
+                  <input class="form-control" type="text" id="teamName" @bind="newTeam.Name" />
+               </div>
+               <div class="form-group">
+                  <label for="teamColor">Team Color:</label>
+                  <input class="form-control" type="color" id="teamColor" @bind="newTeam.Color" />
+               </div>
+               <br>
+               <button class="btn btn-primary" type="button" @onclick="AddTeam">Add Team</button>
+            </form>
+         </div>
+      </div>
+      <p class="text-danger mt-3">@errorMessage</p>
+   </div>
+</div>
+
+@if (selectedTeam != null && selectedTeam.Tasks != null && selectedTeam.Tasks.Any())
+{
+   <h3>Tasks for @selectedTeam.Name</h3>
+   <ul class="list-group">
+      @foreach (var task in selectedTeam.Tasks)
+      {
+         <li class="list-group-item">
+            @task.Name
+            <!-- Add any other task information you want to display -->
+         </li>
+      }
+   </ul>
+}
+
 
 @code {
-   private int currentCount = 0;
+   private List<ProjectTeam> teams;
+   private List<GanttData> tasks;
+   private ProjectTeam newTeam = new ProjectTeam();
+   private string errorMessage = "";
+   private ProjectTeam selectedTeam;
 
-   private void IncrementCount()
+   protected override async Task OnInitializedAsync()
    {
-      currentCount++;
+      teams = SampleData.GetTeams();
+      tasks = SampleData.GetProject();
+   }
+
+   private async Task AddTeam()
+   {
+      if (string.IsNullOrWhiteSpace(newTeam.Name))
+      {
+         errorMessage = "Team name is required.";
+         return;
+      }
+
+      errorMessage = "";
+
+      teams.Add(newTeam);
+      newTeam = new ProjectTeam(); // Reset the new team object after adding
+      StateHasChanged();
+   }
+
+   private void ShowTasksForTeam(ProjectTeam team)
+   {
+      selectedTeam = team;
+      ProjectTeam.GetTasksForTeam(tasks, team);
    }
 }
