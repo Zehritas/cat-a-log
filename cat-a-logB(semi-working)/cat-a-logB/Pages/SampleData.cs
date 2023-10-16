@@ -4,9 +4,9 @@
     {
         private static List<ProjectTeam> teams = new List<ProjectTeam>
         {
-            new ProjectTeam("#3db821", "Team A"),
-            new ProjectTeam("#b8212b", "Team B"),
-            new ProjectTeam("#2188b8", "Team C")
+            new ProjectTeam("#3db821", "Team A", new List<string> {"Marijonas", "Rytis"}),
+            new ProjectTeam("#b8212b", "Team B", new List<string> {"Jūris", "Aldas"}),
+            new ProjectTeam("#2188b8", "Team C", new List<string> {"Aldas", "Rytis", "Jūris", "Marijonas"})
         };
 
         private static List<GanttData> tasks = new List<GanttData>

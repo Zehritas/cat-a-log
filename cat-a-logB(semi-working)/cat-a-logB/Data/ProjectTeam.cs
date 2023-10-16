@@ -3,6 +3,15 @@ public class ProjectTeam
    public string Color { get; set; }
    public string Name { get; set; }
    public List<GanttData> Tasks { get; set; }
+   public List<String> Members { get; set; }
+
+   public ProjectTeam(string color, string name, List<string> members)
+   {
+      Color = color;
+      Name = name;
+      Tasks = new List<GanttData>();
+      Members = members;
+   }
 
    public ProjectTeam(string color, string name)
    {

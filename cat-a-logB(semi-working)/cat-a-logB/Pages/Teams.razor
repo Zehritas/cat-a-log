@@ -49,19 +49,47 @@
    </div>
 </div>
 
-@if (selectedTeam != null && selectedTeam.Tasks != null && selectedTeam.Tasks.Any())
+@if (selectedTeam != null)
 {
-   <h3>Tasks for @selectedTeam.Name</h3>
-   <ul class="list-group">
-      @foreach (var task in selectedTeam.Tasks)
-      {
-         <li class="list-group-item">
-            @task.Name
-            <!-- Add any other task information you want to display -->
-         </li>
-      }
-   </ul>
+   @if (selectedTeam.Members != null && selectedTeam.Members.Any())
+   {
+      <h3>Team Members for @selectedTeam.Name</h3>
+
+      <ul>
+         @foreach (var member in selectedTeam.Members)
+         {
+            <li>@member</li>
+         }
+      </ul>
+   }
+   else
+   {
+      <h3>@selectedTeam.Name has no members yet</h3>
+   }
+
+   @if (selectedTeam.Tasks != null && selectedTeam.Tasks.Any())
+   {
+      <h3>Tasks for @selectedTeam.Name</h3>
+      <ul class="list-group">
+         @foreach (var task in selectedTeam.Tasks)
+         {
+            <li class="list-group-item">
+               @task.Name
+            </li>
+         }
+      </ul>
+   }
+   else
+   {
+      <p>No tasks found for @selectedTeam.Name</p>
+   }
 }
+else
+{
+   <p>No team selected.</p>
+}
+
+
 
 
 @code {
