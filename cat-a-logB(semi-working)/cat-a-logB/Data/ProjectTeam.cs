@@ -3,7 +3,23 @@ public class ProjectTeam
    public string Color { get; set; }
    public string Name { get; set; }
    public List<GanttData> Tasks { get; set; }
-   public List<String> Members { get; set; }
+
+   private List<string> members;
+   public List<String> Members
+   {
+      get { return members; }
+      set
+      {
+         if (value != null && value.Distinct().Count() == value.Count)
+         {
+            members = value;
+         }
+         else
+         {
+            throw new ArgumentException("Members list must be non-null and contain unique names.");
+         }
+      }
+   }
 
    public ProjectTeam(string color, string name, List<string> members)
    {
