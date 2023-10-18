@@ -22,7 +22,10 @@ public class ProjectTeam
    public ProjectTeam()
    {
    }
-
+   public void LoadTeamTasks(List<GanttData> allTasks)
+   {
+      Tasks = allTasks.Where(task => task.Team.Name == Name).ToList();
+   }
    public static void GetTasksForTeam(List<GanttData> allTasks, ProjectTeam team)
    {
       team.Tasks = allTasks.Where(task => task.Team.Name == team.Name).ToList();
