@@ -294,7 +294,7 @@ else if (selectedData != null)
             }
             else
             {
-                selectedTaskForProgress.PointColor = GanttData.GetColorForPhase(selectedTaskForProgress.Phase);
+                selectedTaskForProgress.PointColor = selectedTaskForProgress.Team.Color;
             }
 
             showEditProgressInput = false;
