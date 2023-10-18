@@ -1,4 +1,4 @@
-﻿public class GanttData
+﻿public class GanttData : IComparable<GanttData>
 {
     public string Name { get; set; }
     public DateTime StartDate { get; set; }
@@ -6,6 +6,10 @@
     public string PointColor { get; set; }
     public ProjectTeam Team { get; set; }
     public int Progress { get; set; } // Add a Progress property
+    public int CompareTo(GanttData other)
+    {
+        return this.Progress.CompareTo(other.Progress);
+    }
 
 
     public GanttData()
@@ -25,25 +29,4 @@
         PointColor = team.Color; // Assuming 'color' is a property of the ProjectTeam class
     }
 
-
-    // public static string GetTeamColor(ProjectTeam Team)
-    // {
-    //     switch (phase)
-    //     {
-    //         case ProjectPhase.Planning:
-    //             return "#3db821";
-
-    //         case ProjectPhase.Execution:
-    //             return "#b8212b";
-
-    //         case ProjectPhase.Testing:
-    //             return "#2188b8";
-
-    //         case ProjectPhase.Deployment:
-    //             return "#2188b8";
-
-    //         default:
-    //             return "#000000";
-    //     }
-    // }
 }
