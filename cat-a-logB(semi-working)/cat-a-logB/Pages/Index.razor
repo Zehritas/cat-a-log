@@ -179,12 +179,11 @@ else if (selectedData != null)
     private DateTime newTaskEndTime = DateTime.Today.AddDays(1);
     private string selectedTeamName;
     private int newProgress = 0;
-    private List<int> progressOptions = new List<int> { 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85,
-90, 95, 100 };
+    private List<int> progressOptions = new List<int> { 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80,
+85, 90, 95, 100 };
     private GanttData selectedTaskForProgress;
     private bool showEditProgressInput = false;
-    private List<string> yellowShades = new List<string> { "#FF9900", "#FFAA00", "#FFB800", "#FFC300", "#FFD700", "#FFFF00"
-};
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -276,40 +275,30 @@ else if (selectedData != null)
                 GanttData taskToUpdate = project.FirstOrDefault(task => task.Name == selectedTaskName);
                 if (taskToUpdate != null)
                 {
-                    showEditProgressInput = true;
+                    showEditProgressInput = !showEditProgressInput;
                     selectedTaskForProgress = taskToUpdate;
                 }
             }
         }
     }
+
     private async Task UpdateProgress(int progressValue)
     {
         if (selectedTaskForProgress != null)
         {
-
             selectedTaskForProgress.Progress = progressValue;
 
-            if (progressValue == 0)
+            if (progressValue == 100)
             {
-
-                selectedTaskForProgress.PointColor = (selectedTaskForProgress.Team.Color);
-            }
-            else if (progressValue >= 20 && progressValue < 100)
-            {
-
-                int colorIndex = (progressValue - 20) / 20;
-                colorIndex = Math.Min(colorIndex, yellowShades.Count - 1);
-                selectedTaskForProgress.PointColor = yellowShades[colorIndex];
+                selectedTaskForProgress.PointColor = "#CCCCCC";
             }
             else
             {
-                selectedTaskForProgress.PointColor = "#FFFF00";
+                selectedTaskForProgress.PointColor = GanttData.GetColorForPhase(selectedTaskForProgress.Phase);
             }
-
 
             showEditProgressInput = false;
             selectedTaskForProgress = null;
-
 
             await chart.UpdateSeriesAsync();
             StateHasChanged();
