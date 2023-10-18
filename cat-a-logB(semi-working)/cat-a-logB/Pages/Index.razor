@@ -1,6 +1,7 @@
 ﻿@page "/";
 @using cat_a_logB;
 @using ApexCharts;
+@inject cat_a_logB.Pages.SampleData SampleData
 
 <PageTitle>Gantt Chart</PageTitle>
 
@@ -26,7 +27,7 @@
                         <h4>@point.X</h4>
                         <span>Deadline: @point.Items.First().EndDate.ToShortDateString()</span>
                         <br>
-                        <span>Phase: @point.Items.First().Phase</span>
+                        <span>Team: @point.Items.First().Team.Name</span>
 
 
                     }
@@ -36,7 +37,8 @@
             <ChildContent>
                 <ApexRangeSeries TItem="GanttData" Items="project" XValue="@(e => e.Name)"
                     YMinValue="@(e => e.StartDate.ToUnixTimeMilliseconds())"
-                    YMaxValue="@(e => e.EndDate.ToUnixTimeMilliseconds())" PointColor="e=> e.PointColor" />
+                    YMaxValue="@(e => e.EndDate.ToUnixTimeMilliseconds())" PointColor="e=> e.PointColor"
+                    OrderByDescending="e => e.Items.First().Team.Name" />
             </ChildContent>
 
 
@@ -102,7 +104,7 @@
             <button type="button" class="btn btn-success" @onclick="() => UpdateProgress(newProgress)">Update Progress</button>
         </form>
     }
-    
+
 
     <div class="mt-4">
         <h4>Task Information:</h4>
@@ -110,7 +112,7 @@
             <li class="list-group-item">Task Name: @selectedData.DataPoint.Items.First().Name</li>
             <li class="list-group-item">Start Date: @selectedData.DataPoint.Items.First().StartDate.ToShortDateString()</li>
             <li class="list-group-item">End Date: @selectedData.DataPoint.Items.First().EndDate.ToShortDateString()</li>
-            <li class="list-group-item">Phase: @selectedData.DataPoint.Items.First().Phase</li>
+            <li class="list-group-item">Team: @selectedData.DataPoint.Items.First().Team.Name</li>
             <li class="list-group-item">Progress: @selectedData.DataPoint.Items.First().Progress%</li>
         </ul>
     </div>
@@ -141,14 +143,16 @@ else if (selectedData != null)
         <input class="form-control" type="date" id="endDate" @bind="newTask.EndDate" />
     </div>
     <div class="form-group">
-        <label for="taskPhase">Task Phase:</label>
-        <select class="form-control" id="taskPhase" @bind="newTask.Phase">
-            @foreach (GanttData.ProjectPhase phase in Enum.GetValues(typeof(GanttData.ProjectPhase)))
+        <label for="taskTeam">Task Team:</label>
+        <select class="form-control" id="taskTeam" @bind="selectedTeamName">
+            @foreach (var team in teams)
             {
-                <option value="@phase">@phase</option>
+                <option value="@team.Name">@team.Name</option>
             }
         </select>
+
     </div>
+
     <br>
 
     <button class="btn btn-primary" type="button" @onclick="AddTask">Add Task</button>
@@ -165,6 +169,7 @@ else if (selectedData != null)
     private ApexChart<GanttData> chart;
     private GanttData newTask = new GanttData();
     private List<GanttData> project;
+    private List<ProjectTeam> teams;
     private ApexChartOptions<GanttData> options;
     private SelectedData<GanttData> selectedData;
     private bool showEditTaskNameInput = false;
@@ -172,21 +177,25 @@ else if (selectedData != null)
     private string newTaskName;
     private DateTime newTaskStartTime = DateTime.Today;
     private DateTime newTaskEndTime = DateTime.Today.AddDays(1);
+    private string selectedTeamName;
     private int newProgress = 0;
-    private List<int> progressOptions = new List<int> { 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100 };
+    private List<int> progressOptions = new List<int> { 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80,
+85, 90, 95, 100 };
     private GanttData selectedTaskForProgress;
     private bool showEditProgressInput = false;
-    
+
 
     protected override async Task OnInitializedAsync()
     {
+
         options = new ApexChartOptions<GanttData>
             {
                 PlotOptions = new PlotOptions
                 {
                     Bar = new PlotOptionsBar
                     {
-                        Horizontal = true
+                        Horizontal = true,
+                        RangeBarGroupRows = false,
                     }
                 },
                 Tooltip = new ApexCharts.Tooltip
@@ -197,7 +206,9 @@ else if (selectedData != null)
                     }
                 }
             };
+
         project = SampleData.GetProject();
+        teams = SampleData.GetTeams();
     }
 
     private async Task AddTask()
@@ -215,20 +226,26 @@ else if (selectedData != null)
         }
 
         errorMessage = "";
+        var selectedTeam = teams.FirstOrDefault(t => t.Name == selectedTeamName);
 
-        var newTaskData = new GanttData
-            {
-                Name = newTask.Name,
-                StartDate = newTask.StartDate,
-                EndDate = newTask.EndDate,
-                Phase = newTask.Phase,
-                PointColor = GanttData.GetColorForPhase(newTask.Phase)
-            };
-
-        project.Add(newTaskData);
-
-        await chart.UpdateSeriesAsync();
-        StateHasChanged();
+        if (selectedTeam != null)
+        {
+            var newTaskData = new GanttData(
+            newTask.Name,
+            newTask.StartDate,
+            newTask.EndDate,
+            selectedTeam,
+            0
+            );
+            project.Add(newTaskData);
+            await chart.UpdateSeriesAsync();
+            StateHasChanged();
+        }
+        else
+        {
+            // Handle the case where no team with the selected name is found
+            errorMessage = "Selected team not found.";
+        }
     }
 
     private void OnClick(SelectedData<GanttData> data)
@@ -273,11 +290,11 @@ else if (selectedData != null)
 
             if (progressValue == 100)
             {
-                selectedTaskForProgress.PointColor = "#CCCCCC"; 
+                selectedTaskForProgress.PointColor = "#CCCCCC";
             }
             else
             {
-                selectedTaskForProgress.PointColor = GanttData.GetColorForPhase(selectedTaskForProgress.Phase);
+                selectedTaskForProgress.PointColor = selectedTaskForProgress.Team.Color;
             }
 
             showEditProgressInput = false;

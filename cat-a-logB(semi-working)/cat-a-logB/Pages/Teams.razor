@@ -1,0 +1,128 @@
+@page "/teams"
+@inject cat_a_logB.Pages.SampleData SampleData
+
+<PageTitle>Teams</PageTitle>
+
+<h1 class="mb-4">Team Management</h1>
+
+<div class="row">
+   <div class="col-md-6 mb-4">
+      @if (teams != null && teams.Any())
+      {
+         <ul class="list-group">
+            @foreach (var team in teams)
+            {
+               <li class="list-group-item d-flex justify-content-between align-items-center">
+                  <button class="btn btn-link" @onclick="() => ShowTasksForTeam(team)">
+                     @team.Name
+                  </button>
+                  <span style="color: @team.Color;">&#9632;</span>
+               </li>
+            }
+         </ul>
+      }
+      else
+      {
+         <p>No teams found.</p>
+      }
+   </div>
+
+   <div class="col-md-6">
+      <div class="card">
+         <div class="card-body">
+            <h3 class="card-title mb-3">New Team:</h3>
+            <form>
+               <div class="form-group">
+                  <label for="teamName">Team Name:</label>
+                  <input class="form-control" type="text" id="teamName" @bind="newTeam.Name" />
+               </div>
+               <div class="form-group">
+                  <label for="teamColor">Team Color:</label>
+                  <input class="form-control" type="color" id="teamColor" @bind="newTeam.Color" />
+               </div>
+               <br>
+               <button class="btn btn-primary" type="button" @onclick="AddTeam">Add Team</button>
+            </form>
+         </div>
+      </div>
+      <p class="text-danger mt-3">@errorMessage</p>
+   </div>
+</div>
+
+@if (selectedTeam != null)
+{
+   @if (selectedTeam.Members != null && selectedTeam.Members.Any())
+   {
+      <h3>Team Members for @selectedTeam.Name</h3>
+
+      <ul>
+         @foreach (var member in selectedTeam.Members)
+         {
+            <li>@member</li>
+         }
+      </ul>
+   }
+   else
+   {
+      <h3>@selectedTeam.Name has no members yet</h3>
+   }
+
+   @if (selectedTeam.Tasks != null && selectedTeam.Tasks.Any())
+   {
+      <h3>Tasks for @selectedTeam.Name</h3>
+      <ul class="list-group">
+         @foreach (var task in selectedTeam.Tasks)
+         {
+            <li class="list-group-item">
+               @task.Name
+            </li>
+         }
+      </ul>
+   }
+   else
+   {
+      <p>No tasks found for @selectedTeam.Name</p>
+   }
+}
+else
+{
+   <p>No team selected.</p>
+}
+
+
+
+
+@code {
+   private List<ProjectTeam> teams;
+   private List<GanttData> tasks;
+   private ProjectTeam newTeam = new ProjectTeam();
+   private string errorMessage = "";
+   private ProjectTeam selectedTeam;
+
+   protected override async Task OnInitializedAsync()
+   {
+      teams = SampleData.GetTeams();
+      tasks = SampleData.GetProject();
+   }
+
+   private async Task AddTeam()
+   {
+      if (string.IsNullOrWhiteSpace(newTeam.Name))
+      {
+         errorMessage = "Team name is required.";
+         return;
+      }
+
+      errorMessage = "";
+
+      teams.Add(newTeam);
+      newTeam = new ProjectTeam(); // Reset the new team object after adding
+      StateHasChanged();
+   }
+
+   private void ShowTasksForTeam(ProjectTeam team)
+   {
+      selectedTeam = team;
+      ProjectTeam.GetTasksForTeam(tasks, team);
+   }
+}
