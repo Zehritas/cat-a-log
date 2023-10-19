@@ -1,4 +1,5 @@
 ﻿@page "/";
+@using cat_a_logB.Data
 @using cat_a_logB;
 @using ApexCharts;
 @inject cat_a_logB.Pages.SampleData SampleData
@@ -140,6 +141,7 @@
             <li class="list-group-item">End Date: @selectedData.DataPoint.Items.First().EndDate.ToShortDateString()</li>
             <li class="list-group-item">Team: @selectedData.DataPoint.Items.First().Team.Name</li>
             <li class="list-group-item">Progress: @selectedData.DataPoint.Items.First().Progress%</li>
+            <li class="list-group-item">Task Time Progress: @selectedData.DataPoint.Items.First().AutoProgress%</li>
         </ul>
     </div>
 
@@ -218,7 +220,8 @@ else if (selectedData != null)
     private bool showEditCommentsInput = false;
     private bool showEditCommentsModal = false;
     private string editedComments;
-
+    private List<object> boxedValues = new List<object>();
+    
 
     protected override async Task OnInitializedAsync()
     {
@@ -248,17 +251,23 @@ else if (selectedData != null)
 
     private async Task AddTask()
     {
-        if (string.IsNullOrWhiteSpace(newTask.Name))
+        if (!newTask.Name.IsTaskNameValid())
         {
             errorMessage = "Task name is required.";
             return;
         }
 
-        if (newTask.StartDate >= newTask.EndDate)
+        if (!newTask.StartDate.IsEndDateGreaterThanStartDate(newTask.EndDate))
         {
             errorMessage = "End date must be greater than start date.";
             return;
         }
+        //boxing days demonstration
+        boxedValues.Add(newTask.StartDate);
+        boxedValues.Add(newTask.EndDate);
+
+        Console.WriteLine("Added Start Date to boxedValues: " + newTask.StartDate);
+        Console.WriteLine("Added End Date to boxedValues: " + newTask.EndDate);
 
         errorMessage = "";
         var selectedTeam = teams.FirstOrDefault(t => t.Name == selectedTeamName);
@@ -274,8 +283,10 @@ else if (selectedData != null)
             newTask.Comments
             );
             project.Add(newTaskData);
+            CalculateAutoProgress(newTaskData);
             await chart.UpdateSeriesAsync();
             StateHasChanged();
+            ShowTaskDates();
         }
         else
         {
@@ -284,6 +295,37 @@ else if (selectedData != null)
         }
     }
 
+    private void ShowTaskDates()
+    {
+
+        if (boxedValues.Count >= 2)
+        {
+            DateTime startDate = (DateTime)boxedValues[0];
+            DateTime endDate = (DateTime)boxedValues[1];
+
+            Console.WriteLine("Start Date: " + startDate);
+            Console.WriteLine("End Date: " + endDate);
+        }
+    }
+    private void CalculateAutoProgress(GanttData task)
+    {
+
+        var now = DateTime.Now;
+        if (task.StartDate <= now && now <= task.EndDate)
+        {
+            double totalDays = (task.EndDate - task.StartDate).TotalDays;
+            double daysPassed = (now - task.StartDate).TotalDays;
+            task.AutoProgress = (int)((daysPassed / totalDays) * 100);
+        }
+        else if (now > task.EndDate)
+        {
+            task.AutoProgress = 100;
+        }
+        else
+        {
+            task.AutoProgress = 0;
+        }
+    }
     private void OnClick(SelectedData<GanttData> data)
     {
         selectedData = data;
