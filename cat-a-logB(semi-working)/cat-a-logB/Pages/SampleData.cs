@@ -55,6 +55,11 @@
 
         public static List<GanttData> GetProject()
         {
+
+            foreach (var task in tasks)
+            {
+                task.AutoProgress = CalculateAutoProgress(task);
+            }
             return tasks;
         }
 
@@ -62,5 +67,26 @@
         {
             return teams;
         }
+        private static int CalculateAutoProgress(GanttData task)
+        {
+
+            DateTime currentDate = DateTime.Now.Date;
+            if (currentDate < task.StartDate)
+            {
+                return 0;
+            }
+            else if (currentDate >= task.EndDate)
+            {
+                return 100;
+            }
+            else
+            {
+
+                double totalDays = (task.EndDate - task.StartDate).TotalDays;
+                double daysPassed = (currentDate - task.StartDate).TotalDays;
+                return (int)((daysPassed / totalDays) * 100);
+            }
+        }
     }
 }
+

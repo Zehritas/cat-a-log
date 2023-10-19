@@ -7,6 +7,8 @@
     public string Comments { get; set; }
     public ProjectTeam Team { get; set; }
     public int Progress { get; set; } // Add a Progress property
+
+    public int AutoProgress { get; set; }
     public int CompareTo(GanttData other)
     {
         return this.Progress.CompareTo(other.Progress);
