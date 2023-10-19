@@ -4,7 +4,7 @@ public class ProjectTeam
    public string Name { get; set; }
    public List<GanttData> Tasks { get; set; }
 
-   private List<string> members;
+   private List<String> members;
    public List<String> Members
    {
       get { return members; }

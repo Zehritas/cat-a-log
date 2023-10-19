@@ -26,7 +26,7 @@
         EndDate = endDate;
         Team = team;
         Progress = progress;
-        PointColor = team.Color; // Assuming 'color' is a property of the ProjectTeam class
+        PointColor = team.Color;
     }
 
 }
