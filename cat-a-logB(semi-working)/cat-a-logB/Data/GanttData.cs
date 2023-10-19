@@ -4,6 +4,7 @@
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
     public string PointColor { get; set; }
+    public string Comments { get; set; }
     public ProjectTeam Team { get; set; }
     public int Progress { get; set; } // Add a Progress property
     public int CompareTo(GanttData other)
@@ -18,8 +19,9 @@
         EndDate = DateTime.Now.Date;
         PointColor = "#000000";
         Progress = 0;
+        Comments = ""; 
     }
-    public GanttData(string name, DateTime startDate, DateTime endDate, ProjectTeam team, int progress)
+    public GanttData(string name, DateTime startDate, DateTime endDate, ProjectTeam team, int progress, string comments)
     {
         Name = name;
         StartDate = startDate;
@@ -27,6 +29,7 @@
         Team = team;
         Progress = progress;
         PointColor = team.Color; // Assuming 'color' is a property of the ProjectTeam class
+        Comments = comments;
     }
 
 }

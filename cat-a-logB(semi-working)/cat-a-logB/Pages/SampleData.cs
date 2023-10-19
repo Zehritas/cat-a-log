@@ -16,35 +16,40 @@
                 DateTime.Now.Date.AddDays(-4),
                 DateTime.Now.Date.AddDays(1),
                 teams[0], // Assigning Task 1 to Team A
-                0
+                0,
+                ""
             ),
             new GanttData(
                 "Task 2",
                 DateTime.Now.Date.AddDays(-3),
                 DateTime.Now.Date.AddDays(2),
                 teams[0], // Assigning Task 1 to Team A
-                0
+                0,
+                ""
             ),
             new GanttData(
                 "Task 3",
                 DateTime.Now.Date.AddDays(-2),
                 DateTime.Now.Date.AddDays(5),
                 teams[1], // Assigning Task 1 to Team A
-                0
+                0,
+                ""
             ),
             new GanttData(
                 "Task 4",
                 DateTime.Now.Date.AddDays(-1),
                 DateTime.Now.Date.AddDays(8),
                 teams[1], // Assigning Task 1 to Team A
-                0
+                0,
+                ""
             ),
             new GanttData(
                 "Task 5",
                 DateTime.Now.Date.AddDays(-2),
                 DateTime.Now.Date.AddDays(10),
                 teams[2], // Assigning Task 1 to Team A
-                0
+                0,
+                ""
             )
         };
 
