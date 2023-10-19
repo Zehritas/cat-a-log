@@ -8,6 +8,8 @@
     public ProjectTeam Team { get; set; }
     public int Progress { get; set; } // Add a Progress property
 
+    public double DayProgress { get; set; }
+
     public int AutoProgress { get; set; }
     public int CompareTo(GanttData other)
     {

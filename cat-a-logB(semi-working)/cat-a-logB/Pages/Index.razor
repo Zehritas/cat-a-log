@@ -149,6 +149,7 @@
             <li class="list-group-item">Team: @selectedData.DataPoint.Items.First().Team.Name</li>
             <li class="list-group-item">Progress: @selectedData.DataPoint.Items.First().Progress%</li>
             <li class="list-group-item">Task Time Progress: @selectedData.DataPoint.Items.First().AutoProgress%</li>
+            <li class="list-group-item">User Progress Difference: @CompareUserProgress(selectedData.DataPoint.Items.First(), selectedData.DataPoint.Items.First().Progress)</li>
         </ul>
     </div>
 
@@ -228,7 +229,7 @@ else if (selectedData != null)
     private bool showEditCommentsModal = false;
     private string editedComments;
     private List<object> boxedValues = new List<object>();
-    
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -290,8 +291,8 @@ else if (selectedData != null)
             0,
             newTask.Comments
             );
+            newTaskData.AutoProgress = (int)CalculateAutoProgress(newTaskData);
             project.Add(newTaskData);
-            CalculateAutoProgress(newTaskData);
             await chart.UpdateSeriesAsync();
             StateHasChanged();
             ShowTaskDates();
@@ -315,24 +316,27 @@ else if (selectedData != null)
             Console.WriteLine("End Date: " + endDate);
         }
     }
-    private void CalculateAutoProgress(GanttData task)
+    private double CalculateAutoProgress(GanttData task)
     {
-
         var now = DateTime.Now;
+        double totalDays = (task.EndDate - task.StartDate).TotalDays;
+        double dayProgress;
+
         if (task.StartDate <= now && now <= task.EndDate)
         {
-            double totalDays = (task.EndDate - task.StartDate).TotalDays;
             double daysPassed = (now - task.StartDate).TotalDays;
-            task.AutoProgress = (int)((daysPassed / totalDays) * 100);
+            dayProgress = (daysPassed / totalDays) * 100;
         }
         else if (now > task.EndDate)
         {
-            task.AutoProgress = 100;
+            dayProgress = 100;
         }
         else
         {
-            task.AutoProgress = 0;
+            dayProgress = 0;
         }
+
+        return dayProgress;
     }
     private void OnClick(SelectedData<GanttData> data)
     {
@@ -516,5 +520,28 @@ else if (selectedData != null)
         showEditCommentsInput = false;
         showEditCommentsModal = true;
     }
+    private string CompareUserProgress(GanttData task, int userProgress)
+    {
+        double taskTimeProgress = task.AutoProgress;
+        double userDaysAheadOrBehind = (taskTimeProgress - userProgress) * (task.EndDate - task.StartDate).TotalDays / 100.0;
+
+        if (userProgress == 100)
+        {
+            return "Task completed.";
+        }
+        else if (userDaysAheadOrBehind > 0)
+        {
+            return $"User is {userDaysAheadOrBehind:N1} days behind.";
+        }
+        else if (userDaysAheadOrBehind < 0)
+        {
+            return $"User is {Math.Abs(userDaysAheadOrBehind):N1} days ahead.";
+        }
+        else
+        {
+            return "User is on track.";
+        }
+    }
+    
 
 }
