@@ -16,40 +16,50 @@
                 DateTime.Now.Date.AddDays(-4),
                 DateTime.Now.Date.AddDays(1),
                 teams[0], // Assigning Task 1 to Team A
-                0
+                0,
+                ""
             ),
             new GanttData(
                 "Task 2",
                 DateTime.Now.Date.AddDays(-3),
                 DateTime.Now.Date.AddDays(2),
                 teams[0], // Assigning Task 1 to Team A
-                0
+                0,
+                ""
             ),
             new GanttData(
                 "Task 3",
                 DateTime.Now.Date.AddDays(-2),
                 DateTime.Now.Date.AddDays(5),
                 teams[1], // Assigning Task 1 to Team A
-                0
+                0,
+                ""
             ),
             new GanttData(
                 "Task 4",
                 DateTime.Now.Date.AddDays(-1),
                 DateTime.Now.Date.AddDays(8),
                 teams[1], // Assigning Task 1 to Team A
-                0
+                0,
+                ""
             ),
             new GanttData(
                 "Task 5",
                 DateTime.Now.Date.AddDays(-2),
                 DateTime.Now.Date.AddDays(10),
                 teams[2], // Assigning Task 1 to Team A
-                0
+                0,
+                ""
             )
         };
 
         public static List<GanttData> GetProject()
         {
+
+            foreach (var task in tasks)
+            {
+                task.AutoProgress = CalculateAutoProgress(task);
+            }
             return tasks;
         }
 
@@ -57,5 +67,26 @@
         {
             return teams;
         }
+        private static int CalculateAutoProgress(GanttData task)
+        {
+
+            DateTime currentDate = DateTime.Now.Date;
+            if (currentDate < task.StartDate)
+            {
+                return 0;
+            }
+            else if (currentDate >= task.EndDate)
+            {
+                return 100;
+            }
+            else
+            {
+
+                double totalDays = (task.EndDate - task.StartDate).TotalDays;
+                double daysPassed = (currentDate - task.StartDate).TotalDays;
+                return (int)((daysPassed / totalDays) * 100);
+            }
+        }
     }
 }
+

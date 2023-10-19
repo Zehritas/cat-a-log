@@ -1,4 +1,5 @@
 ﻿@page "/";
+@using cat_a_logB.Data
 @using cat_a_logB;
 @using ApexCharts;
 @inject cat_a_logB.Pages.SampleData SampleData
@@ -68,6 +69,7 @@
         <button type="button" class="btn btn-primary" @onclick="RemoveTask">Remove Task</button>
         <button type="button" class="btn btn-primary" @onclick="ToggleEditTaskName">Edit Task Name</button>
         <button type="button" class="btn btn-primary" @onclick="ToggleEditTaskTime">Edit Task Time</button>
+        <button type="button" class="btn btn-primary" @onclick="ToggleEditComments">Comments</button>
 
     </form>
     @if (showEditTaskNameInput)
@@ -111,7 +113,32 @@
             <button type="button" class="btn btn-success" @onclick="() => UpdateProgress(newProgress)">Update Progress</button>
         </form>
     }
-
+    @if (showEditCommentsModal)
+    {
+        <div class="modal fade show" style="display: block;" tabindex="-1" role="dialog" id="editCommentsModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">@selectedData.DataPoint.Items.First().Name Comments </h5>
+                        <button type="button" class="close" @onclick="CloseEditCommentsModal">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="newComments">Comments:</label>
+                            <textarea class="form-control" id="newComments" @bind="editedComments"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" @onclick="CloseEditCommentsModal">Close</button>
+                        <button type="button" class="btn btn-success" @onclick="UpdateComments">Save Changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-backdrop fade show"></div>
+    }
 
     <div class="mt-4">
         <h4>Task Information:</h4>
@@ -121,6 +148,7 @@
             <li class="list-group-item">End Date: @selectedData.DataPoint.Items.First().EndDate.ToShortDateString()</li>
             <li class="list-group-item">Team: @selectedData.DataPoint.Items.First().Team.Name</li>
             <li class="list-group-item">Progress: @selectedData.DataPoint.Items.First().Progress%</li>
+            <li class="list-group-item">Task Time Progress: @selectedData.DataPoint.Items.First().AutoProgress%</li>
         </ul>
     </div>
 
@@ -149,6 +177,12 @@ else if (selectedData != null)
         <label for="endDate">End Date:</label>
         <input class="form-control" type="date" id="endDate" @bind="newTask.EndDate" />
     </div>
+
+    <div class="form-group">
+        <label for="comments">Comments:</label>
+        <input class="form-control" id="comments" @bind="newTask.Comments">
+    </div>
+
     <div class="form-group">
         <label for="taskTeam">Task Team:</label>
         <select class="form-control" id="taskTeam" @bind="selectedTeamName">
@@ -190,7 +224,11 @@ else if (selectedData != null)
 85, 90, 95, 100 };
     private GanttData selectedTaskForProgress;
     private bool showEditProgressInput = false;
-
+    private bool showEditCommentsInput = false;
+    private bool showEditCommentsModal = false;
+    private string editedComments;
+    private List<object> boxedValues = new List<object>();
+    
 
     protected override async Task OnInitializedAsync()
     {
@@ -221,17 +259,23 @@ else if (selectedData != null)
 
     private async Task AddTask()
     {
-        if (string.IsNullOrWhiteSpace(newTask.Name))
+        if (!newTask.Name.IsTaskNameValid())
         {
             errorMessage = "Task name is required.";
             return;
         }
 
-        if (newTask.StartDate >= newTask.EndDate)
+        if (!newTask.StartDate.IsEndDateGreaterThanStartDate(newTask.EndDate))
         {
             errorMessage = "End date must be greater than start date.";
             return;
         }
+        //boxing days demonstration
+        boxedValues.Add(newTask.StartDate);
+        boxedValues.Add(newTask.EndDate);
+
+        Console.WriteLine("Added Start Date to boxedValues: " + newTask.StartDate);
+        Console.WriteLine("Added End Date to boxedValues: " + newTask.EndDate);
 
         errorMessage = "";
         var selectedTeam = teams.FirstOrDefault(t => t.Name == selectedTeamName);
@@ -243,11 +287,14 @@ else if (selectedData != null)
             newTask.StartDate,
             newTask.EndDate,
             selectedTeam,
-            0
+            0,
+            newTask.Comments
             );
             project.Add(newTaskData);
+            CalculateAutoProgress(newTaskData);
             await chart.UpdateSeriesAsync();
             StateHasChanged();
+            ShowTaskDates();
         }
         else
         {
@@ -256,6 +303,37 @@ else if (selectedData != null)
         }
     }
 
+    private void ShowTaskDates()
+    {
+
+        if (boxedValues.Count >= 2)
+        {
+            DateTime startDate = (DateTime)boxedValues[0];
+            DateTime endDate = (DateTime)boxedValues[1];
+
+            Console.WriteLine("Start Date: " + startDate);
+            Console.WriteLine("End Date: " + endDate);
+        }
+    }
+    private void CalculateAutoProgress(GanttData task)
+    {
+
+        var now = DateTime.Now;
+        if (task.StartDate <= now && now <= task.EndDate)
+        {
+            double totalDays = (task.EndDate - task.StartDate).TotalDays;
+            double daysPassed = (now - task.StartDate).TotalDays;
+            task.AutoProgress = (int)((daysPassed / totalDays) * 100);
+        }
+        else if (now > task.EndDate)
+        {
+            task.AutoProgress = 100;
+        }
+        else
+        {
+            task.AutoProgress = 0;
+        }
+    }
     private void OnClick(SelectedData<GanttData> data)
     {
         selectedData = data;
@@ -357,6 +435,7 @@ else if (selectedData != null)
         newTaskName = "";
         showEditTaskTimeInput = false;
         showEditTaskNameInput = !showEditTaskNameInput;
+        showEditCommentsInput = false;
     }
 
     private async Task EditTaskTime(DateTime newStartDate, DateTime newEndDate)
@@ -401,6 +480,41 @@ else if (selectedData != null)
         newTaskEndTime = DateTime.Today.AddDays(1);
         showEditTaskNameInput = false;
         showEditTaskTimeInput = !showEditTaskTimeInput;
+        showEditCommentsInput = false;
+    }
+
+    private void CloseEditCommentsModal()
+    {
+        showEditCommentsModal = false;
+        editedComments = ""; // Clear the edited comments
+    }
+
+    private async Task UpdateComments()
+    {
+        if (selectedData != null && selectedData.DataPoint != null)
+        {
+            if (selectedData.DataPoint.X is string selectedTaskName)
+            {
+                GanttData taskToUpdate = project.FirstOrDefault(task => task.Name == selectedTaskName);
+                if (taskToUpdate != null)
+                {
+                    taskToUpdate.Comments = editedComments;
+                }
+            }
+
+            CloseEditCommentsModal();
+            await chart.UpdateSeriesAsync();
+            StateHasChanged();
+        }
+    }
+
+    private void ToggleEditComments()
+    {
+        editedComments = selectedData.DataPoint.Items.First().Comments; // Initialize the input field with existing comments
+        showEditTaskNameInput = false;
+        showEditTaskTimeInput = false;
+        showEditCommentsInput = false;
+        showEditCommentsModal = true;
     }
 
 }
