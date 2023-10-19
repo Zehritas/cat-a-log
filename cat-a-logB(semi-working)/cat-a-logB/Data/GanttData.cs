@@ -21,7 +21,7 @@
         EndDate = DateTime.Now.Date;
         PointColor = "#000000";
         Progress = 0;
-        Comments = ""; 
+        Comments = "";
     }
     public GanttData(string name, DateTime startDate, DateTime endDate, ProjectTeam team, int progress, string comments)
     {

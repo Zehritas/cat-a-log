@@ -36,10 +36,17 @@
             </ApexPointTooltip>
 
             <ChildContent>
-                <ApexRangeSeries TItem="GanttData" Items="project" XValue="@(e => e.Name)"
-                    YMinValue="@(e => e.StartDate.ToUnixTimeMilliseconds())"
-                    YMaxValue="@(e => e.EndDate.ToUnixTimeMilliseconds())" PointColor="e=> e.PointColor"
-                    OrderByDescending="e => e.Items.First().Team.Name" />
+                @foreach (var team in teams)
+    {
+        <ApexRangeSeries TItem="GanttData" 
+                         Items="project.Where(task => task.Team == team)"
+                         Name="@team.Name"
+                         XValue="@(e => e.Name)"
+                         YMinValue="@(e => e.StartDate.ToUnixTimeMilliseconds())"
+                         YMaxValue="@(e => e.EndDate.ToUnixTimeMilliseconds())" 
+                         PointColor="e => e.PointColor" 
+                         OrderByDescending="e => e.Items.First().Team.Name" />
+    }
             </ChildContent>
 
 
@@ -225,7 +232,9 @@ else if (selectedData != null)
 
     protected override async Task OnInitializedAsync()
     {
-
+        project = SampleData.GetProject();
+        teams = SampleData.GetTeams();
+        var colors = teams.Select(team => team.Color).ToList();
         options = new ApexChartOptions<GanttData>
             {
                 PlotOptions = new PlotOptions
@@ -233,7 +242,7 @@ else if (selectedData != null)
                     Bar = new PlotOptionsBar
                     {
                         Horizontal = true,
-                        RangeBarGroupRows = false,
+                        RangeBarGroupRows = true,
                     }
                 },
                 Tooltip = new ApexCharts.Tooltip
@@ -242,11 +251,10 @@ else if (selectedData != null)
                     {
                         Format = "dd MMM yyyy",
                     }
-                }
+                },
+                Colors = colors
             };
-
-        project = SampleData.GetProject();
-        teams = SampleData.GetTeams();
+        options.Legend = new Legend { Position = LegendPosition.Bottom, FontSize ="14px", HorizontalAlign = Align.Center};            
     }
 
     private async Task AddTask()
