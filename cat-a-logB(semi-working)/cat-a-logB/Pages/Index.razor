@@ -29,6 +29,8 @@
                         <span>Deadline: @point.Items.First().EndDate.ToShortDateString()</span>
                         <br>
                         <span>Team: @point.Items.First().Team.Name</span>
+                        <br>
+                        <span>@CompareUserProgress(point.Items.First(), point.Items.First().Progress)</span>
 
 
                     }
