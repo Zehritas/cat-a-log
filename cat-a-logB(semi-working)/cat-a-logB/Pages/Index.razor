@@ -6,6 +6,10 @@
 
 <PageTitle>Gantt Chart</PageTitle>
 
+<div class="mb-2 btn-list">
+    <Button Size=ButtonSize.Small OnClick=AddXAxisAnnotation BackgroundColor="TablerColor.Primary">Add XAxis Annotation</Button>
+</div>
+
 <DemoContainer>
 
     @if (project == null)
@@ -258,6 +262,23 @@ else if (selectedData != null)
                 Colors = colors
             };
         options.Legend = new Legend { Position = LegendPosition.Bottom, FontSize ="14px", HorizontalAlign = Align.Center};            
+    }
+
+   private async Task AddXAxisAnnotation()
+    {
+        var point = new AnnotationsXAxis
+            {
+                X = DateTime.Now.Date.AddDays(1),
+                StrokeDashArray = 0,
+                BorderWidth = 3,
+                
+                Label = new Label
+                {
+                    Text = "X Axis Annotation"
+                }
+            };
+
+        await chart.AddXAxisAnnotationAsync(point, false);
     }
 
     private async Task AddTask()
