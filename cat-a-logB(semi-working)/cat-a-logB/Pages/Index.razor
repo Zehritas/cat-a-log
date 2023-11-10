@@ -6,10 +6,6 @@
 
 <PageTitle>Gantt Chart</PageTitle>
 
-<div class="mb-2 btn-list">
-    <Button Size=ButtonSize.Small OnClick=AddXAxisAnnotation BackgroundColor="TablerColor.Primary">Add XAxis Annotation</Button>
-</div>
-
 <DemoContainer>
 
     @if (project == null)
@@ -145,6 +141,9 @@
         </div>
         <div class="modal-backdrop fade show"></div>
     }
+    
+    <button class="btn btn-primary" @onclick="AddDependency">Add Dependency</button>
+
 
     <div class="mt-4">
         <h4>Task Information:</h4>
@@ -156,6 +155,18 @@
             <li class="list-group-item">Progress: @selectedData.DataPoint.Items.First().Progress%</li>
             <li class="list-group-item">Task Time Progress: @selectedData.DataPoint.Items.First().AutoProgress%</li>
             <li class="list-group-item">User Progress Difference: @CompareUserProgress(selectedData.DataPoint.Items.First(), selectedData.DataPoint.Items.First().Progress)</li>
+             <div class="mt-4">
+        <h4>Dependencies:</h4>
+        <ul class="list-group">
+            @foreach (var dependency in selectedData.DataPoint.Items.First().Dependencies)
+            {
+                <li class="list-group-item">
+                    Task: @dependency.DependentTaskName,
+                    Type: @dependency.Type
+                </li>
+            }
+        </ul>
+    </div>
         </ul>
     </div>
 
@@ -202,7 +213,6 @@ else if (selectedData != null)
     </div>
 
     <br>
-
     <button class="btn btn-primary" type="button" @onclick="AddTask">Add Task</button>
 </form>
 
@@ -262,23 +272,6 @@ else if (selectedData != null)
                 Colors = colors
             };
         options.Legend = new Legend { Position = LegendPosition.Bottom, FontSize ="14px", HorizontalAlign = Align.Center};            
-    }
-
-   private async Task AddXAxisAnnotation()
-    {
-        var point = new AnnotationsXAxis
-            {
-                X = DateTime.Now.Date.AddDays(1),
-                StrokeDashArray = 0,
-                BorderWidth = 3,
-                
-                Label = new Label
-                {
-                    Text = "X Axis Annotation"
-                }
-            };
-
-        await chart.AddXAxisAnnotationAsync(point, false);
     }
 
     private async Task AddTask()
@@ -394,6 +387,38 @@ else if (selectedData != null)
             }
         }
     }
+
+    private async Task AddDependency()
+    {
+        if (selectedData != null && selectedData.DataPoint != null)
+        {
+            if (selectedData.DataPoint.X is string selectedTaskName)
+            {
+                GanttData dependentTask = project.FirstOrDefault(task => task.Name == selectedTaskName);
+
+                if (dependentTask != null)
+                {
+                    // Assuming you have a selectedDependencyType variable to store the chosen dependency type
+                    DependencyType selectedDependencyType = DependencyType.FS; // Replace with your logic to get the selected dependency type
+
+                    // Assuming you have a selectedDependentTaskName variable to store the name of the dependent task
+                    string selectedDependentTaskName = "TaskB"; // Replace with your logic to get the selected dependent task name
+
+                    Dependency newDependency = new Dependency
+                    {
+                        DependentTaskName = selectedDependentTaskName,
+                        Type = selectedDependencyType
+                    };
+
+                    dependentTask.Dependencies.Add(newDependency);
+                }
+            }
+        }
+
+        await chart.UpdateSeriesAsync();
+        StateHasChanged();
+    }
+
 
     private async Task UpdateProgress(int progressValue)
     {

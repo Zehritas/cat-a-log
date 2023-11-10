@@ -11,6 +11,7 @@
     public double DayProgress { get; set; }
 
     public int AutoProgress { get; set; }
+    public List<Dependency> Dependencies { get; set; } = new List<Dependency>();
     public int CompareTo(GanttData other)
     {
         return this.Progress.CompareTo(other.Progress);
