@@ -1,0 +1,163 @@
+﻿@page "/Milestones"
+@using cat_a_logB.Data
+@inject cat_a_logB.Pages.SampleData SampleData
+
+<PageTitle>Milestones</PageTitle>
+
+<h1 class="mb-4">Milestone settings</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        @if (milestones != null && milestones.Any())
+        {
+            <ul class="list-group">
+                @foreach (var milestone in milestones)
+                {
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <button class="btn btn-link" @onclick="() => ToggleMilestoneSelection(milestone)">
+                            @milestone.Name
+                        </button>
+                    </li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p>No Milestones found.</p>
+        }
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title mb-3">New Milestone:</h3>
+                <form>
+                    <div class="form-group">
+                        <label for="milestoneName">Milestone Name:</label>
+                        <input class="form-control" type="text" id="milestoneName" @bind="milestoneName" />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Tasks:</label>
+                        @foreach (var task in tasks)
+                        {
+                            <label>
+                                <input type="checkbox" @onclick="() => ToggleTaskSelection(task)" checked="@selectedTasks.Contains(task)" />
+                                @task.Name
+                            </label>
+                        }
+                    </div>
+                    <br>
+                    <button class="btn btn-primary" type="button" @onclick="CreateMilestone">Create Milestone</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-6">
+    <!-- Rest of your component HTML -->
+
+    <div class="line">
+        @foreach (var milestone in milestones)
+        {
+            <div class="rhombus" title="@milestone.Name">
+                <!-- Optionally, you can display the milestone name as a tooltip -->
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    .rhombus {
+        width: 20px; /* Adjust the size as needed */
+        height: 20px; /* Adjust the size as needed */
+        background-color: blue; /* Adjust the color as needed */
+        transform: rotate(45deg);
+        margin: 10px; /* Add margin to control the spacing between rhombus icons */
+    }
+</style>
+
+
+
+@if (selectedMilestone != null)
+{
+    <h3>Selected Milestone: @selectedMilestone.Name</h3>
+    @if (selectedMilestone.Tasks != null && selectedMilestone.Tasks.Any())
+    {
+        <h3>Tasks for @selectedMilestone.Name</h3>
+        <ul>
+            @foreach (var task in selectedMilestone.Tasks)
+            {
+                <li>@task.Name</li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>No tasks found for @selectedMilestone.Name</p>
+    }
+}
+else
+{
+    <p>No milestone selected.</p>
+}
+
+@code {
+    private List<GanttData> tasks;
+    private string milestoneName;
+    private List<GanttData> selectedTasks = new List<GanttData>();
+    private List<ProjectMilestone> milestones = SampleData.GetMilestones(); // Get milestones from the SampleData service
+    private ProjectMilestone selectedMilestone;
+
+
+
+
+    protected override void OnInitialized()
+    {
+        // Retrieve tasks from the SampleData service
+        tasks = SampleData.GetProject();
+    }
+
+    private void ToggleTaskSelection(GanttData task)
+    {
+        if (selectedTasks == null)
+        {
+            selectedTasks = new List<GanttData>();
+        }
+
+        if (selectedTasks.Contains(task))
+        {
+            selectedTasks.Remove(task);
+        }
+        else
+        {
+            selectedTasks.Add(task);
+        }
+    }
+
+    private void CreateMilestone()
+    {
+        if (!string.IsNullOrWhiteSpace(milestoneName) && selectedTasks != null && selectedTasks.Any())
+        {
+            // Create a new ProjectMilestone instance
+            var newMilestone = new ProjectMilestone
+                {
+                    Name = milestoneName,
+                    Tasks = selectedTasks.ToList() // Create a copy of the selected tasks
+                };
+
+            // Add the new milestone to your milestones collection
+            milestones.Add(newMilestone);
+
+            // Clear the milestoneName and selectedTasks
+            milestoneName = string.Empty;
+            selectedTasks.Clear();
+        }
+    }
+
+    private void ToggleMilestoneSelection(ProjectMilestone milestone)
+    {
+        selectedMilestone = milestone;
+    }
+}
