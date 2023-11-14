@@ -65,14 +65,14 @@
         <h3>Edit: @selectedData.DataPoint.X</h3>
     </div>
 
-    <button class="btn btn-primary" @onclick="AddProgress">Update Progress</button>
     <form>
         <!-- Buttons for editing tasks -->
         <button type="button" class="btn btn-primary" @onclick="RemoveTask">Remove Task</button>
         <button type="button" class="btn btn-primary" @onclick="ToggleEditTaskName">Edit Task Name</button>
         <button type="button" class="btn btn-primary" @onclick="ToggleEditTaskTime">Edit Task Time</button>
-        <button type="button" class="btn btn-primary" @onclick="ToggleEditComments">Comments</button>
-
+        <button type="button" class="btn btn-primary" @onclick="ToggleEditTaskComments">Comments</button>
+        <button type="button" class="btn btn-primary" @onclick="ToggleEditTaskProgress">Update Progress</button>
+        <button type="button" class="btn btn-primary" @onclick="ToggleEditTaskDependencies">Add Dependency</button>
     </form>
     @if (showEditTaskNameInput)
     {
@@ -100,7 +100,7 @@
             <button type="button" class="btn btn-success" @onclick="UpdateTaskTime">Update Task Time</button>
         </form>
     }
-    @if (showEditProgressInput)
+    @if (showEditTaskProgressInput)
     {
         <form>
             <div class="form-group">
@@ -115,14 +115,14 @@
             <button type="button" class="btn btn-success" @onclick="() => UpdateProgress(newProgress)">Update Progress</button>
         </form>
     }
-    @if (showEditCommentsModal)
+    @if (showEditTaskCommentsModal)
     {
         <div class="modal fade show" style="display: block;" tabindex="-1" role="dialog" id="editCommentsModal">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">@selectedData.DataPoint.Items.First().Name Comments </h5>
-                        <button type="button" class="close" @onclick="CloseEditCommentsModal">
+                        <button type="button" class="close" @onclick="ToggleEditTaskComments">
                             <span aria-hidden="true">×</span>
                         </button>
                     </div>
@@ -133,7 +133,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" @onclick="CloseEditCommentsModal">Close</button>
+                        <button type="button" class="btn btn-secondary" @onclick="ToggleEditTaskComments">Close</button>
                         <button type="button" class="btn btn-success" @onclick="UpdateComments">Save Changes</button>
                     </div>
                 </div>
@@ -141,10 +141,50 @@
         </div>
         <div class="modal-backdrop fade show"></div>
     }
+
+    @if (showEditTaskDependenciesModal)
+    {
+    <div class="modal fade show" style="display: block;" tabindex="-1" role="dialog" id="addDependenciesModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Dependency</h5>
+                    <button type="button" class="close" @onclick="ToggleEditTaskDependencies">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="selectedTaskForDependency">Select Task:</label>
+                            <select class="form-control" id="selectedTaskForDependency" @bind="selectedTaskForDependency">
+                                @foreach (var task in project)
+                                {
+                                    <option value="@task.Name">@task.Name</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="dependencyType">Select Dependency Type:</label>
+                            <select class="form-control" id="dependencyType" @bind="selectedDependencyType">
+                                @foreach (var dependencyType in Enum.GetValues(typeof(DependencyType)))
+                                {
+                                    <option value="@dependencyType">@dependencyType</option>
+                                }
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="ToggleEditTaskDependencies">Close</button>
+                    <button type="button" class="btn btn-success" @onclick="AddDependency">Add Dependency</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-backdrop fade show"></div>
+    }
     
-    <button class="btn btn-primary" @onclick="AddDependency">Add Dependency</button>
-
-
     <div class="mt-4">
         <h4>Task Information:</h4>
         <ul class="list-group">
@@ -222,6 +262,7 @@ else if (selectedData != null)
     <div class="alert alert-danger mt-2">@errorMessage</div>
 }
 
+
 @code {
     private string errorMessage = "";
     private ApexChart<GanttData> chart;
@@ -230,8 +271,6 @@ else if (selectedData != null)
     private List<ProjectTeam> teams;
     private ApexChartOptions<GanttData> options;
     private SelectedData<GanttData> selectedData;
-    private bool showEditTaskNameInput = false;
-    private bool showEditTaskTimeInput = false;
     private string newTaskName;
     private DateTime newTaskStartTime = DateTime.Today;
     private DateTime newTaskEndTime = DateTime.Today.AddDays(1);
@@ -240,9 +279,13 @@ else if (selectedData != null)
     private List<int> progressOptions = new List<int> { 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80,
 85, 90, 95, 100 };
     private GanttData selectedTaskForProgress;
-    private bool showEditProgressInput = false;
-    private bool showEditCommentsInput = false;
-    private bool showEditCommentsModal = false;
+    private bool showEditTaskNameInput = false;
+    private bool showEditTaskTimeInput = false;
+    private bool showEditTaskProgressInput = false;
+    private bool showEditTaskCommentsModal = false;
+    private bool showEditTaskDependenciesModal = false;
+    private DependencyType selectedDependencyType = DependencyType.FS; //default is FS
+    private string selectedTaskForDependency;
     private string editedComments;
     private List<object> boxedValues = new List<object>();
 
@@ -287,12 +330,6 @@ else if (selectedData != null)
             errorMessage = "End date must be greater than start date.";
             return;
         }
-        //boxing days demonstration
-        boxedValues.Add(newTask.StartDate);
-        boxedValues.Add(newTask.EndDate);
-
-        Console.WriteLine("Added Start Date to boxedValues: " + newTask.StartDate);
-        Console.WriteLine("Added End Date to boxedValues: " + newTask.EndDate);
 
         errorMessage = "";
         var selectedTeam = teams.FirstOrDefault(t => t.Name == selectedTeamName);
@@ -320,18 +357,6 @@ else if (selectedData != null)
         }
     }
 
-    private void ShowTaskDates()
-    {
-
-        if (boxedValues.Count >= 2)
-        {
-            DateTime startDate = (DateTime)boxedValues[0];
-            DateTime endDate = (DateTime)boxedValues[1];
-
-            Console.WriteLine("Start Date: " + startDate);
-            Console.WriteLine("End Date: " + endDate);
-        }
-    }
     private double CalculateAutoProgress(GanttData task)
     {
         var now = DateTime.Now;
@@ -354,6 +379,30 @@ else if (selectedData != null)
 
         return dayProgress;
     }
+
+    
+    private string CompareUserProgress(GanttData task, int userProgress)
+    {
+        double taskTimeProgress = task.AutoProgress;
+        double userDaysAheadOrBehind = (taskTimeProgress - userProgress) * (task.EndDate - task.StartDate).TotalDays / 100.0;
+
+        if (userProgress == 100)
+        {
+            return "Task completed.";
+        }
+        else if (userDaysAheadOrBehind > 0)
+        {
+            return $"User is {userDaysAheadOrBehind:N1} days behind.";
+        }
+        else if (userDaysAheadOrBehind < 0)
+        {
+            return $"User is {Math.Abs(userDaysAheadOrBehind):N1} days ahead.";
+        }
+        else
+        {
+            return "User is on track.";
+        }
+    }
     private void OnClick(SelectedData<GanttData> data)
     {
         selectedData = data;
@@ -372,75 +421,65 @@ else if (selectedData != null)
         await chart.UpdateSeriesAsync();
         StateHasChanged();
     }
-    private async Task AddProgress()
-    {
-        if (selectedData != null && selectedData.DataPoint != null)
-        {
-            if (selectedData.DataPoint.X is string selectedTaskName)
-            {
-                GanttData taskToUpdate = project.FirstOrDefault(task => task.Name == selectedTaskName);
-                if (taskToUpdate != null)
-                {
-                    showEditProgressInput = !showEditProgressInput;
-                    selectedTaskForProgress = taskToUpdate;
-                }
-            }
-        }
-    }
 
     private async Task AddDependency()
     {
-        if (selectedData != null && selectedData.DataPoint != null)
+        if (selectedData != null && selectedData.DataPoint != null &&
+        selectedData.DataPoint.X is string selectedTaskName)
         {
-            if (selectedData.DataPoint.X is string selectedTaskName)
+            GanttData dependentTask = project.FirstOrDefault(task => task.Name == selectedTaskName);
+
+            if (dependentTask != null)
             {
-                GanttData dependentTask = project.FirstOrDefault(task => task.Name == selectedTaskName);
+                // Assuming you have a selectedDependencyType variable to store the chosen dependency type
+                DependencyType dependencyType = selectedDependencyType; // Replace with your logic to get the selected dependency type
 
-                if (dependentTask != null)
+                // Assuming you have a selectedDependentTaskName variable to store the name of the dependent task
+                string selectedDependentTaskName = selectedTaskForDependency; // Replace with your logic to get the selected dependent task name
+
+                Dependency newDependency = new Dependency
                 {
-                    // Assuming you have a selectedDependencyType variable to store the chosen dependency type
-                    DependencyType selectedDependencyType = DependencyType.FS; // Replace with your logic to get the selected dependency type
+                    DependentTaskName = selectedDependentTaskName,
+                    Type = dependencyType
+                };
 
-                    // Assuming you have a selectedDependentTaskName variable to store the name of the dependent task
-                    string selectedDependentTaskName = "TaskB"; // Replace with your logic to get the selected dependent task name
-
-                    Dependency newDependency = new Dependency
-                    {
-                        DependentTaskName = selectedDependentTaskName,
-                        Type = selectedDependencyType
-                    };
-
-                    dependentTask.Dependencies.Add(newDependency);
-                }
+                dependentTask.Dependencies.Add(newDependency);
             }
         }
+
+        ToggleEditTaskDependencies();
 
         await chart.UpdateSeriesAsync();
         StateHasChanged();
     }
 
 
+
     private async Task UpdateProgress(int progressValue)
     {
-        if (selectedTaskForProgress != null)
+
+         if (selectedData != null && selectedData.DataPoint != null &&
+        selectedData.DataPoint.X is string selectedTaskName)
         {
-            selectedTaskForProgress.Progress = progressValue;
-
-            if (progressValue == 100)
+            GanttData taskToUpdate = project.FirstOrDefault(task => task.Name == selectedTaskName);
+            if (taskToUpdate != null)
             {
-                selectedTaskForProgress.PointColor = "#CCCCCC";
-            }
-            else
-            {
-                selectedTaskForProgress.PointColor = selectedTaskForProgress.Team.Color;
-            }
+                taskToUpdate.Progress = progressValue;
 
-            showEditProgressInput = false;
-            selectedTaskForProgress = null;
-
-            await chart.UpdateSeriesAsync();
-            StateHasChanged();
+                if (progressValue == 100)
+                {
+                    taskToUpdate.PointColor = "#CCCCCC";
+                }
+                else
+                {
+                    taskToUpdate.PointColor = taskToUpdate.Team.Color;
+                }
+            }
         }
+
+        ToggleEditTaskProgress();
+        await chart.UpdateSeriesAsync();
+        StateHasChanged();
     }
 
 
@@ -456,6 +495,60 @@ else if (selectedData != null)
             }
         }
 
+        await chart.UpdateSeriesAsync();
+        StateHasChanged();
+    }
+
+        private async Task UpdateTaskTime()
+    {
+        if (newTaskStartTime < newTaskEndTime) // Add a check to ensure the start date is before the end date
+        {
+            await EditTaskTime(newTaskStartTime, newTaskEndTime);
+            showEditTaskTimeInput = false;
+        }
+        else
+        {
+            // Handle case where the start date is not before the end date
+            // You may want to display a message or take appropriate action
+        }
+    }
+
+    
+    private async Task UpdateComments()
+    {
+        if (selectedData != null && selectedData.DataPoint != null)
+        {
+            if (selectedData.DataPoint.X is string selectedTaskName)
+            {
+                GanttData taskToUpdate = project.FirstOrDefault(task => task.Name == selectedTaskName);
+                if (taskToUpdate != null)
+                {
+                    taskToUpdate.Comments = editedComments;
+                }
+            }
+
+            ToggleEditTaskComments();
+            await chart.UpdateSeriesAsync();
+            StateHasChanged();
+        }
+    }
+
+    private async Task EditTaskTime(DateTime newStartDate, DateTime newEndDate)
+    {
+        if (selectedData != null && selectedData.DataPoint != null)
+        {
+            if (selectedData.DataPoint.X is string selectedTaskName)
+            {
+                // Find the task in the project list with the matching name and update its StartDate and EndDate properties
+                GanttData taskToUpdate = project.FirstOrDefault(task => task.Name == selectedTaskName);
+                if (taskToUpdate != null)
+                {
+                    taskToUpdate.StartDate = newStartDate;
+                    taskToUpdate.EndDate = newEndDate;
+                }
+            }
+            selectedData = null; // Reset selected data after modification
+        }
         await chart.UpdateSeriesAsync();
         StateHasChanged();
     }
@@ -482,48 +575,27 @@ else if (selectedData != null)
         }
     }
 
+    #region ToggleFunctions
     private void ToggleEditTaskName()
     {
         newTaskName = "";
-        showEditTaskTimeInput = false;
         showEditTaskNameInput = !showEditTaskNameInput;
-        showEditCommentsInput = false;
     }
 
-    private async Task EditTaskTime(DateTime newStartDate, DateTime newEndDate)
+    private void ToggleEditTaskProgress()
     {
-        if (selectedData != null && selectedData.DataPoint != null)
-        {
-            if (selectedData.DataPoint.X is string selectedTaskName)
-            {
-                // Find the task in the project list with the matching name and update its StartDate and EndDate properties
-                GanttData taskToUpdate = project.FirstOrDefault(task => task.Name == selectedTaskName);
-                if (taskToUpdate != null)
-                {
-                    taskToUpdate.StartDate = newStartDate;
-                    taskToUpdate.EndDate = newEndDate;
-                }
-            }
-            selectedData = null; // Reset selected data after modification
-        }
-        await chart.UpdateSeriesAsync();
-        StateHasChanged();
+        showEditTaskProgressInput = !showEditTaskProgressInput;
     }
 
 
-    private async Task UpdateTaskTime()
+    private void ToggleEditTaskDependencies()
     {
-        if (newTaskStartTime < newTaskEndTime) // Add a check to ensure the start date is before the end date
-        {
-            await EditTaskTime(newTaskStartTime, newTaskEndTime);
-            showEditTaskTimeInput = false;
-        }
-        else
-        {
-            // Handle case where the start date is not before the end date
-            // You may want to display a message or take appropriate action
-        }
+        showEditTaskDependenciesModal = !showEditTaskDependenciesModal;
+        selectedTaskForDependency = null;
+
     }
+
+
 
 
     private void ToggleEditTaskTime()
@@ -532,64 +604,22 @@ else if (selectedData != null)
         newTaskEndTime = DateTime.Today.AddDays(1);
         showEditTaskNameInput = false;
         showEditTaskTimeInput = !showEditTaskTimeInput;
-        showEditCommentsInput = false;
+        // showEditCommentsInput = false;
     }
 
-    private void CloseEditCommentsModal()
-    {
-        showEditCommentsModal = false;
-        editedComments = ""; // Clear the edited comments
-    }
 
-    private async Task UpdateComments()
+    private void ToggleEditTaskComments()
     {
-        if (selectedData != null && selectedData.DataPoint != null)
+        showEditTaskCommentsModal = !showEditTaskCommentsModal;
+        if(showEditTaskCommentsModal)
         {
-            if (selectedData.DataPoint.X is string selectedTaskName)
-            {
-                GanttData taskToUpdate = project.FirstOrDefault(task => task.Name == selectedTaskName);
-                if (taskToUpdate != null)
-                {
-                    taskToUpdate.Comments = editedComments;
-                }
-            }
-
-            CloseEditCommentsModal();
-            await chart.UpdateSeriesAsync();
-            StateHasChanged();
-        }
-    }
-
-    private void ToggleEditComments()
-    {
-        editedComments = selectedData.DataPoint.Items.First().Comments; // Initialize the input field with existing comments
-        showEditTaskNameInput = false;
-        showEditTaskTimeInput = false;
-        showEditCommentsInput = false;
-        showEditCommentsModal = true;
-    }
-    private string CompareUserProgress(GanttData task, int userProgress)
-    {
-        double taskTimeProgress = task.AutoProgress;
-        double userDaysAheadOrBehind = (taskTimeProgress - userProgress) * (task.EndDate - task.StartDate).TotalDays / 100.0;
-
-        if (userProgress == 100)
-        {
-            return "Task completed.";
-        }
-        else if (userDaysAheadOrBehind > 0)
-        {
-            return $"User is {userDaysAheadOrBehind:N1} days behind.";
-        }
-        else if (userDaysAheadOrBehind < 0)
-        {
-            return $"User is {Math.Abs(userDaysAheadOrBehind):N1} days ahead.";
+            editedComments = selectedData.DataPoint.Items.First().Comments; // Initialize the input field with existing comments
         }
         else
         {
-            return "User is on track.";
+            editedComments = null;
         }
     }
-    
+    #endregion
 
 }
