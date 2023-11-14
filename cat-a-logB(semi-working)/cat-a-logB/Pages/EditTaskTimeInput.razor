@@ -1,0 +1,59 @@
+<form>
+   <div class="form-group">
+      <label for="newTaskStartTime">Start Date:</label>
+      <input type="date" class="form-control" id="newTaskStartTime" @bind="newTaskStartTime" />
+   </div>
+   <div class="form-group">
+      <label for="newTaskEndTime">End Date:</label>
+      <input type="date" class="form-control" id="newTaskEndTime" @bind="newTaskEndTime" />
+   </div>
+   <br>
+   <button type="button" class="btn btn-success" @onclick="UpdateTaskTime">Update Task Time</button>
+</form>
+
+@code {
+   [Parameter] public List<GanttData> project { get; set; }
+   [Parameter] public ApexChart<GanttData> chart { get; set; }
+   [Parameter] public SelectedData<GanttData> selectedData { get; set; }
+   [Parameter] public EventCallback OnClose { get; set; }
+
+   private DateTime newTaskStartTime = DateTime.Today;
+   private DateTime newTaskEndTime = DateTime.Today.AddDays(1);
+
+
+   private async Task EditTaskTime(DateTime newStartDate, DateTime newEndDate)
+   {
+      if (selectedData != null && selectedData.DataPoint != null &&
+      selectedData.DataPoint.Items.First().Name is string selectedTaskName)
+      {
+         // Find the task in the project list with the matching name and update its StartDate and EndDate properties
+         GanttData taskToUpdate = project.FirstOrDefault(task => task.Name == selectedTaskName);
+         if (taskToUpdate != null)
+         {
+            taskToUpdate.StartDate = newStartDate;
+            taskToUpdate.EndDate = newEndDate;
+         }
+         // selectedData = null; // Reset selected data after modification
+      }
+      else
+      {
+
+      }
+      await chart.UpdateSeriesAsync();
+      StateHasChanged();
+      OnClose.InvokeAsync();
+   }
+
+   private async Task UpdateTaskTime()
+   {
+      if (newTaskStartTime < newTaskEndTime) // Add a check to ensure the start date is before the end date
+      {
+         await EditTaskTime(newTaskStartTime, newTaskEndTime);
+      }
+      else
+      {
+         // Handle case where the start date is not before the end date
+         // You may want to display a message or take appropriate action
+      }
+   }
+}

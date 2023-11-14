@@ -28,12 +28,24 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ291bnRlci5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Marijonas/source/repos/cat-a-log/cat-a-logB(semi-working)/cat-a-logB/Pages/EditTaskNameInput.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRWRpdFRhc2tOYW1lSW5wdXQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Marijonas/source/repos/cat-a-log/cat-a-logB(semi-working)/cat-a-logB/Pages/EditTaskTimeInput.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRWRpdFRhc2tUaW1lSW5wdXQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Marijonas/source/repos/cat-a-log/cat-a-logB(semi-working)/cat-a-logB/Pages/FetchData.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRmV0Y2hEYXRhLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Marijonas/source/repos/cat-a-log/cat-a-logB(semi-working)/cat-a-logB/Pages/Index.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXgucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Marijonas/source/repos/cat-a-log/cat-a-logB(semi-working)/cat-a-logB/Pages/Milestones.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWlsZXN0b25lcy5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Marijonas/source/repos/cat-a-log/cat-a-logB(semi-working)/cat-a-logB/Pages/Teams.razor]

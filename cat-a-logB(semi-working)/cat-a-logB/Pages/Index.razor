@@ -62,7 +62,7 @@
 @if (selectedData != null && selectedData.DataPoint != null)
 {
     <div class="alert alert-info">
-        <h3>Edit: @selectedData.DataPoint.X</h3>
+        <h3>Edit:@selectedData.DataPoint.Items.First().Name</h3>
     </div>
 
     <form>
@@ -76,29 +76,11 @@
     </form>
     @if (showEditTaskNameInput)
     {
-        <form>
-            <div class="form-group">
-                <label for="newTaskName">New Task Name:</label>
-                <input type="text" class="form-control" id="newTaskName" @bind="newTaskName" />
-            </div>
-            <br>
-            <button type="button" class="btn btn-success" @onclick="UpdateTaskName">Update Task Name</button>
-        </form>
+        <EditTaskNameInput selectedData="selectedData" project="project" chart="chart" OnClose="ToggleEditTaskName" />
     }
     @if (showEditTaskTimeInput)
     {
-        <form>
-            <div class="form-group">
-                <label for="newTaskStartTime">Start Date:</label>
-                <input type="date" class="form-control" id="newTaskStartTime" @bind="newTaskStartTime" />
-            </div>
-            <div class="form-group">
-                <label for="newTaskEndTime">End Date:</label>
-                <input type="date" class="form-control" id="newTaskEndTime" @bind="newTaskEndTime" />
-            </div>
-            <br>
-            <button type="button" class="btn btn-success" @onclick="UpdateTaskTime">Update Task Time</button>
-        </form>
+        <EditTaskTimeInput selectedData="selectedData" project="project" chart="chart" OnClose="ToggleEditTaskTime" />
     }
     @if (showEditTaskProgressInput)
     {
@@ -348,7 +330,6 @@ else if (selectedData != null)
             project.Add(newTaskData);
             await chart.UpdateSeriesAsync();
             StateHasChanged();
-            ShowTaskDates();
         }
         else
         {
@@ -483,35 +464,8 @@ else if (selectedData != null)
     }
 
 
-    private async Task EditTaskName(string newTaskName) // Strictly to edit the name and refresh
-    {
-        if (selectedData != null && selectedData.DataPoint != null &&
-        selectedData.DataPoint.X is string selectedTaskName)
-        {
-            GanttData taskToUpdate = project.FirstOrDefault(task => task.Name == selectedTaskName);
-            if (taskToUpdate != null)
-            {
-                taskToUpdate.Name = newTaskName;
-            }
-        }
+   
 
-        await chart.UpdateSeriesAsync();
-        StateHasChanged();
-    }
-
-        private async Task UpdateTaskTime()
-    {
-        if (newTaskStartTime < newTaskEndTime) // Add a check to ensure the start date is before the end date
-        {
-            await EditTaskTime(newTaskStartTime, newTaskEndTime);
-            showEditTaskTimeInput = false;
-        }
-        else
-        {
-            // Handle case where the start date is not before the end date
-            // You may want to display a message or take appropriate action
-        }
-    }
 
     
     private async Task UpdateComments()
@@ -533,47 +487,6 @@ else if (selectedData != null)
         }
     }
 
-    private async Task EditTaskTime(DateTime newStartDate, DateTime newEndDate)
-    {
-        if (selectedData != null && selectedData.DataPoint != null)
-        {
-            if (selectedData.DataPoint.X is string selectedTaskName)
-            {
-                // Find the task in the project list with the matching name and update its StartDate and EndDate properties
-                GanttData taskToUpdate = project.FirstOrDefault(task => task.Name == selectedTaskName);
-                if (taskToUpdate != null)
-                {
-                    taskToUpdate.StartDate = newStartDate;
-                    taskToUpdate.EndDate = newEndDate;
-                }
-            }
-            selectedData = null; // Reset selected data after modification
-        }
-        await chart.UpdateSeriesAsync();
-        StateHasChanged();
-    }
-
-    private async Task UpdateTaskName() // To do checks wether the input is valid, if yes update the name
-    {
-        if (!string.IsNullOrWhiteSpace(newTaskName))
-        {
-            if (!project.Any(task => task.Name == newTaskName))
-            {
-                await EditTaskName(newTaskName);
-                showEditTaskNameInput = false;
-                newTaskName = string.Empty;
-            }
-            else
-            {
-                // Handle case where the name is already in use
-            }
-        }
-
-        else
-        {
-            // handle case where name is whiteSpace
-        }
-    }
 
     #region ToggleFunctions
     private void ToggleEditTaskName()
@@ -595,14 +508,10 @@ else if (selectedData != null)
 
     }
 
-
-
-
     private void ToggleEditTaskTime()
     {
         newTaskStartTime = DateTime.Today;
         newTaskEndTime = DateTime.Today.AddDays(1);
-        showEditTaskNameInput = false;
         showEditTaskTimeInput = !showEditTaskTimeInput;
         // showEditCommentsInput = false;
     }
