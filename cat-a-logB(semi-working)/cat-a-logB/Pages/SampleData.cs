@@ -66,19 +66,14 @@ namespace cat_a_logB.Pages
         }
         public static List<ProjectMilestone> GetMilestones()
         {
-            // Replace this with code to retrieve milestones from your data source
-            // You can create and return a list of ProjectMilestone instances here
-            // For example:
-            var milestones = new List<ProjectMilestone>
-            {
-                new ProjectMilestone { Name = "Milestone 1", Tasks = new List<GanttData>() },
-                new ProjectMilestone { Name = "Milestone 2", Tasks = new List<GanttData>() },
-                // Add more milestones as needed
-            };
-
             return milestones;
         }
+        private static List<ProjectMilestone> milestones = new List<ProjectMilestone>
+        {
+            new ProjectMilestone { Name = "Milestone 1", Tasks = new List<GanttData>() {tasks[1],tasks[2] } },
+            new ProjectMilestone { Name = "Milestone 2", Tasks = new List<GanttData>() {tasks[0],tasks[4] }},
 
+        };
         public static List<ProjectTeam> GetTeams()
         {
             return teams;

@@ -55,30 +55,6 @@
     </div>
 </div>
 
-<div class="col-md-6">
-    <!-- Rest of your component HTML -->
-
-    <div class="line">
-        @foreach (var milestone in milestones)
-        {
-            <div class="rhombus" title="@milestone.Name">
-                <!-- Optionally, you can display the milestone name as a tooltip -->
-            </div>
-        }
-    </div>
-</div>
-
-<style>
-    .rhombus {
-        width: 20px; /* Adjust the size as needed */
-        height: 20px; /* Adjust the size as needed */
-        background-color: blue; /* Adjust the color as needed */
-        transform: rotate(45deg);
-        margin: 10px; /* Add margin to control the spacing between rhombus icons */
-    }
-</style>
-
-
 
 @if (selectedMilestone != null)
 {
@@ -105,17 +81,19 @@ else
 
 @code {
     private List<GanttData> tasks;
+    private List<ProjectMilestone> milestones;
     private string milestoneName;
     private List<GanttData> selectedTasks = new List<GanttData>();
-    private List<ProjectMilestone> milestones = SampleData.GetMilestones(); // Get milestones from the SampleData service
     private ProjectMilestone selectedMilestone;
+    private ProjectMilestone newMilestone = new ProjectMilestone();
+    private string errorMessage = "";
 
 
 
 
     protected override void OnInitialized()
     {
-        // Retrieve tasks from the SampleData service
+        milestones = SampleData.GetMilestones();
         tasks = SampleData.GetProject();
     }
 
@@ -140,19 +118,19 @@ else
     {
         if (!string.IsNullOrWhiteSpace(milestoneName) && selectedTasks != null && selectedTasks.Any())
         {
-            // Create a new ProjectMilestone instance
+
             var newMilestone = new ProjectMilestone
                 {
                     Name = milestoneName,
-                    Tasks = selectedTasks.ToList() // Create a copy of the selected tasks
+                    Tasks = selectedTasks.ToList()
                 };
 
-            // Add the new milestone to your milestones collection
-            milestones.Add(newMilestone);
 
-            // Clear the milestoneName and selectedTasks
+            milestones.Add(newMilestone);
+            newMilestone = new ProjectMilestone();
             milestoneName = string.Empty;
             selectedTasks.Clear();
+            StateHasChanged();
         }
     }
 
