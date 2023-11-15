@@ -1,3 +1,5 @@
+@using cat_a_logB.Data
+
 <form>
    <div class="form-group">
       <label for="progressInput">Select Progress:</label>
@@ -12,14 +14,16 @@
 </form>
 
 @code {
+   [Parameter] public SelectedData<GanttData> selectedData { get; set; }
    [Parameter] public List<GanttData> project { get; set; }
    [Parameter] public ApexChart<GanttData> chart { get; set; }
-   [Parameter] public SelectedData<GanttData> selectedData { get; set; }
+   [Parameter] public ApexChart<ProjectMilestone> mileChart { get; set; }
+   [Parameter] public List<ProjectMilestone> milestones { get; set; }
    [Parameter] public EventCallback OnClose { get; set; }
 
    private int newProgress = 0;
    private List<int> progressOptions = new List<int> { 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80,
-85, 90, 95, 100 };
+   85, 90, 95, 100 };
 
    private async Task UpdateProgress(int progressValue)
    {
@@ -35,6 +39,14 @@
             if (progressValue == 100)
             {
                taskToUpdate.PointColor = "#CCCCCC";
+               foreach(var milestone in milestones)
+               {
+                  milestone.CalculateCompletedTasksPercentage();
+                  if(milestone.Color == "green")
+                  {
+                     mileChart.RenderAsync();
+                  }
+               }
             }
             else
             {
@@ -47,5 +59,5 @@
       await chart.UpdateSeriesAsync();
       StateHasChanged();
    }
-
 }
+   

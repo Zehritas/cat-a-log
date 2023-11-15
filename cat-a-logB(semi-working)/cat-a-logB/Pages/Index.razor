@@ -152,11 +152,11 @@
     }
     @if (showEditTaskProgressInput)
     {
-        <EditTaskProgressInput selectedData="selectedData" project="project" chart="chart" OnClose="ToggleEditTaskProgress" />
+        <EditTaskProgressInput selectedData="selectedData" project="project" chart="chart" mileChart="MileChart" milestones="milestones" OnClose="ToggleEditTaskProgress"/>
     }
     @if (showEditTaskCommentsModal)
     {
-        <EditTaskCommentsModal selectedData="selectedData" project="project" chart="chart" OnClose="ToggleEditTaskComments" />
+        <EditTaskCommentsModal selectedData="selectedData" project="project" chart="chart" OnClose="ToggleEditTaskComments"/>
     }
 
     @if (showEditTaskDependenciesModal)
