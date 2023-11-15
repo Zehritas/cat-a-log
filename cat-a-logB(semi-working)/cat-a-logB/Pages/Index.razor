@@ -30,7 +30,7 @@
                         <br>
                         <span>Team: @point.Items.First().Team.Name</span>
                         <br>
-                        <span>@CompareUserProgress(point.Items.First(), point.Items.First().Progress)</span>
+                        <span>@CompareUserProgress(point.Items.First())</span>
 
 
                     }
@@ -84,44 +84,11 @@
     }
     @if (showEditTaskProgressInput)
     {
-        <form>
-            <div class="form-group">
-                <label for="progressInput">Select Progress:</label>
-                <select class="form-control" id="progressInput" @bind="newProgress">
-                    @foreach (var progressOption in progressOptions)
-                    {
-                        <option value="@progressOption">@progressOption%</option>
-                    }
-                </select>
-            </div>
-            <button type="button" class="btn btn-success" @onclick="() => UpdateProgress(newProgress)">Update Progress</button>
-        </form>
+        <EditTaskProgressInput selectedData="selectedData" project="project" chart="chart" OnClose="ToggleEditTaskProgress" />
     }
     @if (showEditTaskCommentsModal)
     {
-        <div class="modal fade show" style="display: block;" tabindex="-1" role="dialog" id="editCommentsModal">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">@selectedData.DataPoint.Items.First().Name Comments </h5>
-                        <button type="button" class="close" @onclick="ToggleEditTaskComments">
-                            <span aria-hidden="true">×</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label for="newComments">Comments:</label>
-                            <textarea class="form-control" id="newComments" @bind="editedComments"></textarea>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" @onclick="ToggleEditTaskComments">Close</button>
-                        <button type="button" class="btn btn-success" @onclick="UpdateComments">Save Changes</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="modal-backdrop fade show"></div>
+        <EditTaskCommentsModal selectedData="selectedData" project="project" chart="chart" OnClose="ToggleEditTaskComments" />
     }
 
     @if (showEditTaskDependenciesModal)
@@ -176,7 +143,7 @@
             <li class="list-group-item">Team: @selectedData.DataPoint.Items.First().Team.Name</li>
             <li class="list-group-item">Progress: @selectedData.DataPoint.Items.First().Progress%</li>
             <li class="list-group-item">Task Time Progress: @selectedData.DataPoint.Items.First().AutoProgress%</li>
-            <li class="list-group-item">User Progress Difference: @CompareUserProgress(selectedData.DataPoint.Items.First(), selectedData.DataPoint.Items.First().Progress)</li>
+            <li class="list-group-item">User Progress Difference: @CompareUserProgress(selectedData.DataPoint.Items.First())</li>
              <div class="mt-4">
         <h4>Dependencies:</h4>
         <ul class="list-group">
@@ -257,9 +224,6 @@ else if (selectedData != null)
     private DateTime newTaskStartTime = DateTime.Today;
     private DateTime newTaskEndTime = DateTime.Today.AddDays(1);
     private string selectedTeamName;
-    private int newProgress = 0;
-    private List<int> progressOptions = new List<int> { 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80,
-85, 90, 95, 100 };
     private GanttData selectedTaskForProgress;
     private bool showEditTaskNameInput = false;
     private bool showEditTaskTimeInput = false;
@@ -268,7 +232,6 @@ else if (selectedData != null)
     private bool showEditTaskDependenciesModal = false;
     private DependencyType selectedDependencyType = DependencyType.FS; //default is FS
     private string selectedTaskForDependency;
-    private string editedComments;
     private List<object> boxedValues = new List<object>();
 
 
@@ -297,6 +260,11 @@ else if (selectedData != null)
                 Colors = colors
             };
         options.Legend = new Legend { Position = LegendPosition.Bottom, FontSize ="14px", HorizontalAlign = Align.Center};            
+    }
+
+     private void OnClick(SelectedData<GanttData> data)
+    {
+        selectedData = data;
     }
 
     private async Task AddTask()
@@ -362,8 +330,9 @@ else if (selectedData != null)
     }
 
     
-    private string CompareUserProgress(GanttData task, int userProgress)
+    private string CompareUserProgress(GanttData task)
     {
+        int userProgress = task.Progress;
         double taskTimeProgress = task.AutoProgress;
         double userDaysAheadOrBehind = (taskTimeProgress - userProgress) * (task.EndDate - task.StartDate).TotalDays / 100.0;
 
@@ -384,10 +353,7 @@ else if (selectedData != null)
             return "User is on track.";
         }
     }
-    private void OnClick(SelectedData<GanttData> data)
-    {
-        selectedData = data;
-    }
+   
     private async Task RemoveTask()
     {
         if (selectedData != null && selectedData.DataPoint != null)
@@ -433,59 +399,8 @@ else if (selectedData != null)
         await chart.UpdateSeriesAsync();
         StateHasChanged();
     }
-
-
-
-    private async Task UpdateProgress(int progressValue)
-    {
-
-         if (selectedData != null && selectedData.DataPoint != null &&
-        selectedData.DataPoint.X is string selectedTaskName)
-        {
-            GanttData taskToUpdate = project.FirstOrDefault(task => task.Name == selectedTaskName);
-            if (taskToUpdate != null)
-            {
-                taskToUpdate.Progress = progressValue;
-
-                if (progressValue == 100)
-                {
-                    taskToUpdate.PointColor = "#CCCCCC";
-                }
-                else
-                {
-                    taskToUpdate.PointColor = taskToUpdate.Team.Color;
-                }
-            }
-        }
-
-        ToggleEditTaskProgress();
-        await chart.UpdateSeriesAsync();
-        StateHasChanged();
-    }
-
-
-   
-
-
     
-    private async Task UpdateComments()
-    {
-        if (selectedData != null && selectedData.DataPoint != null)
-        {
-            if (selectedData.DataPoint.X is string selectedTaskName)
-            {
-                GanttData taskToUpdate = project.FirstOrDefault(task => task.Name == selectedTaskName);
-                if (taskToUpdate != null)
-                {
-                    taskToUpdate.Comments = editedComments;
-                }
-            }
 
-            ToggleEditTaskComments();
-            await chart.UpdateSeriesAsync();
-            StateHasChanged();
-        }
-    }
 
 
     #region ToggleFunctions
@@ -516,18 +431,9 @@ else if (selectedData != null)
         // showEditCommentsInput = false;
     }
 
-
     private void ToggleEditTaskComments()
     {
         showEditTaskCommentsModal = !showEditTaskCommentsModal;
-        if(showEditTaskCommentsModal)
-        {
-            editedComments = selectedData.DataPoint.Items.First().Comments; // Initialize the input field with existing comments
-        }
-        else
-        {
-            editedComments = null;
-        }
     }
     #endregion
 
