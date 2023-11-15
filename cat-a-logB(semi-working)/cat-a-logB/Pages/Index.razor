@@ -43,7 +43,7 @@
                                 
                             }
                         </ul>
-                        <span>Completed Tasks Percentage: @milestone.CompletedTasksPercentage.ToString("0.##")%</span>
+                        @* <span>Completed Tasks Percentage: @milestone.CompletedTasksPercentage.ToString("0.##")%</span> *@
                     }
                 }
                 else
@@ -63,7 +63,7 @@
                              SeriesType="SeriesType.Line"
                              XValue="@(e => e.Name)"
                              YValue="@(e => 0)"
-                             PointColor="@(e => GetPointColor(e))">
+                             PointColor="@(e => e.Color)">
                             
             
             </ApexPointSeries>
@@ -315,11 +315,6 @@ else if (selectedData != null)
         lineData = milestones.Select(_ => 100.0).ToList();
         options1.Yaxis = new List<YAxis>();
 
-        foreach (var milestone in milestones)
-        {
-            milestone.OnTasksUpdated += HandleTasksUpdated;
-        }
-
         options1.Yaxis.Add(new YAxis
             {
                 DecimalsInFloat = 0,
@@ -358,12 +353,12 @@ else if (selectedData != null)
         options.Legend = new Legend { Position = LegendPosition.Bottom, FontSize ="14px", HorizontalAlign = Align.Center};            
     }
 
-    private string GetPointColor(ProjectMilestone milestone)
+   /* private string GetPointColor(ProjectMilestone milestone)
     {
-        Console.WriteLine("GetPointColor called");
-        return milestone.CompletedTasksPercentage == 100 ? "green" : "blue";
+        milestone.CalculateCompletedTasksPercentage();
+        return milestone.Color;
         
-    }
+    } */
     private void HandleTasksUpdated()
     {
         Console.WriteLine("HandleTasksUpdated called");
@@ -492,6 +487,14 @@ else if (selectedData != null)
             if (progressValue == 100)
             {
                 selectedTaskForProgress.PointColor = "#CCCCCC";
+                foreach(var milestone in milestones)
+                {
+                    milestone.CalculateCompletedTasksPercentage();
+                    if(milestone.Color == "green")
+                    {
+                        MileChart.RenderAsync();
+                    }
+                }
             }
             else
             {
