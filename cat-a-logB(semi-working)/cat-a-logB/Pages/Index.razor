@@ -496,8 +496,7 @@ else if (selectedData != null)
                     // Display an error message, log, or handle the situation appropriately
                     return;
                 }
-                if (dependentTask.Dependencies.Any(dep => dep.DependentTaskName == selectedDependentTaskName && dep.Type ==
-                dependencyType))
+                if (dependentTask.Dependencies.Any(dep => dep.DependentTaskName == selectedDependentTaskName))
                 {
                     // Display an error message, log, or handle the situation appropriately
                     return;
