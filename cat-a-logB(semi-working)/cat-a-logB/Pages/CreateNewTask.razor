@@ -1,0 +1,84 @@
+@* <form>
+<div class="form-group">
+<label for="taskName">Task Name:</label>
+<input class="form-control" type="text" id="taskName" @bind="newTask.Name" />
+</div>
+
+<div class="form-group">
+<label for="startDate">Start Date:</label>
+<input class="form-control" type="date" id="startDate" @bind="newTask.StartDate" />
+</div>
+
+<div class="form-group">
+<label for="endDate">End Date:</label>
+<input class="form-control" type="date" id="endDate" @bind="newTask.EndDate" />
+</div>
+
+<div class="form-group">
+<label for="comments">Comments:</label>
+<input class="form-control" id="comments" @bind="newTask.Comments">
+</div>
+
+<div class="form-group">
+<label for="taskTeam">Task Team:</label>
+<select class="form-control" id="taskTeam" @bind="selectedTeamName">
+@foreach (var team in teams)
+{
+<option value="@team.Name">@team.Name</option>
+}
+</select>
+
+</div>
+
+<br>
+<button class="btn btn-primary" type="button" @onclick="AddTask">Add Task</button>
+</form>
+
+@code {
+
+[Parameter] public List<GanttData> project { get; set; }
+[Parameter] public ApexChart<GanttData> chart { get; set; }
+[Parameter] public List<ProjectTeam> teams { get; set; }
+[Parameter] public SelectedData<GanttData> selectedData { get; set; }
+// [Parameter] public EventCallback OnClose { get; set; }
+
+
+private async Task AddTask()
+{
+if (!newTask.Name.IsTaskNameValid())
+{
+errorMessage = "Task name is required.";
+return;
+}
+
+if (!newTask.StartDate.IsEndDateGreaterThanStartDate(newTask.EndDate))
+{
+errorMessage = "End date must be greater than start date.";
+return;
+}
+
+errorMessage = "";
+var selectedTeam = teams.FirstOrDefault(t => t.Name == selectedTeamName);
+
+if (selectedTeam != null)
+{
+var newTaskData = new GanttData(
+newTask.Name,
+newTask.StartDate,
+newTask.EndDate,
+selectedTeam,
+0,
+newTask.Comments
+);
+newTaskData.AutoProgress = (int)CalculateAutoProgress(newTaskData);
+project.Add(newTaskData);
+await chart.UpdateSeriesAsync();
+StateHasChanged();
+}
+else
+{
+// Handle the case where no team with the selected name is found
+errorMessage = "Selected team not found.";
+}
+}
+} *@
