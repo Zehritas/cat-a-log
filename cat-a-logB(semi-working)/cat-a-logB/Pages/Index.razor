@@ -6,6 +6,74 @@
 
 <PageTitle>Gantt Chart</PageTitle>
 
+<PageTitle>Gantt Chart</PageTitle>
+
+<DemoContainer>
+  <ApexChart @ref=MileChart
+               TItem="ProjectMilestone"
+               Title="@title"
+               Height="120"
+               Options=options1
+               Debug
+    >
+
+        <ApexPointTooltip>
+            <div class="m-2" style="width: 300px; max-height: 100px; font-size: 12px;">
+                @if (context != null)
+                {
+                    var dataPoint = (ApexCharts.DataPoint<ProjectMilestone>)context.DataPoint;
+
+                    var milestone = dataPoint.Items.FirstOrDefault();
+                    if (milestone != null)
+                    {
+                        <h4>@milestone.Name</h4>
+                        <span>Tasks:</span>
+                        <ul>
+                            @foreach (var task in milestone.Tasks)
+                            {
+                                <li>
+                                    <span style="margin-right: 8px;">@task.Name</span>
+                                    @if (task.Progress == 100)
+                                    {
+                                        <span style="color: green;">(Complete)</span>
+                                    }
+
+
+                                </li>
+                                
+                            }
+                        </ul>
+                        @* <span>Completed Tasks Percentage: @milestone.CompletedTasksPercentage.ToString("0.##")%</span> *@
+                    }
+                }
+                else
+                {
+                    <p>Context is null.</p>
+                }
+
+            </div>
+        </ApexPointTooltip>
+
+
+        <ChildContent>
+            
+            <ApexPointSeries TItem="ProjectMilestone"
+                             Items="milestones"
+                             Name="Milestones"
+                             SeriesType="SeriesType.Line"
+                             XValue="@(e => e.Name)"
+                             YValue="@(e => 0)"
+                             PointColor="@(e => e.Color)">
+                            
+            
+            </ApexPointSeries>
+
+        </ChildContent>
+        
+    </ApexChart>
+
+</DemoContainer>
+
 <DemoContainer>
 
     @if (project == null)
@@ -233,13 +301,38 @@ else if (selectedData != null)
     private DependencyType selectedDependencyType = DependencyType.FS; //default is FS
     private string selectedTaskForDependency;
     private List<object> boxedValues = new List<object>();
+    private ApexChart<ProjectMilestone> MileChart;
+    private List<ProjectMilestone> milestones;
+    private string title = "Milestone List";
+    private List<double> lineData;
+    private ApexChartOptions<ProjectMilestone> options1 { get; set; } = new();
 
 
     protected override async Task OnInitializedAsync()
     {
         project = SampleData.GetProject();
         teams = SampleData.GetTeams();
+        milestones = SampleData.GetMilestones();
         var colors = teams.Select(team => team.Color).ToList();
+        lineData = milestones.Select(_ => 100.0).ToList();
+        options1.Yaxis = new List<YAxis>();
+
+        options1.Yaxis.Add(new YAxis
+            {
+                DecimalsInFloat = 0,
+                TickAmount = 1,
+
+                Labels = new YAxisLabels
+                {
+                    Style = new AxisLabelStyle
+                    {
+                        FontSize = "5px",
+                        Colors = new Color("white")
+                    }
+                }
+            });
+
+
         options = new ApexChartOptions<GanttData>
             {
                 PlotOptions = new PlotOptions
