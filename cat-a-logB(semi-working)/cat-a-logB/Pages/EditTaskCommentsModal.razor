@@ -39,20 +39,22 @@
    }
    private async Task UpdateComments()
    {
-      if (selectedData != null && selectedData.DataPoint != null)
+      if (selectedData != null && selectedData.DataPoint != null
+      && selectedData.DataPoint.Items.First().Name is string selectedTaskName)
       {
-         if (selectedData.DataPoint.X is string selectedTaskName)
+         GanttData taskToUpdate = project.FirstOrDefault(task => task.Name == selectedTaskName);
+         if (taskToUpdate != null)
          {
-            GanttData taskToUpdate = project.FirstOrDefault(task => task.Name == selectedTaskName);
-            if (taskToUpdate != null)
-            {
-               taskToUpdate.Comments = editedComments;
-            }
+            taskToUpdate.Comments = editedComments;
          }
 
          OnClose.InvokeAsync();
          await chart.UpdateSeriesAsync();
          StateHasChanged();
+      }
+      else
+      {
+         Console.WriteLine("Aaa");
       }
    }
 
