@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "UEkx+jTugeMHG9A5KQNSp3mGuLmVQbgpRdv1RP0qAlHxbuGA0pHMf6FGq05GeRmEaABUVeabb+F+vjtNqroF8A==",
+  "dgSpecHash": "EZIb5yb9C58UQtiixgF39RUSfJrchS4f51Zcuo4WEbYXgk5gS/x8nthdz94CGJlRPX28OKKxsFhAJsninzW5WQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Marijonas\\source\\repos\\cat-a-log\\cat-a-logB(semi-working)\\cat-a-logB\\cat-a-logB.csproj",
+  "projectFilePath": "C:\\Users\\Marijonas\\source\\repos\\cat-a-log\\cat-a-logB\\cat-a-logB.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Marijonas\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "C:\\Users\\Marijonas\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",

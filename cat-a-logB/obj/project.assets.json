@@ -11993,11 +11993,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Marijonas\\source\\repos\\cat-a-log\\cat-a-logB(semi-working)\\cat-a-logB\\cat-a-logB.csproj",
+      "projectUniqueName": "C:\\Users\\Marijonas\\source\\repos\\cat-a-log\\cat-a-logB\\cat-a-logB.csproj",
       "projectName": "cat-a-logB",
-      "projectPath": "C:\\Users\\Marijonas\\source\\repos\\cat-a-log\\cat-a-logB(semi-working)\\cat-a-logB\\cat-a-logB.csproj",
+      "projectPath": "C:\\Users\\Marijonas\\source\\repos\\cat-a-log\\cat-a-logB\\cat-a-logB.csproj",
       "packagesPath": "C:\\Users\\Marijonas\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Marijonas\\source\\repos\\cat-a-log\\cat-a-logB(semi-working)\\cat-a-logB\\obj\\",
+      "outputPath": "C:\\Users\\Marijonas\\source\\repos\\cat-a-log\\cat-a-logB\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
