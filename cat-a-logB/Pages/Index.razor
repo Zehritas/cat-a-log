@@ -294,6 +294,7 @@ else if (selectedData != null)
     private ApexChart<GanttData> chart;
     private GanttData newTask = new GanttData();
     private List<GanttData> project;
+    private List<GanttData> sortedTasks;
     private List<ProjectTeam> teams;
     private ApexChartOptions<GanttData> options;
     private SelectedData<GanttData> selectedData;
@@ -320,6 +321,7 @@ else if (selectedData != null)
     protected override async Task OnInitializedAsync()
     {
         project = SampleData.GetProject();
+        sortedTasks = project;
         teams = SampleData.GetTeams();
         milestones = SampleData.GetMilestones();
         var colors = teams.Select(team => team.Color).ToList();
@@ -432,6 +434,116 @@ else if (selectedData != null)
     }
 
 
+    public List<GanttData> SortTasksByDependencies(List<GanttData> tasks)
+    {
+        var graph = new Dictionary<string, List<string>>();
+        var inDegree = new Dictionary<string, int>();
+
+        // Build the graph and calculate in-degrees
+        foreach (var task in tasks)
+        {
+            graph[task.Name] = new List<string>();
+            inDegree[task.Name] = 0;
+        }
+
+        foreach (var task in tasks)
+        {
+            foreach (var dependency in task.Dependencies)
+            {
+                graph[dependency.DependentTaskName].Add(task.Name);
+                inDegree[task.Name]++;
+            }
+        }
+
+        // Perform topological sort
+        var sortedTasks = new List<GanttData>();
+        var queue = new Queue<string>(inDegree.Where(entry => entry.Value == 0).Select(entry => entry.Key));
+
+        while (queue.Count > 0)
+        {
+            var currentTaskName = queue.Dequeue();
+            var currentTask = tasks.First(task => task.Name == currentTaskName);
+
+            sortedTasks.Add(currentTask);
+
+            foreach (var dependentTaskName in graph[currentTaskName])
+            {
+                inDegree[dependentTaskName]--;
+                if (inDegree[dependentTaskName] == 0)
+                {
+                    queue.Enqueue(dependentTaskName);
+                }
+            }
+        }
+
+        return sortedTasks;
+    }
+
+
+    public async Task Reschedule(GanttData predecessorTask, List<GanttData> tasks)
+    {
+        foreach (var dependency in predecessorTask.Dependencies)
+        {
+            GanttData successorTask = tasks.FirstOrDefault(task => task.Name == dependency.DependentTaskName);
+
+            switch (dependency.Type)
+            {
+                case DependencyType.FS:
+                    // Rule: Reschedule dependent task to start at the predecessor task's end date
+                    if (predecessorTask.EndDate > successorTask.StartDate)
+                    {
+                        double taskLength = (successorTask.EndDate - successorTask.StartDate).TotalDays;
+                        successorTask.StartDate = predecessorTask.EndDate;
+                        successorTask.EndDate = successorTask.StartDate.AddDays(taskLength);
+                        await Reschedule(successorTask, tasks);
+                        await chart.UpdateSeriesAsync();
+                        StateHasChanged();
+                    }
+                    break;
+
+                /* case DependencyType.SF:
+                // Rule: Reschedule dependent task to start at predecessor task's end date
+                if (dependency.DependentTask.StartDate < task.EndDate)
+                {
+                dependency.DependentTask.StartDate = task.EndDate;
+                }
+                break;
+
+                case DependencyType.SS:
+                // Rule: Reschedule dependent task to start at predecessor task's start date
+                if (dependency.DependentTask.StartDate < task.StartDate)
+                {
+                dependency.DependentTask.StartDate = task.StartDate;
+                }
+                break;
+
+                case DependencyType.FF:
+                // Rule: Reschedule dependent task to finish at the predecessor task's finish date
+                if (task.EndDate < dependency.DependentTask.EndDate)
+                {
+                task.EndDate = dependency.DependentTask.EndDate;
+                }
+                break; */
+
+                default:
+                    // Handle unsupported dependency types
+                    throw new ArgumentException("Unsupported DependencyType");
+            }
+        }
+
+    }
+
+    /* private void RescheduleSuccessorTasks(Task succesorTask)
+    {
+    GanttData successorTask = tasks.FirstOrDefault(task => task.Name == dependency.DependentTaskName);
+    // Logic to identify and reschedule dependent tasks
+    foreach (var predecessorTask in succesorTask.dependencies)
+    {
+    RescheduleTask(successorTask);
+    RescheduleSuccessorTasks(successorTask);
+    }
+    } */
+
 
 
     private string CompareUserProgress(GanttData task)
@@ -448,24 +560,20 @@ else if (selectedData != null)
         {
             return $"User is {userDaysAheadOrBehind:N1} days behind.";
         }
-        else if (userDaysAheadOrBehind < 0)
-        {
-            return $"User is {Math.Abs(userDaysAheadOrBehind):N1} days ahead.";
-        }
+        else if (userDaysAheadOrBehind < 0) { return $"User is {Math.Abs(userDaysAheadOrBehind):N1} days ahead."; }
         else
         {
             return "User is on track.";
         }
     }
-
     private async Task RemoveTask()
     {
-        if (selectedData != null && selectedData.DataPoint != null)
+        if (selectedData != null && selectedData.DataPoint
+        != null)
         {
             if (selectedData.DataPoint.X is string selectedTaskName)
-            {
-                // Use LINQ to create a new list of tasks excluding the one with the matching name
-                project = project.Where(task => task.Name != selectedTaskName).ToList(); // LINQ EXPRESSION
+            { // Use LINQ to create a new list of tasks
+                project = project.Where(task => task.Name != selectedTaskName).ToList(); //
             }
             selectedData = null; // Reset selected data after removal
         }
@@ -510,6 +618,13 @@ else if (selectedData != null)
                     };
 
                 dependentTask.Dependencies.Add(newDependency);
+                sortedTasks = SortTasksByDependencies(project);
+                Reschedule(dependentTask, sortedTasks);
+                foreach (var task in sortedTasks)
+                {
+                    Console.WriteLine(task.Name);
+                }
+                Console.WriteLine("----------");
             }
         }
 
