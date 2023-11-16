@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\cat-a-logB.props" />
+</Project>

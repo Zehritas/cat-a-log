@@ -1,0 +1,561 @@
+﻿@page "/";
+@using cat_a_logB.Data
+@using cat_a_logB;
+@using ApexCharts;
+@inject cat_a_logB.Pages.SampleData SampleData
+
+<PageTitle>Gantt Chart</PageTitle>
+
+<PageTitle>Gantt Chart</PageTitle>
+
+<DemoContainer>
+    <ApexChart @ref=MileChart TItem="ProjectMilestone" Title="@title" Height="120" Options=options1 Debug>
+
+        <ApexPointTooltip>
+            <div class="m-2" style="width: 300px; max-height: 100px; font-size: 12px;">
+                @if (context != null)
+                {
+                    var dataPoint = (ApexCharts.DataPoint<ProjectMilestone>)context.DataPoint;
+
+                    var milestone = dataPoint.Items.FirstOrDefault();
+                    if (milestone != null)
+                    {
+                        <h4>@milestone.Name</h4>
+                        <span>Tasks:</span>
+                        <ul>
+                            @foreach (var task in milestone.Tasks)
+                            {
+                                <li>
+                                    <span style="margin-right: 8px;">@task.Name</span>
+                                    @if (task.Progress == 100)
+                                    {
+                                        <span style="color: green;">(Complete)</span>
+                                    }
+
+
+                                </li>
+
+                            }
+                        </ul>
+                        @* <span>Completed Tasks Percentage: @milestone.CompletedTasksPercentage.ToString("0.##")%</span> *@
+                    }
+                }
+                else
+                {
+                    <p>Context is null.</p>
+                }
+
+            </div>
+        </ApexPointTooltip>
+
+
+        <ChildContent>
+
+            <ApexPointSeries TItem="ProjectMilestone" Items="milestones" Name="Milestones" SeriesType="SeriesType.Line"
+                XValue="@(e => e.Name)" YValue="@(e => 0)" PointColor="@(e => e.Color)">
+
+
+            </ApexPointSeries>
+
+        </ChildContent>
+
+    </ApexChart>
+
+</DemoContainer>
+
+<DemoContainer>
+
+    @if (project == null)
+    {
+        <div class="text-center text-muted" style="min-height: 300px">
+            <h3>Loading chart<span class="animated-dots"></span></h3>
+        </div>
+    }
+    else
+    {
+        <ApexChart OnClick=OnClick @ref=chart TItem="GanttData" Title="Project Gantt chart" Options="options"
+            XAxisType="XAxisType.Datetime">
+
+            <ApexPointTooltip>
+
+                <div class="m-2">
+                    @{
+                        var point = (ListPoint<GanttData>)context.DataPoint;
+
+                        <h4>@point.X</h4>
+                        <span>Deadline: @point.Items.First().EndDate.ToShortDateString()</span>
+                        <br>
+                        <span>Team: @point.Items.First().Team.Name</span>
+                        <br>
+                        <span>@CompareUserProgress(point.Items.First())</span>
+
+
+                    }
+                </div>
+            </ApexPointTooltip>
+
+            <ChildContent>
+                @foreach (var team in teams)
+                {
+                    <ApexRangeSeries TItem="GanttData" Items="project.Where(task => task.Team == team)" Name="@team.Name"
+                        XValue="@(e => e.Name)" YMinValue="@(e => e.StartDate.ToUnixTimeMilliseconds())"
+                        YMaxValue="@(e => e.EndDate.ToUnixTimeMilliseconds())" PointColor="e => e.PointColor"
+                        OrderByDescending="e => e.Items.First().Team.Name" />
+                }
+            </ChildContent>
+
+
+        </ApexChart>
+    }
+
+</DemoContainer>
+
+
+
+@if (selectedData != null && selectedData.DataPoint != null)
+{
+    <div class="alert alert-info">
+        <h3>Edit:@selectedData.DataPoint.Items.First().Name</h3>
+    </div>
+
+    <form>
+        <!-- Buttons for editing tasks -->
+        <button type="button" class="btn btn-primary" @onclick="RemoveTask">Remove Task</button>
+        <button type="button" class="btn btn-primary" @onclick="ToggleEditTaskName">Edit Task Name</button>
+        <button type="button" class="btn btn-primary" @onclick="ToggleEditTaskTime">Edit Task Time</button>
+        <button type="button" class="btn btn-primary" @onclick="ToggleEditTaskComments">Comments</button>
+        <button type="button" class="btn btn-primary" @onclick="ToggleEditTaskProgress">Update Progress</button>
+        <button type="button" class="btn btn-primary" @onclick="ToggleEditTaskDependencies">Add Dependency</button>
+    </form>
+    @if (showEditTaskNameInput)
+    {
+        <EditTaskNameInput selectedData="selectedData" project="project" chart="chart" OnClose="ToggleEditTaskName" />
+    }
+    @if (showEditTaskTimeInput)
+    {
+        <EditTaskTimeInput selectedData="selectedData" project="project" chart="chart" OnClose="ToggleEditTaskTime" />
+    }
+    @if (showEditTaskProgressInput)
+    {
+        <EditTaskProgressInput selectedData="selectedData" project="project" chart="chart" mileChart="MileChart"
+            milestones="milestones" OnClose="ToggleEditTaskProgress" />
+    }
+    @if (showEditTaskCommentsModal)
+    {
+        <EditTaskCommentsModal selectedData="selectedData" project="project" chart="chart" OnClose="ToggleEditTaskComments" />
+    }
+
+    @if (showEditTaskDependenciesModal)
+    {
+        <div class="modal fade show" style="display: block;" tabindex="-1" role="dialog" id="addDependenciesModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Manage Dependencies</h5>
+                        <button type="button" class="close" @onclick="ToggleEditTaskDependencies">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <h5>Current Dependencies:</h5>
+                        <div>
+                            @foreach (var dependency in selectedData.DataPoint.Items.First().Dependencies)
+                            {
+                                <div>
+                                    <span>@selectedData.DataPoint.Items.First().Name -> @dependency.DependentTaskName|
+                                        @dependency.Type </span>
+                                    <button type="button" class="btn btn-link"
+                                        @onclick="() => DeleteDependency(selectedData.DataPoint.Items.First().Dependencies, dependency)">
+                                        Remove
+                                    </button>
+                                </div>
+                            }
+                        </div>
+                        <hr />
+                        <h5>Add a new dependency:</h5>
+                        <form>
+                            <div class="form-group">
+                                <label for="selectedTaskForDependency">Select Task:</label>
+                                <select class="form-control" id="selectedTaskForDependency" @bind="selectedTaskForDependency">
+                                    <option value="">-</option>
+                                    @foreach (var task in project)
+                                    {
+                                        if (task.Name != selectedData.DataPoint.Items.First().Name)
+                                        {
+                                            <option value="@task.Name">@task.Name</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="dependencyType">Select Dependency Type:</label>
+                                <select class="form-control" id="dependencyType" @bind="selectedDependencyType">
+                                    @foreach (var dependencyType in Enum.GetValues(typeof(DependencyType)))
+                                    {
+                                        <option value="@dependencyType">@dependencyType</option>
+                                    }
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" @onclick="ToggleEditTaskDependencies">Close</button>
+                        <button type="button" class="btn btn-success" @onclick="AddDependency">Add Dependency</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-backdrop fade show"></div>
+        <div class="modal-backdrop fade show"></div>
+    }
+
+    <div class="mt-4">
+        <h4>Task Information:</h4>
+        <ul class="list-group">
+            <li class="list-group-item">Task Name: @selectedData.DataPoint.Items.First().Name</li>
+            <li class="list-group-item">Start Date: @selectedData.DataPoint.Items.First().StartDate.ToShortDateString()</li>
+            <li class="list-group-item">End Date: @selectedData.DataPoint.Items.First().EndDate.ToShortDateString()</li>
+            <li class="list-group-item">Team: @selectedData.DataPoint.Items.First().Team.Name</li>
+            <li class="list-group-item">Progress: @selectedData.DataPoint.Items.First().Progress%</li>
+            <li class="list-group-item">Task Time Progress: @selectedData.DataPoint.Items.First().AutoProgress%</li>
+            <li class="list-group-item">User Progress Difference: @CompareUserProgress(selectedData.DataPoint.Items.First())
+            </li>
+            <div class="mt-4">
+                <h4>Dependencies:</h4>
+                <ul class="list-group">
+                    @foreach (var dependency in selectedData.DataPoint.Items.First().Dependencies)
+                    {
+                        <li class="list-group-item">
+                            Task: @dependency.DependentTaskName,
+                            Type: @dependency.Type
+                        </li>
+                    }
+                </ul>
+            </div>
+        </ul>
+    </div>
+
+}
+else if (selectedData != null)
+{
+    <div class="alert alert-info">
+        <h3>You clicked the chart but not a data point</h3>
+    </div>
+}
+
+<h3> Add a new task: </h3>
+
+<form>
+    <div class="form-group">
+        <label for="taskName">Task Name:</label>
+        <input class="form-control" type="text" id="taskName" @bind="newTask.Name" />
+    </div>
+
+    <div class="form-group">
+        <label for="startDate">Start Date:</label>
+        <input class="form-control" type="date" id="startDate" @bind="newTask.StartDate" />
+    </div>
+
+    <div class="form-group">
+        <label for="endDate">End Date:</label>
+        <input class="form-control" type="date" id="endDate" @bind="newTask.EndDate" />
+    </div>
+
+    <div class="form-group">
+        <label for="comments">Comments:</label>
+        <input class="form-control" id="comments" @bind="newTask.Comments">
+    </div>
+
+    <div class="form-group">
+        <label for="taskTeam">Task Team:</label>
+        <select class="form-control" id="taskTeam" @bind="selectedTeamName">
+            <option value="">-</option>
+            @foreach (var team in teams)
+            {
+                <option value="@team.Name">@team.Name</option>
+            }
+        </select>
+
+    </div>
+
+    <br>
+    <button class="btn btn-primary" type="button" @onclick="AddTask">Add Task</button>
+</form>
+
+
+@if (!string.IsNullOrWhiteSpace(errorMessage))
+{
+    <div class="alert alert-danger mt-2">@errorMessage</div>
+}
+
+
+@code {
+    private string errorMessage = "";
+    private ApexChart<GanttData> chart;
+    private GanttData newTask = new GanttData();
+    private List<GanttData> project;
+    private List<ProjectTeam> teams;
+    private ApexChartOptions<GanttData> options;
+    private SelectedData<GanttData> selectedData;
+    private string newTaskName;
+    private DateTime newTaskStartTime = DateTime.Today;
+    private DateTime newTaskEndTime = DateTime.Today.AddDays(1);
+    private string selectedTeamName;
+    private GanttData selectedTaskForProgress;
+    private bool showEditTaskNameInput = false;
+    private bool showEditTaskTimeInput = false;
+    private bool showEditTaskProgressInput = false;
+    private bool showEditTaskCommentsModal = false;
+    private bool showEditTaskDependenciesModal = false;
+    private DependencyType selectedDependencyType = DependencyType.FS; //default is FS
+    private string selectedTaskForDependency;
+    private List<object> boxedValues = new List<object>();
+    private ApexChart<ProjectMilestone> MileChart;
+    private List<ProjectMilestone> milestones;
+    private string title = "Milestone List";
+    private List<double> lineData;
+    private ApexChartOptions<ProjectMilestone> options1 { get; set; } = new();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        project = SampleData.GetProject();
+        teams = SampleData.GetTeams();
+        milestones = SampleData.GetMilestones();
+        var colors = teams.Select(team => team.Color).ToList();
+        lineData = milestones.Select(_ => 100.0).ToList();
+        options1.Yaxis = new List<YAxis>();
+
+        options1.Yaxis.Add(new YAxis
+            {
+                DecimalsInFloat = 0,
+                TickAmount = 1,
+
+                Labels = new YAxisLabels
+                {
+                    Style = new AxisLabelStyle
+                    {
+                        FontSize = "5px",
+                        Colors = new Color("white")
+                    }
+                }
+            });
+
+
+        options = new ApexChartOptions<GanttData>
+            {
+                PlotOptions = new PlotOptions
+                {
+                    Bar = new PlotOptionsBar
+                    {
+                        Horizontal = true,
+                        RangeBarGroupRows = true,
+                    }
+                },
+                Tooltip = new ApexCharts.Tooltip
+                {
+                    X = new TooltipX
+                    {
+                        Format = "dd MMM yyyy",
+                    }
+                },
+                Colors = colors
+            };
+        options.Legend = new Legend { Position = LegendPosition.Bottom, FontSize = "14px", HorizontalAlign = Align.Center };
+    }
+
+    private void OnClick(SelectedData<GanttData> data)
+    {
+        selectedData = data;
+    }
+
+    private async Task AddTask()
+    {
+        if (!newTask.Name.IsTaskNameValid())
+        {
+            errorMessage = "Task name is required.";
+            return;
+        }
+
+        if (!newTask.StartDate.IsEndDateGreaterThanStartDate(newTask.EndDate))
+        {
+            errorMessage = "End date must be greater than start date.";
+            return;
+        }
+
+        errorMessage = "";
+        var selectedTeam = teams.FirstOrDefault(t => t.Name == selectedTeamName);
+
+        if (selectedTeam != null)
+        {
+            var newTaskData = new GanttData(
+            newTask.Name,
+            newTask.StartDate,
+            newTask.EndDate,
+            selectedTeam,
+            0,
+            newTask.Comments
+            );
+            newTaskData.AutoProgress = (int)CalculateAutoProgress(newTaskData);
+            project.Add(newTaskData);
+            await chart.UpdateSeriesAsync();
+            StateHasChanged();
+        }
+        else
+        {
+            // Handle the case where no team with the selected name is found
+            errorMessage = "Selected team not found.";
+        }
+    }
+
+    private double CalculateAutoProgress(GanttData task)
+    {
+        var now = DateTime.Now;
+        double totalDays = (task.EndDate - task.StartDate).TotalDays;
+        double dayProgress;
+
+        if (task.StartDate <= now && now <= task.EndDate)
+        {
+            double daysPassed = (now - task.StartDate).TotalDays;
+            dayProgress = (daysPassed / totalDays) * 100;
+        }
+        else if (now > task.EndDate)
+        {
+            dayProgress = 100;
+        }
+        else
+        {
+            dayProgress = 0;
+        }
+
+        return dayProgress;
+    }
+
+
+
+
+    private string CompareUserProgress(GanttData task)
+    {
+        int userProgress = task.Progress;
+        double taskTimeProgress = task.AutoProgress;
+        double userDaysAheadOrBehind = (taskTimeProgress - userProgress) * (task.EndDate - task.StartDate).TotalDays / 100.0;
+
+        if (userProgress == 100)
+        {
+            return "Task completed.";
+        }
+        else if (userDaysAheadOrBehind > 0)
+        {
+            return $"User is {userDaysAheadOrBehind:N1} days behind.";
+        }
+        else if (userDaysAheadOrBehind < 0)
+        {
+            return $"User is {Math.Abs(userDaysAheadOrBehind):N1} days ahead.";
+        }
+        else
+        {
+            return "User is on track.";
+        }
+    }
+
+    private async Task RemoveTask()
+    {
+        if (selectedData != null && selectedData.DataPoint != null)
+        {
+            if (selectedData.DataPoint.X is string selectedTaskName)
+            {
+                // Use LINQ to create a new list of tasks excluding the one with the matching name
+                project = project.Where(task => task.Name != selectedTaskName).ToList(); // LINQ EXPRESSION
+            }
+            selectedData = null; // Reset selected data after removal
+        }
+        await chart.UpdateSeriesAsync();
+        StateHasChanged();
+    }
+
+    void DeleteDependency(List<Dependency> dependencies, Dependency dependency)
+    {
+        // Assuming 'dependencies' is a List<Dependency> containing your dependencies
+        dependencies.Remove(dependency);
+    }
+
+    private async Task AddDependency()
+    {
+        if (selectedData != null && selectedData.DataPoint != null &&
+        selectedData.DataPoint.X is string selectedTaskName)
+        {
+            GanttData dependentTask = project.FirstOrDefault(task => task.Name == selectedTaskName);
+
+            if (dependentTask != null)
+            {
+                DependencyType dependencyType = selectedDependencyType;
+                string selectedDependentTaskName = selectedTaskForDependency;
+                // input checks
+                if (string.IsNullOrEmpty(selectedTaskForDependency))
+                {
+                    // Display an error message, log, or handle the situation appropriately
+                    return;
+                }
+                if (dependentTask.Dependencies.Any(dep => dep.DependentTaskName == selectedDependentTaskName))
+                {
+                    // Display an error message, log, or handle the situation appropriately
+                    return;
+                }
+
+                // creeaate
+                Dependency newDependency = new Dependency
+                    {
+                        DependentTaskName = selectedDependentTaskName,
+                        Type = dependencyType
+                    };
+
+                dependentTask.Dependencies.Add(newDependency);
+            }
+        }
+
+        //ToggleEditTaskDependencies();
+
+        selectedTaskForDependency = "";
+        selectedDependencyType = DependencyType.FS;
+
+        await chart.UpdateSeriesAsync();
+        StateHasChanged();
+    }
+
+
+
+
+    #region ToggleFunctions
+    private void ToggleEditTaskName()
+    {
+        newTaskName = "";
+        showEditTaskNameInput = !showEditTaskNameInput;
+    }
+
+    private void ToggleEditTaskProgress()
+    {
+        showEditTaskProgressInput = !showEditTaskProgressInput;
+    }
+
+
+    private void ToggleEditTaskDependencies()
+    {
+        showEditTaskDependenciesModal = !showEditTaskDependenciesModal;
+        selectedTaskForDependency = null;
+
+    }
+
+    private void ToggleEditTaskTime()
+    {
+        newTaskStartTime = DateTime.Today;
+        newTaskEndTime = DateTime.Today.AddDays(1);
+        showEditTaskTimeInput = !showEditTaskTimeInput;
+    }
+
+    private void ToggleEditTaskComments()
+    {
+        showEditTaskCommentsModal = !showEditTaskCommentsModal;
+    }
+    #endregion
+
+}
