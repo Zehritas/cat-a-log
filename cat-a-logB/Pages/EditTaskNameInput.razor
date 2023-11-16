@@ -1,59 +1,40 @@
+@inject cat_a_logB.Data.TaskManager TaskManager
 <div>
-   <form>
-      <div class="form-group">
-         <label for="newTaskName">New Task Name:</label>
-         <input type="text" class="form-control" id="newTaskName" @bind="newTaskName" />
-      </div>
-      <br>
-      <button type="button" class="btn btn-success" @onclick="UpdateTaskName">Update Task Name</button>
-   </form>
+    <form>
+        <div class="form-group">
+            <label for="newTaskName">New Task Name:</label>
+            <input type="text" class="form-control" id="newTaskName" @bind="newTaskName" />
+        </div>
+        <br>
+        <button type="button" class="btn btn-success" @onclick="UpdateTaskName">Update Task Name</button>
+    </form>
 </div>
 
 @code {
-   [Parameter] public List<GanttData> project { get; set; }
-   [Parameter] public ApexChart<GanttData> chart { get; set; }
-   [Parameter] public SelectedData<GanttData> selectedData { get; set; }
-   [Parameter] public EventCallback OnClose { get; set; }
+    [Parameter] public List<GanttData> project { get; set; }
+    [Parameter] public ApexChart<GanttData> chart { get; set; }
+    [Parameter] public SelectedData<GanttData> selectedData { get; set; }
+    [Parameter] public EventCallback OnClose { get; set; }
 
-   private string newTaskName = "";
+    private string newTaskName = "";
 
-   private async Task EditTaskName(string newTaskName) // Strictly to edit the name and refresh
-   {
-      if (selectedData != null && selectedData.DataPoint != null &&
-      selectedData.DataPoint.Items.First().Name is string selectedTaskName)
-      {
-         GanttData taskToUpdate = project.FirstOrDefault(task => task.Name == selectedTaskName);
-         if (taskToUpdate != null)
-         {
-            taskToUpdate.Name = newTaskName;
-         }
-      }
-      else
-      {
-      }
-      newTaskName = "";
-      await chart.UpdateSeriesAsync();
-      StateHasChanged();
-      OnClose.InvokeAsync();
-   }
+    private async Task UpdateTaskName()
+    {
+        if (!string.IsNullOrWhiteSpace(newTaskName))
+        {
+            if (!project.Any(task => task.Name == newTaskName))
+            {
+                await TaskManager.EditTaskName(project, chart, selectedData, OnClose, newTaskName);
+            }
+            else
+            {
+                // Handle case where the name is already in use
+            }
+        }
 
-   private async Task UpdateTaskName() // To do checks wether the input is valid, if yes update the name
-   {
-      if (!string.IsNullOrWhiteSpace(newTaskName))
-      {
-         if (!project.Any(task => task.Name == newTaskName))
-         {
-            await EditTaskName(newTaskName);
-         }
-         else
-         {
-            // Handle case where the name is already in use
-         }
-      }
-
-      else
-      {
-         // handle case where name is whiteSpace
-      }
-   }
+        else
+        {
+            // handle case where name is whiteSpace
+        }
+    }
 }
