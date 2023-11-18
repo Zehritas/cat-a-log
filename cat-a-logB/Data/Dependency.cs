@@ -13,10 +13,10 @@ namespace cat_a_logB.Data
         public int DependeeTaskId { get; set; }
 
         [ForeignKey("DependentTaskId")]
-        public GanttData DependentTask { get; set; }
+        public GanttData? DependentTask { get; set; }
 
         [ForeignKey("DependeeTaskId")]
-        public GanttData DependeeTask { get; set; }
+        public GanttData? DependeeTask { get; set; }
 
         public string DependentTaskName { get; set; } // change to id, create task IDs
         public DependencyType Type { get; set; }

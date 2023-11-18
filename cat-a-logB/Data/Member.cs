@@ -13,10 +13,10 @@ namespace cat_a_logB.Data
         public int TeamId { get; set; }
 
         [ForeignKey("UserId")]
-        public User User { get; set; }
+        public User? User { get; set; }
 
         [ForeignKey("TeamId")]
-        public ProjectTeam Team { get; set; }
+        public ProjectTeam? Team { get; set; }
 
         public string Name { get; set; }
         public string Position { get; set; }

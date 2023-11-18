@@ -18,4 +18,12 @@ public class cat_a_logBContext : IdentityDbContext<IdentityUser>
         // For example, you can rename the ASP.NET Identity table names and more.
         // Add your customizations after calling base.OnModelCreating(builder);
     }
+    public DbSet<Dependency> Dependency { get; set; }
+    public DbSet<User> User { get; set; }
+    public DbSet<GanttData> GanttData { get; set; }
+    public DbSet<Member> Member { get; set; }
+    public DbSet<Project> Project { get; set; }
+    public DbSet<ProjectMilestone> ProjectMilestone { get; set; }
+    public DbSet<TaskData> TaskData { get; set; }
+    public DbSet<ProjectTeam> ProjectTeam { get; set; }
 }

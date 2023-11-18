@@ -1,7 +1,11 @@
-﻿namespace cat_a_logB.Data
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace cat_a_logB.Data
 {
     public class ProjectMilestone
     {
+        [Key]
+        public int Id { get; set; }
         public string Name { get; set; }
         public List<GanttData> Tasks { get; set; }
         public string Color { get; set; }
