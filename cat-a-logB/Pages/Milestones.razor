@@ -15,7 +15,7 @@
                 {
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         <button class="btn btn-link" @onclick="() => ToggleMilestoneSelection(milestone)">
-                            @milestone.Name
+                            @milestone.Name - Target Date: @milestone.TargetDate.ToShortDateString()
                         </button>
                     </li>
                 }
@@ -47,6 +47,11 @@
                                 @task.Name
                             </label>
                         }
+                    </div>
+                    <div class="form-group">
+                        <label>Target completion date:</label>
+                        <input class="form-control" type="date" id="targetDate" @bind="milestoneDate" />
+
                     </div>
                     <br>
                     <button class="btn btn-primary" type="button" @onclick="CreateMilestone">Create Milestone</button>
@@ -84,6 +89,7 @@ else
     private List<GanttData> tasks;
     private List<ProjectMilestone> milestones;
     private string milestoneName;
+    private DateTime milestoneDate = DateTime.Today;
     private List<GanttData> selectedTasks = new List<GanttData>();
     private ProjectMilestone selectedMilestone;
     private ProjectMilestone newMilestone = new ProjectMilestone();
@@ -120,8 +126,7 @@ else
         if (!string.IsNullOrWhiteSpace(milestoneName) && selectedTasks != null && selectedTasks.Any())
         {
 
-            newMilestone = new ProjectMilestone(milestoneName, selectedTasks.ToList(), "blue");
-
+            newMilestone = new ProjectMilestone(milestoneName, selectedTasks.ToList(), milestoneDate, "blue");
 
             milestones.Add(newMilestone);
             newMilestone = new ProjectMilestone();
