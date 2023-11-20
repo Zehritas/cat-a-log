@@ -11987,23 +11987,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Lenovo\\.nuget\\packages\\": {},
+    "C:\\Users\\Marijonas\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Lenovo\\Desktop\\cat-a-log\\cat-a-logB\\cat-a-logB.csproj",
+      "projectUniqueName": "C:\\Users\\Marijonas\\source\\repos\\cat-a-log\\cat-a-logB\\cat-a-logB.csproj",
       "projectName": "cat-a-logB",
-      "projectPath": "C:\\Users\\Lenovo\\Desktop\\cat-a-log\\cat-a-logB\\cat-a-logB.csproj",
-      "packagesPath": "C:\\Users\\Lenovo\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Lenovo\\Desktop\\cat-a-log\\cat-a-logB\\obj\\",
+      "projectPath": "C:\\Users\\Marijonas\\source\\repos\\cat-a-log\\cat-a-logB\\cat-a-logB.csproj",
+      "packagesPath": "C:\\Users\\Marijonas\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Marijonas\\source\\repos\\cat-a-log\\cat-a-logB\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\Lenovo\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Marijonas\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
