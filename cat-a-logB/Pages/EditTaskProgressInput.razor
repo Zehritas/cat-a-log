@@ -1,63 +1,35 @@
 @using cat_a_logB.Data
-
+@inject cat_a_logB.Data.TaskManager TaskManager
+@inject cat_a_logB.Pages.SampleData SampleData
 <form>
-   <div class="form-group">
-      <label for="progressInput">Select Progress:</label>
-      <select class="form-control" id="progressInput" @bind="newProgress">
-         @foreach (var progressOption in progressOptions)
-         {
-            <option value="@progressOption">@progressOption%</option>
-         }
-      </select>
-   </div>
-   <button type="button" class="btn btn-success" @onclick="() => UpdateProgress(newProgress)">Update Progress</button>
+    <div class="form-group">
+        <label for="progressInput">Select Progress:</label>
+        <select class="form-control" id="progressInput" @bind="newProgress">
+            @foreach (var progressOption in progressOptions)
+            {
+                <option value="@progressOption">@progressOption%</option>
+            }
+        </select>
+    </div>
+    <button type="button" class="btn btn-success" @onclick="() => UpdateProgress(newProgress)">Update Progress</button>
 </form>
 
 @code {
-   [Parameter] public SelectedData<GanttData> selectedData { get; set; }
-   [Parameter] public List<GanttData> project { get; set; }
-   [Parameter] public ApexChart<GanttData> chart { get; set; }
-   [Parameter] public ApexChart<ProjectMilestone> mileChart { get; set; }
-   [Parameter] public List<ProjectMilestone> milestones { get; set; }
-   [Parameter] public EventCallback OnClose { get; set; }
+    [Parameter] public SelectedData<GanttData> selectedData { get; set; }
+    [Parameter] public List<GanttData> project { get; set; }
+    [Parameter] public ApexChart<GanttData> chart { get; set; }
+    [Parameter] public ApexChart<ProjectMilestone> mileChart { get; set; }
+    [Parameter] public List<ProjectMilestone> milestones { get; set; }
+    [Parameter] public EventCallback OnClose { get; set; }
 
-   private int newProgress = 0;
-   private List<int> progressOptions = new List<int> { 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80,
+    private int newProgress = 0;
+    private List<int> progressOptions = new List<int> { 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80,
    85, 90, 95, 100 };
 
-   private async Task UpdateProgress(int progressValue)
-   {
-
-      if (selectedData != null && selectedData.DataPoint != null &&
-      selectedData.DataPoint.Items.First().Name is string selectedTaskName)
-      {
-         GanttData taskToUpdate = project.FirstOrDefault(task => task.Name == selectedTaskName);
-         if (taskToUpdate != null)
-         {
-            taskToUpdate.Progress = progressValue;
-
-            if (progressValue == 100)
-            {
-               taskToUpdate.PointColor = "#CCCCCC";
-               foreach(var milestone in milestones)
-               {
-                  milestone.CalculateCompletedTasksPercentage();
-                  if(milestone.Color == "green")
-                  {
-                     mileChart.RenderAsync();
-                  }
-               }
-            }
-            else
-            {
-               taskToUpdate.PointColor = taskToUpdate.Team.Color;
-            }
-         }
-      }
-
-      OnClose.InvokeAsync();
-      await chart.UpdateSeriesAsync();
-      StateHasChanged();
-   }
+    private async Task UpdateProgress(int progressValue)
+    {
+        await TaskManager.EditTaskProgress(mileChart, project, chart, selectedData, OnClose, milestones, progressValue);
+        await chart.UpdateSeriesAsync();
+        StateHasChanged();
+    }
 }
-   

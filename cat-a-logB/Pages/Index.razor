@@ -3,6 +3,7 @@
 @using cat_a_logB;
 @using ApexCharts;
 @inject cat_a_logB.Pages.SampleData SampleData
+@inject cat_a_logB.Data.TaskManager TaskManager
 
 <PageTitle>Gantt Chart</PageTitle>
 
@@ -316,6 +317,7 @@ else if (selectedData != null)
     private string title = "Milestone List";
     private List<double> lineData;
     private ApexChartOptions<ProjectMilestone> options1 { get; set; } = new();
+    private TaskManager taskManager;
 
 
     protected override async Task OnInitializedAsync()
@@ -326,6 +328,7 @@ else if (selectedData != null)
         milestones = SampleData.GetMilestones();
         var colors = teams.Select(team => team.Color).ToList();
         lineData = milestones.Select(_ => 100.0).ToList();
+        taskManager = TaskManager;
         options1.Yaxis = new List<YAxis>();
 
         options1.Yaxis.Add(new YAxis

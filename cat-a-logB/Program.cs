@@ -1,3 +1,4 @@
+using ApexCharts;
 using cat_a_logB.Areas.Identity;
 using cat_a_logB.Data;
 using Microsoft.AspNetCore.Components;
@@ -19,6 +20,8 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddScoped<cat_a_logB.Pages.SampleData>();
+builder.Services.AddScoped<ApexChart<GanttData>>();
+builder.Services.AddScoped<TaskManager>();
 builder.Services.AddScoped<AuthenticationStateProvider,
     RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
 builder.Services.AddSingleton<WeatherForecastService>();
