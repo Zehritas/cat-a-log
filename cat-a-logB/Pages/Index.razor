@@ -8,7 +8,66 @@
 
 <PageTitle>Gantt Chart</PageTitle>
 
-<button type="button" class="btn btn-primary" @onclick=ShowMilestones>Show Milestones</button>
+@* <button type="button" class="btn btn-primary" @onclick=ShowMilestones>Show Milestones</button> *@
+
+<DemoContainer>
+    <ApexChart @ref=MileChart TItem="ProjectMilestone" Title="@title" Height="120" Options=options1 Debug OnClick=ShowMilestone>
+         
+
+        <ApexPointTooltip>
+            <div class="m-2" style="width: 300px; max-height: 100px; font-size: 12px;">
+                @if (context != null)
+                {
+                    var dataPoint = (ApexCharts.DataPoint<ProjectMilestone>)context.DataPoint;
+
+                    var milestone = dataPoint.Items.FirstOrDefault();
+                    if (milestone != null)
+                    {
+                        <h4>@milestone.Name</h4>
+                        <span>Tasks:</span>
+                        <ul>
+                            @foreach (var task in milestone.Tasks)
+                            {
+                                <li>
+                                    <span style="margin-right: 8px;">@task.Name</span>
+                                    @if (task.Progress == 100)
+                                    {
+                                        <span style="color: green;">(Complete)</span>
+                                    }
+
+
+                                </li>
+
+                            }
+                        </ul>
+                        
+                    }
+                }
+                else
+                {
+                    <p>Context is null.</p>
+                }
+
+            </div>
+        </ApexPointTooltip>
+
+
+        <ChildContent>
+
+            <ApexPointSeries TItem="ProjectMilestone" Items="milestones" Name="Milestones" SeriesType="SeriesType.Line"
+                XValue="@(e => e.Name)" YValue="@(e => 0)" PointColor="@(e => e.Color)">
+
+
+            </ApexPointSeries>
+
+        </ChildContent>
+
+    </ApexChart>
+
+</DemoContainer>
+
+
+
 
 
 <DemoContainer>
@@ -270,7 +329,12 @@ else if (selectedData != null)
     private List<ProjectMilestone> milestones;
     private string title = "Milestone List";
     private List<double> lineData;
-    private bool milestonesShown = false;
+    private ApexChartOptions<ProjectMilestone> options1 { get; set; } = new();
+    private ProjectMilestone clickedMilestone;
+    private List<ProjectMilestone> displayedMilestones = new List<ProjectMilestone>();
+    
+
+
 
     private TaskManager taskManager;
 
@@ -283,6 +347,26 @@ else if (selectedData != null)
         var colors = teams.Select(team => team.Color).ToList();
         lineData = milestones.Select(_ => 100.0).ToList();
         taskManager = TaskManager;
+
+
+        options1.Yaxis = new List<YAxis>();
+
+        options1.Yaxis.Add(new YAxis
+            {
+                DecimalsInFloat = 0,
+                TickAmount = 1,
+
+                Labels = new YAxisLabels
+                {
+                    Style = new AxisLabelStyle
+                    {
+                        FontSize = "5px",
+                        Colors = new Color("white")
+                    }
+                }
+            });
+
+
 
 
         options = new ApexChartOptions<GanttData>
@@ -315,61 +399,75 @@ else if (selectedData != null)
         selectedData = data;
     }
 
-    private async Task ShowMilestones()
+    private async Task ShowMilestone(SelectedData<ProjectMilestone> data)
     {
-        if (!milestonesShown)
+        clickedMilestone = data?.DataPoint?.Items?.FirstOrDefault();
+
+        if (clickedMilestone != null)
         {
-            foreach (var milestone in milestones)
+            if (displayedMilestones.Contains(clickedMilestone))
             {
-                var XMValue = milestone.TargetDate.ToUnixTimeMilliseconds().ToString();
-                var tasksText = string.Join(" ", milestone.Tasks.Select(t =>
-            {
-                var progressText = (t.Progress == 100) ? "(Complete)" : "";
-                return $"{t.Name}{progressText}";
-            }));
-
-                var point = new AnnotationsPoint
-                    {
-                        X = XMValue,
-                        Y = 0,
-                        
-                        Label = new Label
-                        {
-                            Text = $"{milestone.Name}: {tasksText}\n",
-                            //BorderWidth = 50,
-                            //BorderRadius = 50,
-                            TextAnchor = TextAnchor.Middle,
-
-
-                            Style = new Style
-                            {
-                                FontSize = "17px",
-                                
-                                Padding = new ApexCharts.Padding { Left = 3, Right = 3, Top = 20, Bottom = 20 },
-                                
-                            },
-                        }
-
-                    };
-                var point2 = new AnnotationsXAxis
-                    {
-                        X = XMValue,
-                        StrokeDashArray = 10,
-                        
-                        BorderWidth = 3,
-                        
-                    };
-
-                await chart.AddXAxisAnnotationAsync(point2, false);
-                await chart.AddPointAnnotationAsync(point, false);
-                milestonesShown = true;
+                displayedMilestones.Remove(clickedMilestone);
+                await RedrawAnnotations(); 
             }
-        } else
-        {
-            await chart.ClearAnnotationsAsync();
-            milestonesShown = false;
+            else
+            {
+                displayedMilestones.Add(clickedMilestone);
+                await RedrawAnnotations(); 
+            }
         }
     }
+
+
+    private async Task RedrawAnnotations()
+    {
+        await chart.ClearAnnotationsAsync(); 
+
+        foreach (var milestone in displayedMilestones)
+        {
+       
+            await AddMilestoneAnnotation(milestone);
+        }
+    }
+
+
+
+    private async Task AddMilestoneAnnotation(ProjectMilestone milestone)
+    {
+        var XMValue = milestone.TargetDate.ToUnixTimeMilliseconds().ToString();
+        var tasksText = string.Join(" ", milestone.Tasks.Select(t =>
+        {
+            var progressText = (t.Progress == 100) ? "(Complete)" : "";
+            return $"{t.Name}{progressText}";
+        }));
+
+        var point = new AnnotationsPoint
+            {
+                X = XMValue,
+                Y = 0,
+                Label = new Label
+                {
+                    Text = $"{milestone.Name}: {tasksText}",
+                    Style = new Style
+                    {
+                        FontSize = "17px",
+                        Padding = new ApexCharts.Padding { Left = 3, Right = 3, Top = 20, Bottom = 20 },
+                    },
+                },
+            };
+
+        var point2 = new AnnotationsXAxis
+            {
+                X = XMValue,
+                StrokeDashArray = 10,
+                BorderWidth = 3,
+            };
+
+        await chart.AddXAxisAnnotationAsync(point2, false);
+        await chart.AddPointAnnotationAsync(point, false);
+
+    }
+
 
     private async Task AddTask()
     {
