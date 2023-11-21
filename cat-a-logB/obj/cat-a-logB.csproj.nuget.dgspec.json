@@ -47,7 +47,7 @@
           "dependencies": {
             "Blazor-ApexCharts": {
               "target": "Package",
-              "version": "[1.2.1, )"
+              "version": "[2.1.0, )"
             },
             "Microsoft.ASPNetCore.Diagnostics.EntityFrameworkCore": {
               "target": "Package",

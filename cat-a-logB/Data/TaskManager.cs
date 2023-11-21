@@ -107,5 +107,73 @@ namespace cat_a_logB.Data
             await chart.UpdateSeriesAsync();
             OnClose.InvokeAsync();
         }
+
+        public async Task Reschedule(TaskData predecessorTask, List<TaskData> tasks, ApexChart<TaskData> chart)
+        {
+            foreach (var dependency in predecessorTask.Dependencies)
+            {
+                TaskData successorTask = tasks.FirstOrDefault(task => task.Name == dependency.SuccessorTaskName);
+
+                if (successorTask == null)
+                {
+                    // Handle the case where the successor task is not found
+                    throw new InvalidOperationException($"Task not found for dependency: {dependency.SuccessorTaskName}");
+                }
+                double successorTaskLength = (successorTask.EndDate - successorTask.StartDate).TotalDays;
+
+
+                switch (dependency.Type)
+                {
+                    case DependencyType.FS:
+                        if (predecessorTask.EndDate > successorTask.StartDate)
+                        {
+                            successorTask.StartDate = predecessorTask.EndDate;
+                            successorTask.EndDate = successorTask.StartDate.AddDays(successorTaskLength);
+                            await Reschedule(successorTask, tasks, chart);
+                            await chart.UpdateSeriesAsync();
+                            // StateHasChanged();
+                        }
+                        break;
+
+                    case DependencyType.SF:
+                        if (predecessorTask.EndDate < successorTask.StartDate)
+                        {
+                            successorTask.StartDate = predecessorTask.EndDate;
+                            successorTask.EndDate = successorTask.StartDate.AddDays(successorTaskLength);
+                            await Reschedule(successorTask, tasks, chart);
+                            await chart.UpdateSeriesAsync();
+                            // StateHasChanged();
+                        }
+                        break;
+
+                    case DependencyType.SS:
+                        if (predecessorTask.StartDate > successorTask.StartDate)
+                        {
+                            successorTask.StartDate = predecessorTask.StartDate;
+                            successorTask.EndDate = successorTask.StartDate.AddDays(successorTaskLength);
+                            await Reschedule(successorTask, tasks, chart);
+                            await chart.UpdateSeriesAsync();
+                            // StateHasChanged();
+                        }
+                        break;
+
+                    case DependencyType.FF:
+                        if (predecessorTask.EndDate > successorTask.EndDate)
+                        {
+                            successorTask.EndDate = predecessorTask.EndDate;
+                            successorTask.StartDate = successorTask.EndDate.AddDays(-successorTaskLength);
+                            await Reschedule(successorTask, tasks, chart);
+                            await chart.UpdateSeriesAsync();
+                            // StateHasChanged();
+                        }
+                        break;
+
+                    default:
+                        // Handle unsupported dependency types
+                        throw new ArgumentException("Unsupported DependencyType");
+                }
+            }
+
+        }
     }
 }

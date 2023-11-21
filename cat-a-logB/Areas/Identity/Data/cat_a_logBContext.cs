@@ -22,9 +22,9 @@ public class cat_a_logBContext : IdentityDbContext<IdentityUser>
         //.HasKey(op => new { op.DependentTaskId, op.DependeeTaskId });
 
         builder.Entity<Dependency>()
-            .HasOne(op => op.DependentTask)
+            .HasOne(op => op.SuccessorTask)
             .WithMany(p => p.Dependencies)
-            .HasForeignKey(op => op.DependentTaskId)
+            .HasForeignKey(op => op.SuccessorTaskId)
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.Entity<Dependency>()

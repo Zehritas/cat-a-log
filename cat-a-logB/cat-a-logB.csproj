@@ -21,7 +21,7 @@
 	  </PackageReference>
 	  <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.9" />
 	  <PackageReference Include="Microsoft.ASPNetCore.Diagnostics.EntityFrameworkCore" Version="7.0.9" />
-    <PackageReference Include="Blazor-ApexCharts" Version="1.2.1" />
+    <PackageReference Include="Blazor-ApexCharts" Version="2.1.0" />
   </ItemGroup>
 
 </Project>

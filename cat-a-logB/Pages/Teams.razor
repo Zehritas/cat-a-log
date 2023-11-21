@@ -18,6 +18,8 @@
                      @team.Name
                   </button>
                   <span style="color: @team.Color;">&#9632;</span>
+
+                  <button class="btn btn-danger" @onclick="() => ToggleRemoveTeamModal(team)">Remove</button>
                </li>
             }
          </ul>
@@ -49,6 +51,30 @@
       <p class="text-danger mt-3">@errorMessage</p>
    </div>
 </div>
+
+@if (showRemoveModal)
+{
+   <div class="modal show" tabindex="-1" role="dialog" style="display: block;">
+      <div class="modal-dialog" role="document">
+         <div class="modal-content">
+            <div class="modal-header">
+               <h5 class="modal-title">Confirm Removal</h5>
+               <button type="button" class="close" @onclick="ToggleRemoveModal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+               </button>
+            </div>
+            <div class="modal-body">
+               <p>Are you sure you want to remove the team '@(teamToRemove?.Name)' and its associated tasks?</p>
+            </div>
+            <div class="modal-footer">
+               <button type="button" class="btn btn-secondary" @onclick="ToggleRemoveModal">Cancel</button>
+               <button type="button" class="btn btn-danger" @onclick="() => RemoveTeam(teamToRemove)">Remove</button>
+            </div>
+         </div>
+      </div>
+   </div>
+   <div class="modal-backdrop show"></div>
+}
 
 @if (selectedTeam != null)
 {
@@ -99,6 +125,8 @@ else
    private ProjectTeam newTeam = new ProjectTeam();
    private string errorMessage = "";
    private ProjectTeam selectedTeam;
+   private ProjectTeam teamToRemove;
+   private bool showRemoveModal = false;
 
    protected override async Task OnInitializedAsync()
    {
@@ -121,9 +149,38 @@ else
       StateHasChanged();
    }
 
+   private void RemoveTeam(ProjectTeam team)
+   {
+      // Remove the team
+      teams.Remove(team);
+
+      // Remove associated tasks
+      tasks.RemoveAll(task => task.Team == team);
+
+      // Reset the selected team
+      if (selectedTeam != null && selectedTeam.Name == team.Name)
+      {
+         selectedTeam = null;
+      }
+      ToggleRemoveModal();
+      StateHasChanged();
+   }
+
    private void ShowTasksForTeam(ProjectTeam team)
    {
       selectedTeam = team;
       ProjectTeam.GetTasksForTeam(tasks, team);
    }
+
+   private void ToggleRemoveTeamModal(ProjectTeam team)
+   {
+      teamToRemove = team;
+      showRemoveModal = !showRemoveModal;
+   }
+
+   private void ToggleRemoveModal()
+   {
+      showRemoveModal = !showRemoveModal;
+   }
+
 }

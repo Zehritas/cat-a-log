@@ -46,7 +46,7 @@
           }
         }
       },
-      "Blazor-ApexCharts/1.2.1": {
+      "Blazor-ApexCharts/2.1.0": {
         "type": "package",
         "dependencies": {
           "Microsoft.AspNetCore.Components": "6.0.3",
@@ -4199,17 +4199,17 @@
         "lib/netstandard2.0/Azure.Identity.xml"
       ]
     },
-    "Blazor-ApexCharts/1.2.1": {
-      "sha512": "SuwagWnwFfu4dZwpgE8fdEQ2d0c0RCMbVqysaZiThHz5E2e9Y4rye4vlOsxMairQ3lc5Apj/LPRnbDwzTw6gKg==",
+    "Blazor-ApexCharts/2.1.0": {
+      "sha512": "1thlfnUv5tQevTjs7lSKy6p+psIr4tj9GKbGDx7SN6ehjqOCJsLlEqjoZxHWtP5lMSCrjuE/AU/pIUr+lVVKOg==",
       "type": "package",
-      "path": "blazor-apexcharts/1.2.1",
+      "path": "blazor-apexcharts/2.1.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "LICENSE",
         "README.md",
         "apexchart_logo.png",
-        "blazor-apexcharts.1.2.1.nupkg.sha512",
+        "blazor-apexcharts.2.1.0.nupkg.sha512",
         "blazor-apexcharts.nuspec",
         "build/Blazor-ApexCharts.props",
         "build/Microsoft.AspNetCore.StaticWebAssets.props",
@@ -4218,8 +4218,8 @@
         "lib/net6.0/Blazor-ApexCharts.dll",
         "lib/net6.0/Blazor-ApexCharts.xml",
         "staticwebassets/css/apexcharts.css",
-        "staticwebassets/js/apex-charts.min.js",
-        "staticwebassets/js/blazor-apex-charts.js"
+        "staticwebassets/js/apexcharts.esm.js",
+        "staticwebassets/js/blazor-apexcharts.js"
       ]
     },
     "Humanizer/2.14.1": {
@@ -11977,7 +11977,7 @@
   },
   "projectFileDependencyGroups": {
     "net7.0": [
-      "Blazor-ApexCharts >= 1.2.1",
+      "Blazor-ApexCharts >= 2.1.0",
       "Microsoft.ASPNetCore.Diagnostics.EntityFrameworkCore >= 7.0.9",
       "Microsoft.AspNetCore.Identity.EntityFrameworkCore >= 7.0.10",
       "Microsoft.AspNetCore.Identity.UI >= 7.0.10",
@@ -12033,7 +12033,7 @@
         "dependencies": {
           "Blazor-ApexCharts": {
             "target": "Package",
-            "version": "[1.2.1, )"
+            "version": "[2.1.0, )"
           },
           "Microsoft.ASPNetCore.Diagnostics.EntityFrameworkCore": {
             "target": "Package",
