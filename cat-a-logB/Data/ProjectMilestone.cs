@@ -6,11 +6,14 @@
         public List<GanttData> Tasks { get; set; }
         public string Color { get; set; }
 
+        public DateTime TargetDate { get; set; }
 
-        public ProjectMilestone(string name, List<GanttData> tasks, string color)
+
+        public ProjectMilestone(string name, List<GanttData> tasks, DateTime targetDate, string color)
         {
             this.Name = name;
             this.Tasks = tasks;
+            this.TargetDate = targetDate;
             this.Color = color;
         }
         public ProjectMilestone(string name)
