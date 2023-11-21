@@ -27,9 +27,9 @@
 <div class="modal-backdrop fade show"></div>
 
 @code {
-    [Parameter] public List<GanttData> project { get; set; }
-    [Parameter] public ApexChart<GanttData> chart { get; set; }
-    [Parameter] public SelectedData<GanttData> selectedData { get; set; }
+    [Parameter] public List<TaskData> project { get; set; }
+    [Parameter] public ApexChart<TaskData> chart { get; set; }
+    [Parameter] public SelectedData<TaskData> selectedData { get; set; }
     [Parameter] public EventCallback OnClose { get; set; }
 
     public string editedComments;

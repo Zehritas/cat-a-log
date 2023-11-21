@@ -6,10 +6,7 @@ namespace cat_a_logB.Data
 {
     public class Member
     {
-        [Key, Column(Order = 1)]
         public int UserId { get; set; }
-
-        [Key, Column(Order = 2)]
         public int TeamId { get; set; }
 
         [ForeignKey("UserId")]

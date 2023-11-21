@@ -7,11 +7,11 @@ namespace cat_a_logB.Data
         [Key]
         public int Id { get; set; }
         public string Name { get; set; }
-        public List<GanttData> Tasks { get; set; }
+        public List<TaskData> Tasks { get; set; }
         public string Color { get; set; }
 
 
-        public ProjectMilestone(string name, List<GanttData> tasks, string color)
+        public ProjectMilestone(string name, List<TaskData> tasks, string color)
         {
             this.Name = name;
             this.Tasks = tasks;
@@ -20,7 +20,7 @@ namespace cat_a_logB.Data
         public ProjectMilestone(string name)
         {
             Name = name;
-            Tasks = new List<GanttData>();
+            Tasks = new List<TaskData>();
 
         }
 
@@ -28,7 +28,7 @@ namespace cat_a_logB.Data
         {
         }
 
-        public void LoadMilestoneTasks(List<GanttData> allTasks)
+        public void LoadMilestoneTasks(List<TaskData> allTasks)
         {
             Tasks = allTasks.Where(task => task.Name == Name).ToList();
         }

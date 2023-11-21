@@ -81,10 +81,10 @@ else
 }
 
 @code {
-    private List<GanttData> tasks;
+    private List<TaskData> tasks;
     private List<ProjectMilestone> milestones;
     private string milestoneName;
-    private List<GanttData> selectedTasks = new List<GanttData>();
+    private List<TaskData> selectedTasks = new List<TaskData>();
     private ProjectMilestone selectedMilestone;
     private ProjectMilestone newMilestone = new ProjectMilestone();
     private string errorMessage = "";
@@ -98,11 +98,11 @@ else
         tasks = SampleData.GetProject();
     }
 
-    private void ToggleTaskSelection(GanttData task)
+    private void ToggleTaskSelection(TaskData task)
     {
         if (selectedTasks == null)
         {
-            selectedTasks = new List<GanttData>();
+            selectedTasks = new List<TaskData>();
         }
 
         if (selectedTasks.Contains(task))

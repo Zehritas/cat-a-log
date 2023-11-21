@@ -74,14 +74,14 @@
     }
     else
     {
-        <ApexChart OnClick=OnClick @ref=chart TItem="GanttData" Title="Project Gantt chart" Options="options"
+        <ApexChart OnClick=OnClick @ref=chart TItem="TaskData" Title="Project Gantt chart" Options="options"
             XAxisType="XAxisType.Datetime">
 
             <ApexPointTooltip>
 
                 <div class="m-2">
                     @{
-                        var point = (ListPoint<GanttData>)context.DataPoint;
+                        var point = (ListPoint<TaskData>)context.DataPoint;
 
                         <h4>@point.X</h4>
                         <span>Deadline: @point.Items.First().EndDate.ToShortDateString()</span>
@@ -98,7 +98,7 @@
             <ChildContent>
                 @foreach (var team in teams)
                 {
-                    <ApexRangeSeries TItem="GanttData" Items="project.Where(task => task.Team == team)" Name="@team.Name"
+                    <ApexRangeSeries TItem="TaskData" Items="project.Where(task => task.Team == team)" Name="@team.Name"
                         XValue="@(e => e.Name)" YMinValue="@(e => e.StartDate.ToUnixTimeMilliseconds())"
                         YMaxValue="@(e => e.EndDate.ToUnixTimeMilliseconds())" PointColor="e => e.PointColor"
                         OrderByDescending="e => e.Items.First().Team.Name" />
@@ -292,17 +292,17 @@ else if (selectedData != null)
 
 @code {
     private string errorMessage = "";
-    private ApexChart<GanttData> chart;
-    private GanttData newTask = new GanttData();
-    private List<GanttData> project;
+    private ApexChart<TaskData> chart;
+    private TaskData newTask = new TaskData();
+    private List<TaskData> project;
     private List<ProjectTeam> teams;
-    private ApexChartOptions<GanttData> options;
-    private SelectedData<GanttData> selectedData;
+    private ApexChartOptions<TaskData> options;
+    private SelectedData<TaskData> selectedData;
     private string newTaskName;
     private DateTime newTaskStartTime = DateTime.Today;
     private DateTime newTaskEndTime = DateTime.Today.AddDays(1);
     private string selectedTeamName;
-    private GanttData selectedTaskForProgress;
+    private TaskData selectedTaskForProgress;
     private bool showEditTaskNameInput = false;
     private bool showEditTaskTimeInput = false;
     private bool showEditTaskProgressInput = false;
@@ -345,7 +345,7 @@ else if (selectedData != null)
             });
 
 
-        options = new ApexChartOptions<GanttData>
+        options = new ApexChartOptions<TaskData>
             {
                 PlotOptions = new PlotOptions
                 {
@@ -367,7 +367,7 @@ else if (selectedData != null)
         options.Legend = new Legend { Position = LegendPosition.Bottom, FontSize = "14px", HorizontalAlign = Align.Center };
     }
 
-    private void OnClick(SelectedData<GanttData> data)
+    private void OnClick(SelectedData<TaskData> data)
     {
         selectedData = data;
     }
@@ -391,7 +391,7 @@ else if (selectedData != null)
 
         if (selectedTeam != null)
         {
-            var newTaskData = new GanttData(
+            var newTaskData = new TaskData(
             newTask.Name,
             newTask.StartDate,
             newTask.EndDate,
@@ -411,7 +411,7 @@ else if (selectedData != null)
         }
     }
 
-    private double CalculateAutoProgress(GanttData task)
+    private double CalculateAutoProgress(TaskData task)
     {
         var now = DateTime.Now;
         double totalDays = (task.EndDate - task.StartDate).TotalDays;
@@ -437,7 +437,7 @@ else if (selectedData != null)
 
 
 
-    private string CompareUserProgress(GanttData task)
+    private string CompareUserProgress(TaskData task)
     {
         int userProgress = task.Progress;
         double taskTimeProgress = task.AutoProgress;
@@ -487,7 +487,7 @@ else if (selectedData != null)
         if (selectedData != null && selectedData.DataPoint != null &&
         selectedData.DataPoint.X is string selectedTaskName)
         {
-            GanttData dependentTask = project.FirstOrDefault(task => task.Name == selectedTaskName);
+            TaskData dependentTask = project.FirstOrDefault(task => task.Name == selectedTaskName);
 
             if (dependentTask != null)
             {

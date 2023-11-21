@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using cat_a_logB.Data;
 
@@ -11,9 +12,11 @@ using cat_a_logB.Data;
 namespace cat_a_logB.Migrations
 {
     [DbContext(typeof(cat_a_logBContext))]
-    partial class cat_a_logBContextModelSnapshot : ModelSnapshot
+    [Migration("20231121164350_databaseImplementation")]
+    partial class databaseImplementation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

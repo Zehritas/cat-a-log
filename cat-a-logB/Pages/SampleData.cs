@@ -6,14 +6,14 @@ namespace cat_a_logB.Pages
     {
         private static List<ProjectTeam> teams = new List<ProjectTeam>
         {
-            new ProjectTeam("#3db821", "Team A", new List<string> {"Marijonas", "Rytis"}),
-            new ProjectTeam("#b8212b", "Team B", new List<string> {"Jūris", "Aldas"}),
-            new ProjectTeam("#2188b8", "Team C", new List<string> {"Aldas", "Rytis", "Jūris", "Marijonas"})
+            new ProjectTeam("#3db821", "Team A", new List<String> {"Marijonas", "Rytis"}),
+            new ProjectTeam("#b8212b", "Team B", new List<String> {"Jūris", "Aldas"}),
+            new ProjectTeam("#2188b8", "Team C", new List<String> {"Aldas", "Rytis", "Jūris", "Marijonas"})
         };
 
-        private static List<GanttData> tasks = new List<GanttData>
+        private static List<TaskData> tasks = new List<TaskData>
         {
-            new GanttData(
+            new TaskData(
                 "Task 1",
                 DateTime.Now.Date.AddDays(-4),
                 DateTime.Now.Date.AddDays(1),
@@ -21,7 +21,7 @@ namespace cat_a_logB.Pages
                 0,
                 ""
             ),
-            new GanttData(
+            new TaskData(
                 "Task 2",
                 DateTime.Now.Date.AddDays(-3),
                 DateTime.Now.Date.AddDays(2),
@@ -29,7 +29,7 @@ namespace cat_a_logB.Pages
                 0,
                 ""
             ),
-            new GanttData(
+            new TaskData(
                 "Task 3",
                 DateTime.Now.Date.AddDays(-2),
                 DateTime.Now.Date.AddDays(5),
@@ -37,7 +37,7 @@ namespace cat_a_logB.Pages
                 0,
                 ""
             ),
-            new GanttData(
+            new TaskData(
                 "Task 4",
                 DateTime.Now.Date.AddDays(-1),
                 DateTime.Now.Date.AddDays(8),
@@ -45,7 +45,7 @@ namespace cat_a_logB.Pages
                 0,
                 ""
             ),
-            new GanttData(
+            new TaskData(
                 "Task 5",
                 DateTime.Now.Date.AddDays(-2),
                 DateTime.Now.Date.AddDays(10),
@@ -55,7 +55,7 @@ namespace cat_a_logB.Pages
             )
         };
 
-        public static List<GanttData> GetProject()
+        public static List<TaskData> GetProject()
         {
 
             foreach (var task in tasks)
@@ -70,15 +70,15 @@ namespace cat_a_logB.Pages
         }
         private static List<ProjectMilestone> milestones = new List<ProjectMilestone>
         {
-            new ProjectMilestone { Name = "Milestone 1", Tasks = new List<GanttData>() {tasks[1],tasks[2] ,} ,Color = "blue"},
-            new ProjectMilestone { Name = "Milestone 2", Tasks = new List<GanttData>() {tasks[0],tasks[4] ,} ,Color= "blue"},
+            new ProjectMilestone { Name = "Milestone 1", Tasks = new List<TaskData>() {tasks[1],tasks[2] ,} ,Color = "blue"},
+            new ProjectMilestone { Name = "Milestone 2", Tasks = new List<TaskData>() {tasks[0],tasks[4] ,} ,Color= "blue"},
 
         };
         public static List<ProjectTeam> GetTeams()
         {
             return teams;
         }
-        private static int CalculateAutoProgress(GanttData task)
+        private static int CalculateAutoProgress(TaskData task)
         {
 
             DateTime currentDate = DateTime.Now.Date;

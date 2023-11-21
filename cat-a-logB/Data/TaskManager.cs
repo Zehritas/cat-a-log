@@ -6,20 +6,20 @@ namespace cat_a_logB.Data
 {
     public class TaskManager
     {
-        public List<GanttData> project;
-        public ApexChart<GanttData> chart;
-        public SelectedData<GanttData> selectedData;
+        public List<TaskData> project;
+        public ApexChart<TaskData> chart;
+        public SelectedData<TaskData> selectedData;
         public EventCallback OnClose;
         public ApexChart<ProjectMilestone> mileChart;
         public List<ProjectMilestone> milestones;
 
 
-        public async Task EditComments(List<GanttData> project, ApexChart<GanttData> chart, SelectedData<GanttData> selectedData, EventCallback OnClose, string editedComments)
+        public async Task EditComments(List<TaskData> project, ApexChart<TaskData> chart, SelectedData<TaskData> selectedData, EventCallback OnClose, string editedComments)
         {
             if (selectedData != null && selectedData.DataPoint != null
              && selectedData.DataPoint.Items.First().Name is string selectedTaskName)
             {
-                GanttData taskToUpdate = project.FirstOrDefault(task => task.Name == selectedTaskName);
+                TaskData taskToUpdate = project.FirstOrDefault(task => task.Name == selectedTaskName);
                 if (taskToUpdate != null)
                 {
                     taskToUpdate.Comments = editedComments;
@@ -34,12 +34,12 @@ namespace cat_a_logB.Data
             }
         }
 
-        public async Task EditTaskProgress(ApexChart<ProjectMilestone> mileChart, List<GanttData> project, ApexChart<GanttData> chart, SelectedData<GanttData> selectedData, EventCallback OnClose, List<ProjectMilestone> milestones, int progressValue)
+        public async Task EditTaskProgress(ApexChart<ProjectMilestone> mileChart, List<TaskData> project, ApexChart<TaskData> chart, SelectedData<TaskData> selectedData, EventCallback OnClose, List<ProjectMilestone> milestones, int progressValue)
         {
             if (selectedData != null && selectedData.DataPoint != null &&
                 selectedData.DataPoint.Items.First().Name is string selectedTaskName)
             {
-                GanttData taskToUpdate = project.FirstOrDefault(task => task.Name == selectedTaskName);
+                TaskData taskToUpdate = project.FirstOrDefault(task => task.Name == selectedTaskName);
                 if (taskToUpdate != null)
                 {
                     taskToUpdate.Progress = progressValue;
@@ -67,13 +67,13 @@ namespace cat_a_logB.Data
         }
 
 
-        public async Task EditTaskTime(List<GanttData> project, ApexChart<GanttData> chart, SelectedData<GanttData> selectedData, EventCallback OnClose, DateTime newStartDate, DateTime newEndDate)
+        public async Task EditTaskTime(List<TaskData> project, ApexChart<TaskData> chart, SelectedData<TaskData> selectedData, EventCallback OnClose, DateTime newStartDate, DateTime newEndDate)
         {
             if (selectedData != null && selectedData.DataPoint != null &&
                 selectedData.DataPoint.Items.First().Name is string selectedTaskName)
             {
                 // Find the task in the project list with the matching name and update its StartDate and EndDate properties
-                GanttData taskToUpdate = project.FirstOrDefault(task => task.Name == selectedTaskName);
+                TaskData taskToUpdate = project.FirstOrDefault(task => task.Name == selectedTaskName);
                 if (taskToUpdate != null)
                 {
                     taskToUpdate.StartDate = newStartDate;
@@ -89,12 +89,12 @@ namespace cat_a_logB.Data
             OnClose.InvokeAsync();
         }
 
-        public async Task EditTaskName(List<GanttData> project, ApexChart<GanttData> chart, SelectedData<GanttData> selectedData, EventCallback OnClose, string newTaskName) // Strictly to edit the name and refresh
+        public async Task EditTaskName(List<TaskData> project, ApexChart<TaskData> chart, SelectedData<TaskData> selectedData, EventCallback OnClose, string newTaskName) // Strictly to edit the name and refresh
         {
             if (selectedData != null && selectedData.DataPoint != null &&
             selectedData.DataPoint.Items.First().Name is string selectedTaskName)
             {
-                GanttData taskToUpdate = project.FirstOrDefault(task => task.Name == selectedTaskName);
+                TaskData taskToUpdate = project.FirstOrDefault(task => task.Name == selectedTaskName);
                 if (taskToUpdate != null)
                 {
                     taskToUpdate.Name = newTaskName;

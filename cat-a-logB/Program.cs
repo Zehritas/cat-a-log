@@ -20,7 +20,7 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddScoped<cat_a_logB.Pages.SampleData>();
-builder.Services.AddScoped<ApexChart<GanttData>>();
+builder.Services.AddScoped<ApexChart<TaskData>>();
 builder.Services.AddScoped<TaskManager>();
 builder.Services.AddScoped<AuthenticationStateProvider,
     RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();

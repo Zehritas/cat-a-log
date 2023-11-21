@@ -14,9 +14,13 @@ namespace cat_a_logB.Data
 
         public string Color { get; set; }
         public string Name { get; set; }
-        public List<GanttData> Tasks { get; set; }
+        public List<TaskData> Tasks { get; set; }
 
+        public List<Member> TeamMembers { get; set; }
+
+        [NotMapped]
         private List<String> members;
+        [NotMapped]
         public List<String> Members
         {
             get { return members; }
@@ -33,11 +37,11 @@ namespace cat_a_logB.Data
             }
         }
 
-        public ProjectTeam(string color, string name, List<string> members)
+        public ProjectTeam(string color, string name, List<String> members)
         {
             Color = color;
             Name = name;
-            Tasks = new List<GanttData>();
+            Tasks = new List<TaskData>();
             Members = members;
         }
 
@@ -45,16 +49,16 @@ namespace cat_a_logB.Data
         {
             Color = color;
             Name = name;
-            Tasks = new List<GanttData>();
+            Tasks = new List<TaskData>();
         }
         public ProjectTeam()
         {
         }
-        public void LoadTeamTasks(List<GanttData> allTasks)
+        public void LoadTeamTasks(List<TaskData> allTasks)
         {
             Tasks = allTasks.Where(task => task.Team.Name == Name).ToList();
         }
-        public static void GetTasksForTeam(List<GanttData> allTasks, ProjectTeam team)
+        public static void GetTasksForTeam(List<TaskData> allTasks, ProjectTeam team)
         {
             team.Tasks = allTasks.Where(task => task.Team.Name == team.Name).ToList();
         }

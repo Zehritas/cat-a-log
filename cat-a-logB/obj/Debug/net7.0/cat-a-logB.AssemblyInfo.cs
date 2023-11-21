@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("cat-a-logB")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5bc38404b5849058541dcf05d78ad1b173acdaa9")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+10fb62cf416786f8f053eb029897cc794a8aa6a3")]
 [assembly: System.Reflection.AssemblyProductAttribute("cat-a-logB")]
 [assembly: System.Reflection.AssemblyTitleAttribute("cat-a-logB")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
