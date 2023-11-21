@@ -177,7 +177,7 @@
                             @foreach (var dependency in selectedData.DataPoint.Items.First().Dependencies)
                             {
                                 <div>
-                                    <span>@selectedData.DataPoint.Items.First().Name -> @dependency.DependentTaskName|
+                                    <span>@selectedData.DataPoint.Items.First().Name -> @dependency.SuccessorTaskName|
                                         @dependency.Type </span>
                                     <button type="button" class="btn btn-link"
                                         @onclick="() => DeleteDependency(selectedData.DataPoint.Items.First().Dependencies, dependency)">
@@ -190,8 +190,8 @@
                         <h5>Add a new dependency:</h5>
                         <form>
                             <div class="form-group">
-                                <label for="selectedTaskForDependency">Select Task:</label>
-                                <select class="form-control" id="selectedTaskForDependency" @bind="selectedTaskForDependency">
+                                <label for="selectedSuccessorTask">Select Task:</label>
+                                <select class="form-control" id="selectedSuccessorTask" @bind="selectedSuccessorTask">
                                     <option value="">-</option>
                                     @foreach (var task in project)
                                     {
@@ -241,7 +241,7 @@
                     @foreach (var dependency in selectedData.DataPoint.Items.First().Dependencies)
                     {
                         <li class="list-group-item">
-                            Task: @dependency.DependentTaskName,
+                            Task: @dependency.SuccessorTaskName,
                             Type: @dependency.Type
                         </li>
                     }
@@ -309,6 +309,7 @@ else if (selectedData != null)
     private ApexChart<GanttData> chart;
     private GanttData newTask = new GanttData();
     private List<GanttData> project;
+    private List<GanttData> sortedTasks;
     private List<ProjectTeam> teams;
     private ApexChartOptions<GanttData> options;
     private SelectedData<GanttData> selectedData;
@@ -323,7 +324,7 @@ else if (selectedData != null)
     private bool showEditTaskCommentsModal = false;
     private bool showEditTaskDependenciesModal = false;
     private DependencyType selectedDependencyType = DependencyType.FS; //default is FS
-    private string selectedTaskForDependency;
+    private string selectedSuccessorTask;
     private List<object> boxedValues = new List<object>();
     private ApexChart<ProjectMilestone> MileChart;
     private List<ProjectMilestone> milestones;
@@ -342,6 +343,7 @@ else if (selectedData != null)
     protected override async Task OnInitializedAsync()
     {
         project = SampleData.GetProject();
+        sortedTasks = project;
         teams = SampleData.GetTeams();
         milestones = SampleData.GetMilestones();
         var colors = teams.Select(team => team.Color).ToList();
@@ -503,7 +505,6 @@ else if (selectedData != null)
         }
         else
         {
-            // Handle the case where no team with the selected name is found
             errorMessage = "Selected team not found.";
         }
     }
@@ -532,6 +533,57 @@ else if (selectedData != null)
     }
 
 
+    public List<GanttData> SortTasksByDependencies(List<GanttData> tasks)
+    {
+        var graph = new Dictionary<string, List<string>>();
+        var inDegree = new Dictionary<string, int>();
+
+        // Build the graph and calculate in-degrees
+        foreach (var task in tasks)
+        {
+            graph[task.Name] = new List<string>();
+            inDegree[task.Name] = 0;
+        }
+
+        foreach (var task in tasks)
+        {
+            foreach (var dependency in task.Dependencies)
+            {
+                if (graph.ContainsKey(dependency.SuccessorTaskName)) // Check if the key exists
+                {
+                    graph[dependency.SuccessorTaskName].Add(task.Name);
+                    inDegree[task.Name]++;
+                }
+                else
+                {
+                    // Handle the case where the key doesn't exist (e.g., log or display an error)
+                    Console.WriteLine($"Dependency successor task '{dependency.SuccessorTaskName}' not found.");
+                }
+            }
+        }
+
+        var sortedTasks = new List<GanttData>();
+        var queue = new Queue<string>(inDegree.Where(entry => entry.Value == 0).Select(entry => entry.Key));
+
+        while (queue.Count > 0)
+        {
+            var currentTaskName = queue.Dequeue();
+            var currentTask = tasks.First(task => task.Name == currentTaskName);
+
+            sortedTasks.Add(currentTask);
+
+            foreach (var dependentTaskName in graph[currentTaskName])
+            {
+                inDegree[dependentTaskName]--;
+                if (inDegree[dependentTaskName] == 0)
+                {
+                    queue.Enqueue(dependentTaskName);
+                }
+            }
+        }
+
+        return sortedTasks;
+    }
 
 
     private string CompareUserProgress(GanttData task)
@@ -548,26 +600,50 @@ else if (selectedData != null)
         {
             return $"User is {userDaysAheadOrBehind:N1} days behind.";
         }
-        else if (userDaysAheadOrBehind < 0)
-        {
-            return $"User is {Math.Abs(userDaysAheadOrBehind):N1} days ahead.";
-        }
+        else if (userDaysAheadOrBehind < 0) { return $"User is {Math.Abs(userDaysAheadOrBehind):N1} days ahead."; }
         else
         {
             return "User is on track.";
         }
     }
-
     private async Task RemoveTask()
     {
-        if (selectedData != null && selectedData.DataPoint != null)
+        if (selectedData != null && selectedData.DataPoint
+        != null)
         {
             if (selectedData.DataPoint.X is string selectedTaskName)
-            {
-                // Use LINQ to create a new list of tasks excluding the one with the matching name
-                project = project.Where(task => task.Name != selectedTaskName).ToList(); // LINQ EXPRESSION
+            { // Use LINQ to create a new list of tasks
+                var taskToRemove = project.FirstOrDefault(task => task.Name == selectedTaskName);
+
+                if (taskToRemove != null)
+                {
+                    // might have to think of efficiency sometime later over here
+                    foreach (var team in teams)
+                    {
+                        foreach (var teamTask in team.Tasks)
+                        {
+                            teamTask.Dependencies.RemoveAll(dep => dep.SuccessorTaskName == taskToRemove.Name);
+                        }
+                    }
+
+                    foreach (var otherTask in project)
+                    {
+                        otherTask.Dependencies.RemoveAll(dep => dep.SuccessorTaskName == taskToRemove.Name);
+                    }
+
+                    // Remove the task from the project
+                    project.Remove(taskToRemove);
+
+                    // Find the team containing the task
+                    var teamContainingTask = teams.FirstOrDefault(team => team.Tasks.Contains(taskToRemove));
+
+                    // Remove the task from the team
+                    teamContainingTask?.Tasks.Remove(taskToRemove);
+                }
             }
             selectedData = null; // Reset selected data after removal
+            sortedTasks = SortTasksByDependencies(project);
+            project = sortedTasks;
         }
         await chart.UpdateSeriesAsync();
         StateHasChanged();
@@ -575,8 +651,49 @@ else if (selectedData != null)
 
     void DeleteDependency(List<Dependency> dependencies, Dependency dependency)
     {
-        // Assuming 'dependencies' is a List<Dependency> containing your dependencies
         dependencies.Remove(dependency);
+    }
+    private async Task<bool> DetectCycleInternal(GanttData currentTask, GanttData startingTask, HashSet<GanttData> visited,
+    HashSet<GanttData> currentlyVisiting)
+    {
+        if (currentlyVisiting.Contains(currentTask))
+        {
+            // Cycle detected
+            // Console.WriteLine("cycle detected");
+            return true;
+        }
+
+        if (visited.Contains(currentTask))
+        {
+            // Already visited, no cycle
+            return false;
+        }
+
+        currentlyVisiting.Add(currentTask);
+
+        foreach (var dependency in currentTask.Dependencies)
+        {
+            GanttData successorTask = project.FirstOrDefault(t => t.Name == dependency.SuccessorTaskName);
+
+            if (successorTask != null && await DetectCycleInternal(successorTask, startingTask, visited, currentlyVisiting))
+            {
+                return true; // Cycle detected in the recursive call
+            }
+        }
+
+        currentlyVisiting.Remove(currentTask);
+        visited.Add(currentTask);
+
+        return false; // No cycle detected
+    }
+
+    // Call this function from your AddDependency or wherever appropriate
+    private async Task<bool> DetectCycle(GanttData startingTask)
+    {
+        HashSet<GanttData> visited = new HashSet<GanttData>();
+        HashSet<GanttData> currentlyVisiting = new HashSet<GanttData>();
+
+        return await DetectCycleInternal(startingTask, startingTask, visited, currentlyVisiting);
     }
 
     private async Task AddDependency()
@@ -584,38 +701,50 @@ else if (selectedData != null)
         if (selectedData != null && selectedData.DataPoint != null &&
         selectedData.DataPoint.X is string selectedTaskName)
         {
-            GanttData dependentTask = project.FirstOrDefault(task => task.Name == selectedTaskName);
+            GanttData predecessorTask = project.FirstOrDefault(task => task.Name == selectedTaskName);
 
-            if (dependentTask != null)
+            if (predecessorTask != null)
             {
                 DependencyType dependencyType = selectedDependencyType;
-                string selectedDependentTaskName = selectedTaskForDependency;
+                string selectedSuccessorTaskName = selectedSuccessorTask;
                 // input checks
-                if (string.IsNullOrEmpty(selectedTaskForDependency))
+                if (string.IsNullOrEmpty(selectedSuccessorTask))
                 {
                     // Display an error message, log, or handle the situation appropriately
                     return;
                 }
-                if (dependentTask.Dependencies.Any(dep => dep.DependentTaskName == selectedDependentTaskName))
+                if (predecessorTask.Dependencies.Any(dep => dep.SuccessorTaskName == selectedSuccessorTaskName))
                 {
                     // Display an error message, log, or handle the situation appropriately
+                    return;
+                }
+
+                if (await DetectCycle(predecessorTask))
+                {
+                    // Cycle detected, handle the situation appropriately (display error, log, etc.)
+                    Console.WriteLine("cycle detected");
                     return;
                 }
 
                 // creeaate
                 Dependency newDependency = new Dependency
                     {
-                        DependentTaskName = selectedDependentTaskName,
+                        SuccessorTaskName = selectedSuccessorTaskName,
                         Type = dependencyType
                     };
 
-                dependentTask.Dependencies.Add(newDependency);
+                predecessorTask.Dependencies.Add(newDependency);
+                sortedTasks = SortTasksByDependencies(project);
+                TaskManager.Reschedule(predecessorTask, sortedTasks, chart);
+                foreach (var task in sortedTasks)
+                {
+                    Console.WriteLine(task.Name);
+                }
+                Console.WriteLine("----------");
             }
         }
 
-        //ToggleEditTaskDependencies();
-
-        selectedTaskForDependency = "";
+        selectedSuccessorTask = "";
         selectedDependencyType = DependencyType.FS;
 
         await chart.UpdateSeriesAsync();
@@ -641,7 +770,7 @@ else if (selectedData != null)
     private void ToggleEditTaskDependencies()
     {
         showEditTaskDependenciesModal = !showEditTaskDependenciesModal;
-        selectedTaskForDependency = null;
+        selectedSuccessorTask = null;
 
     }
 
