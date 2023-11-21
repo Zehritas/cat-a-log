@@ -452,8 +452,16 @@ else if (selectedData != null)
         {
             foreach (var dependency in task.Dependencies)
             {
-                graph[dependency.SuccessorTaskName].Add(task.Name);
-                inDegree[task.Name]++;
+                if (graph.ContainsKey(dependency.SuccessorTaskName)) // Check if the key exists
+                {
+                    graph[dependency.SuccessorTaskName].Add(task.Name);
+                    inDegree[task.Name]++;
+                }
+                else
+                {
+                    // Handle the case where the key doesn't exist (e.g., log or display an error)
+                    Console.WriteLine($"Dependency successor task '{dependency.SuccessorTaskName}' not found.");
+                }
             }
         }
 
@@ -480,74 +488,6 @@ else if (selectedData != null)
         return sortedTasks;
     }
 
-
-    public async Task Reschedule(GanttData predecessorTask, List<GanttData> tasks)
-    {
-        foreach (var dependency in predecessorTask.Dependencies)
-        {
-            GanttData successorTask = tasks.FirstOrDefault(task => task.Name == dependency.SuccessorTaskName);
-
-            if (successorTask == null)
-            {
-                // Handle the case where the successor task is not found
-                throw new InvalidOperationException($"Task not found for dependency: {dependency.SuccessorTaskName}");
-            }
-            double successorTaskLength = (successorTask.EndDate - successorTask.StartDate).TotalDays;
-
-
-            switch (dependency.Type)
-            {
-                case DependencyType.FS:
-                    if (predecessorTask.EndDate > successorTask.StartDate)
-                    {
-                        successorTask.StartDate = predecessorTask.EndDate;
-                        successorTask.EndDate = successorTask.StartDate.AddDays(successorTaskLength);
-                        await Reschedule(successorTask, tasks);
-                        await chart.UpdateSeriesAsync();
-                        StateHasChanged();
-                    }
-                    break;
-
-                case DependencyType.SF:
-                    if (predecessorTask.EndDate < successorTask.StartDate)
-                    {
-                        successorTask.StartDate = predecessorTask.EndDate;
-                        successorTask.EndDate = successorTask.StartDate.AddDays(successorTaskLength);
-                        await Reschedule(successorTask, tasks);
-                        await chart.UpdateSeriesAsync();
-                        StateHasChanged();
-                    }
-                    break;
-
-                case DependencyType.SS:
-                    if (predecessorTask.StartDate > successorTask.StartDate)
-                    {
-                        successorTask.StartDate = predecessorTask.StartDate;
-                        successorTask.EndDate = successorTask.StartDate.AddDays(successorTaskLength);
-                        await Reschedule(successorTask, tasks);
-                        await chart.UpdateSeriesAsync();
-                        StateHasChanged();
-                    }
-                    break;
-
-                case DependencyType.FF:
-                    if (predecessorTask.EndDate > successorTask.EndDate)
-                    {
-                        successorTask.EndDate = predecessorTask.EndDate;
-                        successorTask.StartDate = successorTask.EndDate.AddDays(-successorTaskLength);
-                        await Reschedule(successorTask, tasks);
-                        await chart.UpdateSeriesAsync();
-                        StateHasChanged();
-                    }
-                    break;
-
-                default:
-                    // Handle unsupported dependency types
-                    throw new ArgumentException("Unsupported DependencyType");
-            }
-        }
-
-    }
 
     private string CompareUserProgress(GanttData task)
     {
@@ -576,9 +516,37 @@ else if (selectedData != null)
         {
             if (selectedData.DataPoint.X is string selectedTaskName)
             { // Use LINQ to create a new list of tasks
-                project = project.Where(task => task.Name != selectedTaskName).ToList(); //
+                var taskToRemove = project.FirstOrDefault(task => task.Name == selectedTaskName);
+
+                if (taskToRemove != null)
+                {
+                    // might have to think of efficiency sometime later over here
+                    foreach (var team in teams)
+                    {
+                        foreach (var teamTask in team.Tasks)
+                        {
+                            teamTask.Dependencies.RemoveAll(dep => dep.SuccessorTaskName == taskToRemove.Name);
+                        }
+                    }
+
+                    foreach (var otherTask in project)
+                    {
+                        otherTask.Dependencies.RemoveAll(dep => dep.SuccessorTaskName == taskToRemove.Name);
+                    }
+
+                    // Remove the task from the project
+                    project.Remove(taskToRemove);
+
+                    // Find the team containing the task
+                    var teamContainingTask = teams.FirstOrDefault(team => team.Tasks.Contains(taskToRemove));
+
+                    // Remove the task from the team
+                    teamContainingTask?.Tasks.Remove(taskToRemove);
+                }
             }
             selectedData = null; // Reset selected data after removal
+            sortedTasks = SortTasksByDependencies(project);
+            project = sortedTasks;
         }
         await chart.UpdateSeriesAsync();
         StateHasChanged();
@@ -670,7 +638,7 @@ else if (selectedData != null)
 
                 predecessorTask.Dependencies.Add(newDependency);
                 sortedTasks = SortTasksByDependencies(project);
-                Reschedule(predecessorTask, sortedTasks);
+                TaskManager.Reschedule(predecessorTask, sortedTasks, chart);
                 foreach (var task in sortedTasks)
                 {
                     Console.WriteLine(task.Name);
