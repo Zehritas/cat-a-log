@@ -1,6 +1,10 @@
 {
   "version": 2,
+<<<<<<< HEAD
   "dgSpecHash": "EZIb5yb9C58UQtiixgF39RUSfJrchS4f51Zcuo4WEbYXgk5gS/x8nthdz94CGJlRPX28OKKxsFhAJsninzW5WQ==",
+=======
+  "dgSpecHash": "y0FZWr4ajcOXOwTk/ocO5lGsIU7BL2QY88+pZfAKc+aKZWc0rr6AfKqMGGKGfAxwpJoxfGts1zET1cTY7+H4eQ==",
+>>>>>>> master
   "success": true,
   "projectFilePath": "C:\\Users\\Marijonas\\source\\repos\\cat-a-log\\cat-a-logB\\cat-a-logB.csproj",
   "expectedPackageFiles": [
@@ -245,12 +249,5 @@
     "C:\\Users\\Marijonas\\.nuget\\packages\\system.xml.readerwriter\\4.3.0\\system.xml.readerwriter.4.3.0.nupkg.sha512",
     "C:\\Users\\Marijonas\\.nuget\\packages\\system.xml.xdocument\\4.3.0\\system.xml.xdocument.4.3.0.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "Undefined",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Problem reading the cache file C:\\Users\\Marijonas\\source\\repos\\cat-a-log\\cat-a-logB\\obj\\project.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
-    }
-  ]
+  "logs": []
 }
