@@ -78,7 +78,7 @@ namespace cat_a_logB.Pages
         {
             return teams;
         }
-        private static int CalculateAutoProgress(GanttData task)
+        public static int CalculateAutoProgress(GanttData task)
         {
 
             DateTime currentDate = DateTime.Now.Date;
