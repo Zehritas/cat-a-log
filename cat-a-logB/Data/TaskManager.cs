@@ -1,5 +1,6 @@
 ﻿using ApexCharts;
 using Microsoft.AspNetCore.Components;
+using static cat_a_logB.Data.ProjectMilestone;
 
 
 namespace cat_a_logB.Data
@@ -49,10 +50,11 @@ namespace cat_a_logB.Data
                         taskToUpdate.PointColor = "#CCCCCC";
                         foreach (var milestone in milestones)
                         {
-                            milestone.CalculateCompletedTasksPercentage();
-                            if (milestone.Color == "green")
+                            TaskCompletionStatus completionStatus = milestone.GetTaskCompletionStatus();
+                            if (completionStatus == TaskCompletionStatus.Completed)
                             {
-                                mileChart.RenderAsync();
+                                milestone.Color = "green";
+                                await mileChart.RenderAsync();
                             }
                         }
                     }

@@ -32,23 +32,31 @@
             Tasks = allTasks.Where(task => task.Name == Name).ToList();
         }
 
-        public void CalculateCompletedTasksPercentage()
+
+        public enum TaskCompletionStatus
+        {
+            Incomplete,
+            Completed
+        }
+
+
+        public TaskCompletionStatus GetTaskCompletionStatus()
         {
             if (Tasks.Count == 0)
             {
-                return;
+                return TaskCompletionStatus.Incomplete;
             }
 
             int completedTasks = Tasks.Count(task => task.Progress == 100);
-            double completedTasksPercentage = (double)completedTasks / Tasks.Count * 100;
 
-            if (completedTasksPercentage == 100)
+            if (completedTasks == Tasks.Count)
             {
-                Color = "green";
+                return TaskCompletionStatus.Completed;
             }
 
-            return;
+            return TaskCompletionStatus.Incomplete;
         }
+
 
 
 
