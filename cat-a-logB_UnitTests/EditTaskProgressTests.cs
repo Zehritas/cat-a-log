@@ -55,13 +55,42 @@ namespace cat_a_logB_UnitTests
             NUnit.Framework.Assert.AreEqual(50, updatedTask.Progress); 
         }
         [Test]
-        public async Task EditTaskProgress_ProgressCompletionHandling()
+        public async Task EditTaskProgress_ChangesTasksPointColor()
         {
             // Arrange
             var project = new List<GanttData>
                 {
                     new GanttData { Name = "Task 1", Progress = 50, PointColor = "#123456" }
-        
+                };
+
+            var chartMock = new ApexChart<GanttData>();
+
+            var selectedData = new SelectedData<GanttData>
+            {
+                DataPoint = new DataPoint<GanttData>
+                {
+                    Items = new List<GanttData> { new GanttData { Name = "Task 1" } }
+                }
+            };
+
+            var mileChartMock = new ApexChart<ProjectMilestone>();
+            var onCloseCallbackMock = new EventCallback();
+            var taskManager = new TaskManager();
+
+            // Act
+            taskManager.EditTaskProgress(mileChartMock, project, chartMock, selectedData, onCloseCallbackMock, new List<ProjectMilestone>(), 100);
+
+            // Assert
+            var updatedTask = project.FirstOrDefault(task => task.Name == "Task 1");
+            NUnit.Framework.Assert.AreEqual("#CCCCCC", updatedTask.PointColor);
+        }
+        [Test]
+        public async Task EditTaskProgress_ChangesMilestoneColor()
+        {
+            // Arrange
+            var project = new List<GanttData>
+                {
+                    new GanttData { Name = "Task 1", Progress = 50 }
                 };
 
             var chartMock = new ApexChart<GanttData>();
@@ -76,9 +105,71 @@ namespace cat_a_logB_UnitTests
 
             var milestones = new List<ProjectMilestone>
                 {
-                    new ProjectMilestone("Milestone 1", new List<GanttData>(), DateTime.Today, "red"),
-                    new ProjectMilestone("Milestone 2", new List<GanttData>(), DateTime.Today.AddDays(1), "blue")
-        
+                    new ProjectMilestone("Milestone 1", project, DateTime.Today, "red")
+                };
+
+            var mileChartMock = new ApexChart<ProjectMilestone>();
+            var onCloseCallbackMock = new EventCallback();
+            var taskManager = new TaskManager();
+
+            // Act
+            taskManager.EditTaskProgress(mileChartMock, project, chartMock, selectedData, onCloseCallbackMock, milestones, 100);
+
+            // Assert
+            NUnit.Framework.Assert.AreEqual("green", milestones[0].Color);
+        }
+
+
+        [Test]
+        public async Task EditTaskProgress_InvalidSelectedData_NoUpdate()
+        {
+            // Arrange
+            var project = new List<GanttData>
+               {
+                    new GanttData { Name = "Task 1", Progress = 50 }
+                };
+
+            var chartMock = new ApexChart<GanttData>();
+            SelectedData<GanttData> invalidSelectedData = null; 
+
+            var milestones = new List<ProjectMilestone>
+                {
+                    new ProjectMilestone("Milestone 1", new List<GanttData>(), DateTime.Today, "red")
+                };
+
+            var mileChartMock = new ApexChart<ProjectMilestone>();
+            var onCloseCallbackMock = new EventCallback();
+            var taskManager = new TaskManager();
+
+            // Act
+            taskManager.EditTaskProgress(mileChartMock, project, chartMock, invalidSelectedData, onCloseCallbackMock, milestones, 100);
+
+            // Assert
+            var updatedTask = project.FirstOrDefault(task => task.Name == "Task 1");
+            NUnit.Framework.Assert.IsNotNull(updatedTask);
+            NUnit.Framework.Assert.AreEqual(50, updatedTask.Progress); 
+        }
+        [Test]
+        public async Task EditTaskProgress_TaskToUpdateNotFound_NoUpdate()
+        {
+            // Arrange
+            var project = new List<GanttData>
+                {
+                    new GanttData { Name = "Task 1", Progress = 50 }
+                };
+
+            var chartMock = new ApexChart<GanttData>();
+            var selectedData = new SelectedData<GanttData>
+            {
+                DataPoint = new DataPoint<GanttData>
+                {
+                    Items = new List<GanttData> { new GanttData { Name = "Task 2" } }
+                }
+            };
+
+            var milestones = new List<ProjectMilestone>
+                {
+                    new ProjectMilestone("Milestone 1", new List<GanttData>(), DateTime.Today, "red")
                 };
 
             var mileChartMock = new ApexChart<ProjectMilestone>();
@@ -90,8 +181,10 @@ namespace cat_a_logB_UnitTests
 
             // Assert
             var updatedTask = project.FirstOrDefault(task => task.Name == "Task 1");
-            NUnit.Framework.Assert.AreEqual("#CCCCCC", updatedTask.PointColor);
-            NUnit.Framework.Assert.AreEqual("green", milestones[0].Color); 
+            NUnit.Framework.Assert.IsNotNull(updatedTask);
+            NUnit.Framework.Assert.AreEqual(50, updatedTask.Progress); 
+
+            NUnit.Framework.Assert.AreEqual("red", milestones[0].Color); 
         }
     }
 }
