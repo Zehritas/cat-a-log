@@ -1,4 +1,4 @@
-﻿@* @page "/fetchdata"
+﻿@page "/fetchdata"
 @using cat_a_logB.Data
 @inject WeatherForecastService ForecastService
 
@@ -45,4 +45,3 @@ else
         forecasts = await ForecastService.GetForecastAsync(DateOnly.FromDateTime(DateTime.Now));
     }
 }
- *@

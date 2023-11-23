@@ -39,20 +39,18 @@
         {
             if (Tasks.Count == 0)
             {
-                return TaskCompletionStatus.Incomplete; 
+                return TaskCompletionStatus.Incomplete;
             }
 
             int completedTasks = Tasks.Count(task => task.Progress == 100);
 
             if (completedTasks == Tasks.Count)
             {
-                return TaskCompletionStatus.Completed; 
+                return TaskCompletionStatus.Completed;
             }
 
-            return TaskCompletionStatus.Incomplete; 
+            return TaskCompletionStatus.Incomplete;
         }
-
-
 
 
 

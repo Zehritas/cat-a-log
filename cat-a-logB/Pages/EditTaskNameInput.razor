@@ -10,22 +10,31 @@
     </form>
 </div>
 
-@if (!string.IsNullOrWhiteSpace(TaskManager.errorMessage) || !string.IsNullOrWhiteSpace(TaskManager.errorMessage))
-{
-    <div class="alert alert-danger" role="alert">@TaskManager.errorMessage</div>
-}
-
 @code {
     [Parameter] public List<GanttData> project { get; set; }
     [Parameter] public ApexChart<GanttData> chart { get; set; }
     [Parameter] public SelectedData<GanttData> selectedData { get; set; }
     [Parameter] public EventCallback OnClose { get; set; }
-    public string newTaskName = "";
-    public string errorMessage = "";
 
+    private string newTaskName = "";
 
     private async Task UpdateTaskName()
     {
-        await TaskManager.EditTaskName(project, chart, selectedData, OnClose, newTaskName);
+        if (!string.IsNullOrWhiteSpace(newTaskName))
+        {
+            if (!project.Any(task => task.Name == newTaskName))
+            {
+                await TaskManager.EditTaskName(project, chart, selectedData, OnClose, newTaskName);
+            }
+            else
+            {
+                // Handle case where the name is already in use
+            }
+        }
+
+        else
+        {
+            // handle case where name is whiteSpace
+        }
     }
 }

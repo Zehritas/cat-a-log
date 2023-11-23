@@ -1,5 +1,4 @@
 @using ApexCharts;
-@using cat_a_logB.Data;
 @inject cat_a_logB.Pages.SampleData SampleData
 @inject cat_a_logB.Data.TaskManager TaskManager
 <form>
@@ -15,12 +14,6 @@
     <button type="button" class="btn btn-success" @onclick="UpdateTaskTime">Update Task Time</button>
 </form>
 
-@if (TaskManager.newTaskStartTime >= TaskManager.newTaskEndTime)
-{
-    <div class="alert alert-danger" role="alert">@TaskManager.errorMessage</div>
-}
-
-
 @code {
 
     [Parameter] public SelectedData<GanttData> selectedData { get; set; }
@@ -29,11 +22,19 @@
     [Parameter] public EventCallback OnClose { get; set; }
     private DateTime newTaskStartTime = DateTime.Today;
     private DateTime newTaskEndTime = DateTime.Today.AddDays(1);
-    public string errorMessage = "";
+
+
 
     private async Task UpdateTaskTime()
     {
+        if (newTaskStartTime < newTaskEndTime) // Add a check to ensure the start date is before the end date
+        {
             await TaskManager.EditTaskTime(project, chart, selectedData, OnClose, newTaskStartTime, newTaskEndTime);
-
+        }
+        else
+        {
+            // Handle case where the start date is not before the end date
+            // You may want to display a message or take appropriate action
+        }
     }
 }
