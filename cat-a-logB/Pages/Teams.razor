@@ -1,185 +1,189 @@
 @page "/teams"
+@using cat_a_logB.Data
 @inject cat_a_logB.Pages.SampleData SampleData
+@inject cat_a_logBContext DbContext
 
 <PageTitle>Teams</PageTitle>
 
 <h1 class="mb-4">Team Management</h1>
 
 <div class="row">
-   <div class="col-md-6 mb-4">
-      @if (teams != null && teams.Any())
-      {
-         <ul class="list-group">
-            @foreach (var team in teams)
-            {
-               <li class="list-group-item d-flex justify-content-between align-items-center">
-                  <button class="btn btn-link" @onclick="() => ShowTasksForTeam(team)">
-                     @team.Name
-                  </button>
-                  <span style="color: @team.Color;">&#9632;</span>
+    <div class="col-md-6 mb-4">
+        @if (teams != null && teams.Any())
+        {
+            <ul class="list-group">
+                @foreach (var team in teams)
+                {
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <button class="btn btn-link" @onclick="() => ShowTasksForTeam(team)">
+                            @team.Name
+                        </button>
+                        <span style="color: @team.Color;">&#9632;</span>
 
-                  <button class="btn btn-danger" @onclick="() => ToggleRemoveTeamModal(team)">Remove</button>
-               </li>
-            }
-         </ul>
-      }
-      else
-      {
-         <p>No teams found.</p>
-      }
-   </div>
+                        <button class="btn btn-danger" @onclick="() => ToggleRemoveTeamModal(team)">Remove</button>
+                    </li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p>No teams found.</p>
+        }
+    </div>
 
-   <div class="col-md-6">
-      <div class="card">
-         <div class="card-body">
-            <h3 class="card-title mb-3">New Team:</h3>
-            <form>
-               <div class="form-group">
-                  <label for="teamName">Team Name:</label>
-                  <input class="form-control" type="text" id="teamName" @bind="newTeam.Name" />
-               </div>
-               <div class="form-group">
-                  <label for="teamColor">Team Color:</label>
-                  <input class="form-control" type="color" id="teamColor" @bind="newTeam.Color" />
-               </div>
-               <br>
-               <button class="btn btn-primary" type="button" @onclick="AddTeam">Add Team</button>
-            </form>
-         </div>
-      </div>
-      <p class="text-danger mt-3">@errorMessage</p>
-   </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title mb-3">New Team:</h3>
+                <form>
+                    <div class="form-group">
+                        <label for="teamName">Team Name:</label>
+                        <input class="form-control" type="text" id="teamName" @bind="newTeam.Name" />
+                    </div>
+                    <div class="form-group">
+                        <label for="teamColor">Team Color:</label>
+                        <input class="form-control" type="color" id="teamColor" @bind="newTeam.Color" />
+                    </div>
+                    <br>
+                    <button class="btn btn-primary" type="button" @onclick="AddTeam">Add Team</button>
+                </form>
+            </div>
+        </div>
+        <p class="text-danger mt-3">@errorMessage</p>
+    </div>
 </div>
 
 @if (showRemoveModal)
 {
-   <div class="modal show" tabindex="-1" role="dialog" style="display: block;">
-      <div class="modal-dialog" role="document">
-         <div class="modal-content">
-            <div class="modal-header">
-               <h5 class="modal-title">Confirm Removal</h5>
-               <button type="button" class="close" @onclick="ToggleRemoveModal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-               </button>
+    <div class="modal show" tabindex="-1" role="dialog" style="display: block;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirm Removal</h5>
+                    <button type="button" class="close" @onclick="ToggleRemoveModal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to remove the team '@(teamToRemove?.Name)' and its associated tasks?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="ToggleRemoveModal">Cancel</button>
+                    <button type="button" class="btn btn-danger" @onclick="() => RemoveTeam(teamToRemove)">Remove</button>
+                </div>
             </div>
-            <div class="modal-body">
-               <p>Are you sure you want to remove the team '@(teamToRemove?.Name)' and its associated tasks?</p>
-            </div>
-            <div class="modal-footer">
-               <button type="button" class="btn btn-secondary" @onclick="ToggleRemoveModal">Cancel</button>
-               <button type="button" class="btn btn-danger" @onclick="() => RemoveTeam(teamToRemove)">Remove</button>
-            </div>
-         </div>
-      </div>
-   </div>
-   <div class="modal-backdrop show"></div>
+        </div>
+    </div>
+    <div class="modal-backdrop show"></div>
 }
 
 @if (selectedTeam != null)
 {
-   @if (selectedTeam.Members != null && selectedTeam.Members.Any())
-   {
-      <h3>Team Members for @selectedTeam.Name</h3>
+    @if (selectedTeam.Members != null && selectedTeam.Members.Any())
+    {
+        <h3>Team Members for @selectedTeam.Name</h3>
 
-      <ul>
-         @foreach (var member in selectedTeam.Members)
-         {
-            <li>@member</li>
-         }
-      </ul>
-   }
-   else
-   {
-      <h3>@selectedTeam.Name has no members yet</h3>
-   }
+        <ul>
+            @foreach (var member in selectedTeam.Members)
+            {
+                <li>@member</li>
+            }
+        </ul>
+    }
+    else
+    {
+        <h3>@selectedTeam.Name has no members yet</h3>
+    }
 
-   @if (selectedTeam.Tasks != null && selectedTeam.Tasks.Any())
-   {
-      <h3>Tasks for @selectedTeam.Name</h3>
-      <ul class="list-group">
-         @foreach (var task in selectedTeam.Tasks)
-         {
-            <li class="list-group-item">
-               @task.Name
-            </li>
-         }
-      </ul>
-   }
-   else
-   {
-      <p>No tasks found for @selectedTeam.Name</p>
-   }
+    @if (selectedTeam.Tasks != null && selectedTeam.Tasks.Any())
+    {
+        <h3>Tasks for @selectedTeam.Name</h3>
+        <ul class="list-group">
+            @foreach (var task in selectedTeam.Tasks)
+            {
+                <li class="list-group-item">
+                    @task.Name
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>No tasks found for @selectedTeam.Name</p>
+    }
 }
 else
 {
-   <p>No team selected.</p>
+    <p>No team selected.</p>
 }
 
 
 
 
 @code {
-   private List<ProjectTeam> teams;
-   private List<GanttData> tasks;
-   private ProjectTeam newTeam = new ProjectTeam();
-   private string errorMessage = "";
-   private ProjectTeam selectedTeam;
-   private ProjectTeam teamToRemove;
-   private bool showRemoveModal = false;
+    private List<ProjectTeam> teams;
+    private List<TaskData> tasks;
+    private ProjectTeam newTeam = new ProjectTeam() { ProjectId = 1 };
+    private string errorMessage = "";
+    private ProjectTeam selectedTeam;
+    private ProjectTeam teamToRemove;
+    private bool showRemoveModal = false;
 
-   protected override async Task OnInitializedAsync()
-   {
-      teams = SampleData.GetTeams();
-      tasks = SampleData.GetProject();
-   }
+    protected override async Task OnInitializedAsync()
+    {
+        teams = DbContext.ProjectTeam.ToList();
+        tasks = DbContext.TaskData.ToList();
+    }
 
-   private async Task AddTeam()
-   {
-      if (string.IsNullOrWhiteSpace(newTeam.Name))
-      {
-         errorMessage = "Team name is required.";
-         return;
-      }
+    private async Task AddTeam()
+    {
+        if (string.IsNullOrWhiteSpace(newTeam.Name))
+        {
+            errorMessage = "Team name is required.";
+            return;
+        }
 
-      errorMessage = "";
+        errorMessage = "";
 
-      teams.Add(newTeam);
-      newTeam = new ProjectTeam(); // Reset the new team object after adding
-      StateHasChanged();
-   }
+        DbContext.ProjectTeam.Add(newTeam);
+        DbContext.SaveChanges();
+        teams.Add(newTeam);
+        newTeam = new ProjectTeam(); // Reset the new team object after adding
+        StateHasChanged();
+    }
 
-   private void RemoveTeam(ProjectTeam team)
-   {
-      // Remove the team
-      teams.Remove(team);
+    private void RemoveTeam(ProjectTeam team)
+    {
+        // Remove the team
+        teams.Remove(team);
 
-      // Remove associated tasks
-      tasks.RemoveAll(task => task.Team == team);
+        // Remove associated tasks
+        tasks.RemoveAll(task => task.Team == team);
 
-      // Reset the selected team
-      if (selectedTeam != null && selectedTeam.Name == team.Name)
-      {
-         selectedTeam = null;
-      }
-      ToggleRemoveModal();
-      StateHasChanged();
-   }
+        // Reset the selected team
+        if (selectedTeam != null && selectedTeam.Name == team.Name)
+        {
+            selectedTeam = null;
+        }
+        ToggleRemoveModal();
+        StateHasChanged();
+    }
 
-   private void ShowTasksForTeam(ProjectTeam team)
-   {
-      selectedTeam = team;
-      ProjectTeam.GetTasksForTeam(tasks, team);
-   }
+    private void ShowTasksForTeam(ProjectTeam team)
+    {
+        selectedTeam = team;
+        ProjectTeam.GetTasksForTeam(tasks, team);
+    }
 
-   private void ToggleRemoveTeamModal(ProjectTeam team)
-   {
-      teamToRemove = team;
-      showRemoveModal = !showRemoveModal;
-   }
+    private void ToggleRemoveTeamModal(ProjectTeam team)
+    {
+        teamToRemove = team;
+        showRemoveModal = !showRemoveModal;
+    }
 
-   private void ToggleRemoveModal()
-   {
-      showRemoveModal = !showRemoveModal;
-   }
+    private void ToggleRemoveModal()
+    {
+        showRemoveModal = !showRemoveModal;
+    }
 
 }

@@ -20,19 +20,19 @@ namespace cat_a_logB_UnitTests
         public async Task EditComments_ValidCommentUpdate()
         {
             // Arrange
-            var project = new List<GanttData>
+            var project = new List<TaskData>
             {
-                new GanttData { Name = "Task 1", Comments = "Initial comment" },
-                new GanttData { Name = "Task 2", Comments = "Initial comment" }
+                new TaskData { Name = "Task 1", Comments = "Initial comment" },
+                new TaskData { Name = "Task 2", Comments = "Initial comment" }
 
             };
 
-            var chartMock = new ApexChart<GanttData>();
-            var selectedData = new SelectedData<GanttData>
+            var chartMock = new ApexChart<TaskData>();
+            var selectedData = new SelectedData<TaskData>
             {
-                DataPoint = new DataPoint<GanttData>
+                DataPoint = new DataPoint<TaskData>
                 {
-                    Items = new List<GanttData> { new GanttData { Name = "Task 1" } }
+                    Items = new List<TaskData> { new TaskData { Name = "Task 1" } }
                 }
             };
 
@@ -53,16 +53,16 @@ namespace cat_a_logB_UnitTests
         public async Task EditComments_InvalidSelectedData_NoUpdate()
         {
             // Arrange
-            var project = new List<GanttData>
+            var project = new List<TaskData>
                 {
-                    new GanttData { Name = "Task 1", Comments = "Initial comment" }
+                    new TaskData { Name = "Task 1", Comments = "Initial comment" }
 
                 };
 
-            var chartMock = new ApexChart<GanttData>();
+            var chartMock = new ApexChart<TaskData>();
 
 
-            SelectedData<GanttData> invalidSelectedData = null;
+            SelectedData<TaskData> invalidSelectedData = null;
 
             var onCloseCallbackMock = new EventCallback();
             var editedComments = "Updated comment";
@@ -81,19 +81,19 @@ namespace cat_a_logB_UnitTests
         public async Task EditComments_TaskNotFound_NoUpdate()
         {
             // Arrange
-            var project = new List<GanttData>
+            var project = new List<TaskData>
             {
-                new GanttData { Name = "Task 1", Comments = "Initial comment" }
+                new TaskData { Name = "Task 1", Comments = "Initial comment" }
 
             };
 
-            var chartMock = new ApexChart<GanttData>();
+            var chartMock = new ApexChart<TaskData>();
 
-            var selectedData = new SelectedData<GanttData>
+            var selectedData = new SelectedData<TaskData>
             {
-                DataPoint = new DataPoint<GanttData>
+                DataPoint = new DataPoint<TaskData>
                 {
-                    Items = new List<GanttData> { new GanttData { Name = "Nonexistent Task" } }
+                    Items = new List<TaskData> { new TaskData { Name = "Nonexistent Task" } }
                 }
             };
 

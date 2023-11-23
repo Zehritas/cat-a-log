@@ -21,19 +21,19 @@ namespace cat_a_logB_UnitTests
         public void EditTaskName_EmptyName_SetsErrorMessage()
         {
             // Arrange
-            var project = new List<GanttData>
+            var project = new List<TaskData>
             {
-                new GanttData { Name = "Task 1" },
-                new GanttData { Name = "Task 2" }
+                new TaskData { Name = "Task 1" },
+                new TaskData { Name = "Task 2" }
                 // Add more tasks if needed for testing
             };
 
-            var chartMock = new ApexChart<GanttData>();
-            var selectedData = new SelectedData<GanttData>
+            var chartMock = new ApexChart<TaskData>();
+            var selectedData = new SelectedData<TaskData>
             {
-                DataPoint = new DataPoint<GanttData>
+                DataPoint = new DataPoint<TaskData>
                 {
-                    Items = new List<GanttData> { new GanttData { Name = "Task 1" } }
+                    Items = new List<TaskData> { new TaskData { Name = "Task 1" } }
                 }
             };
 
@@ -51,19 +51,19 @@ namespace cat_a_logB_UnitTests
         public void EditTaskName_ExistingName_SetsErrorMessage()
         {
             // Arrange
-            var project = new List<GanttData>
+            var project = new List<TaskData>
             {
-                new GanttData { Name = "Task 1" },
-                new GanttData { Name = "Task 2" }
+                new TaskData { Name = "Task 1" },
+                new TaskData { Name = "Task 2" }
                 // Add more tasks if needed for testing
             };
 
-            var chartMock = new ApexChart<GanttData>();
-            var selectedData = new SelectedData<GanttData>
+            var chartMock = new ApexChart<TaskData>();
+            var selectedData = new SelectedData<TaskData>
             {
-                DataPoint = new DataPoint<GanttData>
+                DataPoint = new DataPoint<TaskData>
                 {
-                    Items = new List<GanttData> { new GanttData { Name = "Task 1" } }
+                    Items = new List<TaskData> { new TaskData { Name = "Task 1" } }
                 }
             };
 
@@ -81,19 +81,19 @@ namespace cat_a_logB_UnitTests
         public void EditTaskName_ValidNameChange_NoErrorMessage()
         {
             // Arrange
-            var project = new List<GanttData>
+            var project = new List<TaskData>
             {
-                new GanttData { Name = "Task 1" },
-                new GanttData { Name = "Task 2" }
+                new TaskData { Name = "Task 1" },
+                new TaskData { Name = "Task 2" }
 
             };
 
-            var chartMock = new ApexChart<GanttData>();
-            var selectedData = new SelectedData<GanttData>
+            var chartMock = new ApexChart<TaskData>();
+            var selectedData = new SelectedData<TaskData>
             {
-                DataPoint = new DataPoint<GanttData>
+                DataPoint = new DataPoint<TaskData>
                 {
-                    Items = new List<GanttData> { new GanttData { Name = "Task 1" } }
+                    Items = new List<TaskData> { new TaskData { Name = "Task 1" } }
                 }
             };
 
@@ -115,16 +115,16 @@ namespace cat_a_logB_UnitTests
         public void EditTaskName_NullOrInvalidSelectedData_NoUpdates()
         {
             // Arrange
-            var project = new List<GanttData>
+            var project = new List<TaskData>
             {
-                new GanttData { Name = "Task 1" },
-                new GanttData { Name = "Task 2" }
+                new TaskData { Name = "Task 1" },
+                new TaskData { Name = "Task 2" }
 
             };
 
-            var chartMock = new ApexChart<GanttData>();
+            var chartMock = new ApexChart<TaskData>();
 
-           
+
             var taskManagerWithNullSelectedData = new TaskManager();
             //act
             taskManagerWithNullSelectedData.EditTaskName(project, chartMock, null, new EventCallback(), "New Task");
@@ -133,8 +133,8 @@ namespace cat_a_logB_UnitTests
             NUnit.Framework.Assert.IsEmpty(taskManagerWithNullSelectedData.errorMessage);
             NUnit.Framework.Assert.AreEqual(2, project.Count);
 
-            
-            var selectedDataWithoutItems = new SelectedData<GanttData>();
+
+            var selectedDataWithoutItems = new SelectedData<TaskData>();
             var taskManagerWithInvalidSelectedData = new TaskManager();
             taskManagerWithInvalidSelectedData.EditTaskName(project, chartMock, selectedDataWithoutItems, new EventCallback(), "New Task");
 

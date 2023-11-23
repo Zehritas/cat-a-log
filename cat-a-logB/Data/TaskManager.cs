@@ -7,9 +7,9 @@ namespace cat_a_logB.Data
 {
     public class TaskManager
     {
-        public List<GanttData> project;
-        public ApexChart<GanttData> chart;
-        public SelectedData<GanttData> selectedData;
+        public List<TaskData> project;
+        public ApexChart<TaskData> chart;
+        public SelectedData<TaskData> selectedData;
         public EventCallback OnClose;
         public ApexChart<ProjectMilestone> mileChart;
         public List<ProjectMilestone> milestones;
@@ -19,12 +19,12 @@ namespace cat_a_logB.Data
         public DateTime newTaskStartTime { get; private set; }
         public DateTime newTaskEndTime { get; private set; }
 
-        public async Task EditComments(List<GanttData> project, ApexChart<GanttData> chart, SelectedData<GanttData> selectedData, EventCallback OnClose, string editedComments)
+        public async Task EditComments(List<TaskData> project, ApexChart<TaskData> chart, SelectedData<TaskData> selectedData, EventCallback OnClose, string editedComments)
         {
             if (selectedData != null && selectedData.DataPoint != null
-             && selectedData.DataPoint.Items.First().Name is string selectedTaskName)
+             && selectedData.DataPoint.Items.First().Id is int selectedTaskId)
             {
-                GanttData taskToUpdate = project.FirstOrDefault(task => task.Name == selectedTaskName);
+                TaskData taskToUpdate = project.FirstOrDefault(task => task.Id == selectedTaskId);
                 if (taskToUpdate != null)
                 {
                     taskToUpdate.Comments = editedComments;
@@ -39,12 +39,12 @@ namespace cat_a_logB.Data
             }
         }
 
-        public async Task EditTaskProgress(ApexChart<ProjectMilestone> mileChart, List<GanttData> project, ApexChart<GanttData> chart, SelectedData<GanttData> selectedData, EventCallback OnClose, List<ProjectMilestone> milestones, int progressValue)
+        public async Task EditTaskProgress(ApexChart<ProjectMilestone> mileChart, List<TaskData> project, ApexChart<TaskData> chart, SelectedData<TaskData> selectedData, EventCallback OnClose, List<ProjectMilestone> milestones, int progressValue)
         {
             if (selectedData != null && selectedData.DataPoint != null &&
-                selectedData.DataPoint.Items.First().Name is string selectedTaskName)
+                selectedData.DataPoint.Items.First().Id is int selectedTaskId)
             {
-                GanttData taskToUpdate = project.FirstOrDefault(task => task.Name == selectedTaskName);
+                TaskData taskToUpdate = project.FirstOrDefault(task => task.Id == selectedTaskId);
                 if (taskToUpdate != null)
                 {
                     taskToUpdate.Progress = progressValue;
@@ -73,7 +73,7 @@ namespace cat_a_logB.Data
         }
 
 
-        public async Task EditTaskTime(List<GanttData> project, ApexChart<GanttData> chart, SelectedData<GanttData> selectedData, EventCallback OnClose, DateTime newStartDate, DateTime newEndDate)
+        public async Task EditTaskTime(List<TaskData> project, ApexChart<TaskData> chart, SelectedData<TaskData> selectedData, EventCallback OnClose, DateTime newStartDate, DateTime newEndDate)
         {
             if (newStartDate >= newEndDate)
             {
@@ -83,11 +83,11 @@ namespace cat_a_logB.Data
 
             errorMessage = "";
             if (selectedData != null && selectedData.DataPoint != null &&
-                    selectedData.DataPoint.Items.First().Name is string selectedTaskName)
+                    selectedData.DataPoint.Items.First().Id is int selectedTaskId)
             {
 
                 // Find the task in the project list with the matching name and update its StartDate and EndDate properties
-                GanttData taskToUpdate = project.FirstOrDefault(task => task.Name == selectedTaskName);
+                TaskData taskToUpdate = project.FirstOrDefault(task => task.Id == selectedTaskId);
                 if (taskToUpdate != null)
                 {
                     taskToUpdate.StartDate = newStartDate;
@@ -104,7 +104,7 @@ namespace cat_a_logB.Data
 
         }
 
-        public async Task EditTaskName(List<GanttData> project, ApexChart<GanttData> chart, SelectedData<GanttData> selectedData, EventCallback OnClose, string newTaskName) // Strictly to edit the name and refresh
+        public async Task EditTaskName(List<TaskData> project, ApexChart<TaskData> chart, SelectedData<TaskData> selectedData, EventCallback OnClose, string newTaskName) // Strictly to edit the name and refresh
         {
             if (string.IsNullOrWhiteSpace(newTaskName))
             {
@@ -120,9 +120,9 @@ namespace cat_a_logB.Data
 
             errorMessage = "";
             if (selectedData != null && selectedData.DataPoint != null &&
-            selectedData.DataPoint.Items.First().Name is string selectedTaskName)
+            selectedData.DataPoint.Items.First().Id is int selectedTaskId)
             {
-                GanttData taskToUpdate = project.FirstOrDefault(task => task.Name == selectedTaskName);
+                TaskData taskToUpdate = project.FirstOrDefault(task => task.Id == selectedTaskId);
                 if (taskToUpdate != null)
                 {
                     taskToUpdate.Name = newTaskName;
@@ -137,16 +137,16 @@ namespace cat_a_logB.Data
             OnClose.InvokeAsync();
         }
 
-        public async Task Reschedule(GanttData predecessorTask, List<GanttData> tasks, ApexChart<GanttData> chart) // it should take taskID and it should not assume it is the predecessor
+        public async Task Reschedule(TaskData predecessorTask, List<TaskData> tasks, ApexChart<TaskData> chart)
         {
             foreach (var dependency in predecessorTask.Dependencies)
             {
-                GanttData successorTask = tasks.FirstOrDefault(task => task.Name == dependency.SuccessorTaskName); // search by id as well
-                // GanttData predecessorTask = tasks.FirstOrDefault(task => task.Name == dependency.PredecessorTaskName);  // and renama predecessor to just task
+                TaskData successorTask = tasks.FirstOrDefault(task => task.Id == dependency.SuccessorTaskId);
+
                 if (successorTask == null)
                 {
                     // Handle the case where the successor task is not found
-                    throw new InvalidOperationException($"Task not found for dependency: {dependency.SuccessorTaskName}");
+                    throw new InvalidOperationException($"Task not found for dependency: {dependency.SuccessorTaskId}");
                 }
                 double successorTaskLength = (successorTask.EndDate - successorTask.StartDate).TotalDays;
 

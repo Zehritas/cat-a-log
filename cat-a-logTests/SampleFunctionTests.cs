@@ -17,7 +17,7 @@ public class SampleFunctionsTest
     public void CalculateAutoProgress_ShouldReturnZero_WhenCurrentDateIsBeforeStartDate()
     {
 
-        var task = new GanttData
+        var task = new TaskData
         {
             StartDate = DateTime.Now.Date.AddDays(5),
             EndDate = DateTime.Now.Date.AddDays(10)
@@ -34,7 +34,7 @@ public class SampleFunctionsTest
     public void CalculateAutoProgress_ShouldReturnHundred_WhenCurrentDateIsAfterEndDate()
     {
         // Arrange
-        var task = new GanttData
+        var task = new TaskData
         {
             StartDate = DateTime.Now.Date.AddDays(-10),
             EndDate = DateTime.Now.Date.AddDays(-5)
@@ -50,7 +50,7 @@ public class SampleFunctionsTest
     public void CalculateAutoProgress_ShouldReturnCalculatedPercentage_WhenWithinStartAndEndDate()
     {
         // Arrange
-        var task = new GanttData
+        var task = new TaskData
         {
             StartDate = DateTime.Now.Date.AddDays(-10),
             EndDate = DateTime.Now.Date.AddDays(10)

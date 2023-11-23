@@ -31,10 +31,10 @@ public class ProjectMilestoneTest
     public void GetTaskCompletionStatus_AllTasksCompleted_ReturnsCompleted()
     {
         // Arrange
-        var tasks = new List<GanttData>
+        var tasks = new List<TaskData>
             {
-                new GanttData { Progress = 100 },
-                new GanttData { Progress = 100 },
+                new TaskData { Progress = 100 },
+                new TaskData { Progress = 100 },
                 // Add more completed tasks if needed for testing
             };
         var milestone = new ProjectMilestone("Milestone with completed tasks", tasks, DateTime.Now, "Green");
@@ -49,10 +49,10 @@ public class ProjectMilestoneTest
     public void GetTaskCompletionStatus_MixedTasks_ReturnsIncomplete()
     {
         // Arrange
-        var tasks = new List<GanttData>
+        var tasks = new List<TaskData>
             {
-                new GanttData { Progress = 100 },
-                new GanttData { Progress = 50 },
+                new TaskData { Progress = 100 },
+                new TaskData { Progress = 50 },
 
             };
         var milestone = new ProjectMilestone("Milestone with mixed tasks", tasks, DateTime.Now, "Yellow");

@@ -1,6 +1,7 @@
 ﻿@page "/Milestones"
 @using cat_a_logB.Data
 @inject cat_a_logB.Pages.SampleData SampleData
+@inject cat_a_logBContext DbContext
 
 <PageTitle>Milestones</PageTitle>
 
@@ -43,7 +44,7 @@
                         {
                             <label>
                                 <input type="checkbox" @onclick="() => ToggleTaskSelection(task)"
-                                    checked="@selectedTasks.Contains(task)" />
+                                       checked="@selectedTasks.Contains(task)" />
                                 @task.Name
                             </label>
                         }
@@ -86,11 +87,11 @@ else
 }
 
 @code {
-    private List<GanttData> tasks;
+    private List<TaskData> tasks;
     private List<ProjectMilestone> milestones;
     private string milestoneName;
     private DateTime milestoneDate = DateTime.Today;
-    private List<GanttData> selectedTasks = new List<GanttData>();
+    private List<TaskData> selectedTasks = new List<TaskData>();
     private ProjectMilestone selectedMilestone;
     private ProjectMilestone newMilestone = new ProjectMilestone();
     private string errorMessage = "";
@@ -100,15 +101,15 @@ else
 
     protected override void OnInitialized()
     {
-        milestones = SampleData.GetMilestones();
-        tasks = SampleData.GetProject();
+        milestones = DbContext.ProjectMilestone.ToList();
+        tasks = DbContext.TaskData.ToList();
     }
 
-    private void ToggleTaskSelection(GanttData task)
+    private void ToggleTaskSelection(TaskData task)
     {
         if (selectedTasks == null)
         {
-            selectedTasks = new List<GanttData>();
+            selectedTasks = new List<TaskData>();
         }
 
         if (selectedTasks.Contains(task))
@@ -128,6 +129,8 @@ else
 
             newMilestone = new ProjectMilestone(milestoneName, selectedTasks.ToList(), milestoneDate, "blue");
 
+            DbContext.ProjectMilestone.Add(newMilestone);
+            DbContext.SaveChanges();
             milestones.Add(newMilestone);
             newMilestone = new ProjectMilestone();
             milestoneName = string.Empty;

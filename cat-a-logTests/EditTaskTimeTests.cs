@@ -20,19 +20,19 @@ namespace cat_a_logB_UnitTests
         public async Task EditTaskTime_ValidDateChange()
         {
             // Arrange
-            var project = new List<GanttData>
+            var project = new List<TaskData>
                 {
-                    new GanttData { Name = "Task 1", StartDate = DateTime.Today, EndDate = DateTime.Today.AddDays(1) }
+                    new TaskData { Name = "Task 1", StartDate = DateTime.Today, EndDate = DateTime.Today.AddDays(1) }
 
                 };
 
 
-            var chartMock = new ApexChart<GanttData>();
-            var selectedData = new SelectedData<GanttData>
+            var chartMock = new ApexChart<TaskData>();
+            var selectedData = new SelectedData<TaskData>
             {
-                DataPoint = new DataPoint<GanttData>
+                DataPoint = new DataPoint<TaskData>
                 {
-                    Items = new List<GanttData> { new GanttData { Name = "Task 1" } }
+                    Items = new List<TaskData> { new TaskData { Name = "Task 1" } }
                 }
             };
 
@@ -56,22 +56,22 @@ namespace cat_a_logB_UnitTests
         public async Task EditTaskTime_EndDateGreaterThanStartDate_ErrorSetNoUpdate()
         {
             // Arrange
-            var project = new List<GanttData>
+            var project = new List<TaskData>
                 {
-                    new GanttData { Name = "Task 1", StartDate = DateTime.Today, EndDate = DateTime.Today.AddDays(1) }
+                    new TaskData { Name = "Task 1", StartDate = DateTime.Today, EndDate = DateTime.Today.AddDays(1) }
 
                 };
 
-            var selectedData = new SelectedData<GanttData>
+            var selectedData = new SelectedData<TaskData>
             {
-                DataPoint = new DataPoint<GanttData>
+                DataPoint = new DataPoint<TaskData>
                 {
-                    Items = new List<GanttData> { new GanttData { Name = "Task 1" } }
+                    Items = new List<TaskData> { new TaskData { Name = "Task 1" } }
                 }
             };
 
 
-            var chartMock = new ApexChart<GanttData>();
+            var chartMock = new ApexChart<TaskData>();
             var onCloseCallbackMock = new EventCallback();
 
             var newStartDate = DateTime.Today.AddDays(2);
@@ -94,21 +94,21 @@ namespace cat_a_logB_UnitTests
         public async Task EditTaskTime_SelectedDataNotAvailable_NoUpdate()
         {
             // Arrange
-            var project = new List<GanttData>
+            var project = new List<TaskData>
                 {
-                    new GanttData { Name = "Task 1", StartDate = DateTime.Today, EndDate = DateTime.Today.AddDays(1) }
+                    new TaskData { Name = "Task 1", StartDate = DateTime.Today, EndDate = DateTime.Today.AddDays(1) }
 
                 };
 
-            var selectedData = new SelectedData<GanttData>
+            var selectedData = new SelectedData<TaskData>
             {
-                DataPoint = new DataPoint<GanttData>
+                DataPoint = new DataPoint<TaskData>
                 {
-                    Items = new List<GanttData> { new GanttData { Name = "Task 1" } }
+                    Items = new List<TaskData> { new TaskData { Name = "Task 1" } }
                 }
             };
-            SelectedData<GanttData> invalidSelectedData = null;
-            var chartMock = new ApexChart<GanttData>();
+            SelectedData<TaskData> invalidSelectedData = null;
+            var chartMock = new ApexChart<TaskData>();
             var onCloseCallbackMock = new EventCallback();
             var taskManager = new TaskManager();
             var newStartDate = DateTime.Today.AddDays(2);
@@ -133,21 +133,21 @@ namespace cat_a_logB_UnitTests
         public async Task EditTaskTime_TaskToUpdateNotFound_NoUpdate()
         {
             // Arrange
-            var project = new List<GanttData>
+            var project = new List<TaskData>
                 {
-                    new GanttData { Name = "Task 1", StartDate = DateTime.Today, EndDate = DateTime.Today.AddDays(1) }
+                    new TaskData { Name = "Task 1", StartDate = DateTime.Today, EndDate = DateTime.Today.AddDays(1) }
 
                 };
 
-            var selectedData = new SelectedData<GanttData>
+            var selectedData = new SelectedData<TaskData>
             {
-                DataPoint = new DataPoint<GanttData>
+                DataPoint = new DataPoint<TaskData>
                 {
-                    Items = new List<GanttData> { new GanttData { Name = "Nonexistent Task" } }
+                    Items = new List<TaskData> { new TaskData { Name = "Nonexistent Task" } }
                 }
             };
-            SelectedData<GanttData> invalidSelectedData = null;
-            var chartMock = new ApexChart<GanttData>();
+            SelectedData<TaskData> invalidSelectedData = null;
+            var chartMock = new ApexChart<TaskData>();
             var onCloseCallbackMock = new EventCallback();
             var taskManager = new TaskManager();
             var newStartDate = DateTime.Today.AddDays(2);
@@ -159,11 +159,11 @@ namespace cat_a_logB_UnitTests
             // Assert
             NUnit.Framework.Assert.IsEmpty(taskManager.errorMessage);
 
-            
+
             var updatedTask = project.FirstOrDefault(task => task.Name == "Task 1");
             NUnit.Framework.Assert.IsNotNull(updatedTask); // Ensure the task still exists
 
-            
+
             NUnit.Framework.Assert.AreEqual(DateTime.Today, updatedTask.StartDate);
             NUnit.Framework.Assert.AreEqual(DateTime.Today.AddDays(1), updatedTask.EndDate);
         }
@@ -171,21 +171,21 @@ namespace cat_a_logB_UnitTests
         public async Task EditTaskTime_NullChartParameter_NoUpdate()
         {
             // Arrange
-            var project = new List<GanttData>
+            var project = new List<TaskData>
                 {
-                    new GanttData { Name = "Task 1", StartDate = DateTime.Today, EndDate = DateTime.Today.AddDays(1) }
+                    new TaskData { Name = "Task 1", StartDate = DateTime.Today, EndDate = DateTime.Today.AddDays(1) }
 
                 };
 
-            var selectedData = new SelectedData<GanttData>
+            var selectedData = new SelectedData<TaskData>
             {
-                DataPoint = new DataPoint<GanttData>
+                DataPoint = new DataPoint<TaskData>
                 {
-                    Items = new List<GanttData> { new GanttData { Name = "Nonexistent Task" } }
+                    Items = new List<TaskData> { new TaskData { Name = "Nonexistent Task" } }
                 }
             };
-            SelectedData<GanttData> invalidSelectedData = null;
-            ApexChart<GanttData> nullChart = null;
+            SelectedData<TaskData> invalidSelectedData = null;
+            ApexChart<TaskData> nullChart = null;
             var onCloseCallbackMock = new EventCallback();
             var taskManager = new TaskManager();
             var newStartDate = DateTime.Today.AddDays(2);
@@ -197,11 +197,11 @@ namespace cat_a_logB_UnitTests
             // Assert
             NUnit.Framework.Assert.IsEmpty(taskManager.errorMessage);
 
-            
+
             var updatedTask = project.FirstOrDefault(task => task.Name == "Task 1");
             NUnit.Framework.Assert.IsNotNull(updatedTask); // Ensure the task still exists
 
-            
+
             NUnit.Framework.Assert.AreEqual(DateTime.Today, updatedTask.StartDate);
             NUnit.Framework.Assert.AreEqual(DateTime.Today.AddDays(1), updatedTask.EndDate);
         }

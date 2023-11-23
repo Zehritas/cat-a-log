@@ -1,4 +1,4 @@
-﻿using cat_a_logB;
+﻿using cat_a_logB.Data;
 
 using NUnit.Framework;
 using System;

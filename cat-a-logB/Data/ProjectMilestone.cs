@@ -1,15 +1,20 @@
-﻿namespace cat_a_logB.Data
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace cat_a_logB.Data
 {
     public class ProjectMilestone
     {
-        public string Name { get; set; }
-        public List<GanttData> Tasks { get; set; }
-        public string Color { get; set; }
+        [Key]
+        public int Id { get; set; }
+        public string? Name { get; set; }
+        public List<TaskData> Tasks { get; set; }
+        public string? Color { get; set; }
 
-        public DateTime TargetDate { get; set; }
+        public DateTime TargetDate { get; set; } = DateTime.Now;
 
 
-        public ProjectMilestone(string name, List<GanttData> tasks, DateTime targetDate, string color)
+
+        public ProjectMilestone(string name, List<TaskData> tasks, DateTime targetDate, string color)
         {
             this.Name = name;
             this.Tasks = tasks;
@@ -19,7 +24,7 @@
         public ProjectMilestone(string name)
         {
             Name = name;
-            Tasks = new List<GanttData>();
+            Tasks = new List<TaskData>();
 
         }
 
@@ -27,7 +32,7 @@
         {
         }
 
-        public void LoadMilestoneTasks(List<GanttData> allTasks)
+        public void LoadMilestoneTasks(List<TaskData> allTasks)
         {
             Tasks = allTasks.Where(task => task.Name == Name).ToList();
         }

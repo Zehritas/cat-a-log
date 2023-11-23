@@ -1,3 +1,4 @@
+@using cat_a_logB.Data
 @inject cat_a_logB.Data.TaskManager TaskManager
 <div>
     <form>
@@ -16,9 +17,9 @@
 }
 
 @code {
-    [Parameter] public List<GanttData> project { get; set; }
-    [Parameter] public ApexChart<GanttData> chart { get; set; }
-    [Parameter] public SelectedData<GanttData> selectedData { get; set; }
+    [Parameter] public List<TaskData> project { get; set; }
+    [Parameter] public ApexChart<TaskData> chart { get; set; }
+    [Parameter] public SelectedData<TaskData> selectedData { get; set; }
     [Parameter] public EventCallback OnClose { get; set; }
     public string newTaskName = "";
     public string errorMessage = "";
