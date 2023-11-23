@@ -92,7 +92,6 @@ namespace cat_a_logB.Pages
             }
             else
             {
-
                 double totalDays = (task.EndDate - task.StartDate).TotalDays;
                 double daysPassed = (currentDate - task.StartDate).TotalDays;
                 return (int)((daysPassed / totalDays) * 100);
