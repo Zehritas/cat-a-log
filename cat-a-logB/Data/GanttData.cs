@@ -6,11 +6,11 @@
     public string PointColor { get; set; }
     public string Comments { get; set; }
     public ProjectTeam Team { get; set; }
-    public int Progress { get; set; } // Add a Progress property
+    public double Progress { get; set; } // Add a Progress property
 
     public double DayProgress { get; set; }
 
-    public int AutoProgress { get; set; }
+    public double AutoProgress { get; set; }
     public List<Dependency> Dependencies { get; set; } = new List<Dependency>();
     public int CompareTo(GanttData other)
     {
