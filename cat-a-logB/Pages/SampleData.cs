@@ -68,7 +68,7 @@ namespace cat_a_logB.Pages
         {
             return milestones;
         }
-        private static List<ProjectMilestone> milestones = new List<ProjectMilestone>
+        public static List<ProjectMilestone> milestones = new List<ProjectMilestone>
         {
             new ProjectMilestone { Name = "Milestone 1", Tasks = new List<GanttData>() {tasks[1],tasks[2] ,} , TargetDate = new DateTime(2023, 11, 26),   Color = "blue"},
             new ProjectMilestone { Name = "Milestone 2", Tasks = new List<GanttData>() {tasks[0],tasks[4] ,} ,TargetDate = new DateTime(2023, 11, 22), Color= "blue"},
@@ -78,7 +78,7 @@ namespace cat_a_logB.Pages
         {
             return teams;
         }
-        private static int CalculateAutoProgress(GanttData task)
+        public static int CalculateAutoProgress(GanttData task)
         {
 
             DateTime currentDate = DateTime.Now.Date;
