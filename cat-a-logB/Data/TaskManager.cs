@@ -108,12 +108,12 @@ namespace cat_a_logB.Data
             OnClose.InvokeAsync();
         }
 
-        public async Task Reschedule(GanttData predecessorTask, List<GanttData> tasks, ApexChart<GanttData> chart)
+        public async Task Reschedule(GanttData predecessorTask, List<GanttData> tasks, ApexChart<GanttData> chart) // it should take taskID and it should not assume it is the predecessor
         {
             foreach (var dependency in predecessorTask.Dependencies)
             {
-                GanttData successorTask = tasks.FirstOrDefault(task => task.Name == dependency.SuccessorTaskName);
-
+                GanttData successorTask = tasks.FirstOrDefault(task => task.Name == dependency.SuccessorTaskName); // search by id as well
+                // GanttData predecessorTask = tasks.FirstOrDefault(task => task.Name == dependency.PredecessorTaskName);  // and renama predecessor to just task
                 if (successorTask == null)
                 {
                     // Handle the case where the successor task is not found
