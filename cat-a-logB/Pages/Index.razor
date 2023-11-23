@@ -176,7 +176,7 @@
                             @foreach (var dependency in selectedData.DataPoint.Items.First().Dependencies)
                             {
                                 <div>
-                                    <span>@selectedData.DataPoint.Items.First(). -> @dependency.SuccessorTask.Name|
+                                    <span>@selectedData.DataPoint.Items.First().Name -> @dependency.SuccessorTask.Name|
                                         @dependency.Type </span>
                                     <button type="button" class="btn btn-link"
                                         @onclick="() => DeleteDependency(selectedData.DataPoint.Items.First().Dependencies, dependency)">
@@ -339,10 +339,10 @@ else if (selectedData != null)
 
     protected override async Task OnInitializedAsync()
     {
-        project = SampleData.GetProject();
+        project = DbContext.TaskData.ToList();
         sortedTasks = project;
-        teams = SampleData.GetTeams();
-        milestones = SampleData.GetMilestones();
+        teams = DbContext.ProjectTeam.ToList();
+        milestones = DbContext.ProjectMilestone.ToList();
         var colors = teams.Select(team => team.Color).ToList();
         lineData = milestones.Select(_ => 100.0).ToList();
 
@@ -493,6 +493,8 @@ else if (selectedData != null)
                 Progress = 0,
                 Comments = newTask.Comments
             };
+            newTaskData.SyncColorWithTeam(DbContext.ProjectTeam.Where(t => newTaskData.TeamId == t.Id).FirstOrDefault());
+
             newTaskData.AutoProgress = (int)CalculateAutoProgress(newTaskData);
             DbContext.TaskData.Add(newTaskData);
             DbContext.SaveChanges();
