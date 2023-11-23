@@ -24,7 +24,7 @@ builder.Services.AddScoped<ApexChart<GanttData>>();
 builder.Services.AddScoped<TaskManager>();
 builder.Services.AddScoped<AuthenticationStateProvider,
     RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
-builder.Services.AddSingleton<WeatherForecastService>();
+
 
 var app = builder.Build();
 

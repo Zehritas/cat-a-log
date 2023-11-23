@@ -6,6 +6,8 @@
 @inject cat_a_logB.Pages.SampleData SampleData
 @inject cat_a_logB.Data.TaskManager TaskManager
 
+
+
 <PageTitle>Gantt Chart</PageTitle>
 
 @* <button type="button" class="btn btn-primary" @onclick=ShowMilestones>Show Milestones</button> *@
@@ -301,6 +303,10 @@ else if (selectedData != null)
 @if (!string.IsNullOrWhiteSpace(errorMessage))
 {
     <div class="alert alert-danger mt-2">@errorMessage</div>
+}
+@if (project.Any(task => task.Name == newTaskName))
+{
+    <div class="alert alert-danger" role="alert">@errorMessage</div>
 }
 
 

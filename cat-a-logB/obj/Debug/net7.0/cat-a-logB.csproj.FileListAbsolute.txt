@@ -1357,3 +1357,4 @@ C:\Users\Lenovo\Desktop\cat-a-log\cat-a-logB\obj\Debug\net7.0\refint\cat-a-logB.
 C:\Users\Lenovo\Desktop\cat-a-log\cat-a-logB\obj\Debug\net7.0\cat-a-logB.pdb
 C:\Users\Lenovo\Desktop\cat-a-log\cat-a-logB\obj\Debug\net7.0\cat-a-logB.genruntimeconfig.cache
 C:\Users\Lenovo\Desktop\cat-a-log\cat-a-logB\obj\Debug\net7.0\ref\cat-a-logB.dll
+C:\Users\Lenovo\Desktop\cat-a-log\cat-a-logB\obj\Debug\net7.0\cat-a-logB.sourcelink.json
