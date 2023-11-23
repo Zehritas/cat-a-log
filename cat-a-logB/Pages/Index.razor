@@ -11,7 +11,7 @@
 @* <button type="button" class="btn btn-primary" @onclick=ShowMilestones>Show Milestones</button> *@
 
 <DemoContainer>
-    <ApexChart @ref=MileChart TItem="ProjectMilestone" Title="@title" Height="120" Options=options1 Debug OnClick=ShowMilestone>
+    <ApexChart @ref=MileChart TItem="ProjectMilestone" Title="@title" Height="120" Options=options1 Debug OnClick=HandleMilestoneClick>
          
 
         <ApexPointTooltip>
@@ -87,13 +87,12 @@
              
 
             <ApexPointTooltip>
-                
-               
-                
-                <div class="m-2">
+
+                <div class="m-3">
                     @{
 
                         var point = (ListPoint<GanttData>)context.DataPoint;
+                        var task = point.Items.First();
 
                         <h4>@point.X</h4>
                         <span>Deadline: @point.Items.First().EndDate.ToShortDateString()</span>
@@ -101,10 +100,18 @@
                         <span>Team: @point.Items.First().Team.Name</span>
                         <br>
                         <span>@CompareUserProgress(point.Items.First())</span>
-
-
+                        <br>
+                        @if (task.Progress < task.AutoProgress)
+                        {
+                            <span style="color: red;">@CheckEstimatedProgress(point.Items.First())</span>
+                        }
+                        else
+                        {
+                            <span style="color: green;">@CheckEstimatedProgress(point.Items.First())</span>
+                        }
                     }
                 </div>
+
             </ApexPointTooltip>
 
             <ChildContent>
@@ -401,6 +408,11 @@ else if (selectedData != null)
         selectedData = data;
     }
 
+    private Task HandleMilestoneClick(SelectedData<ProjectMilestone> data)
+    {
+        return ShowMilestone(data);
+    }
+
     private async Task ShowMilestone(SelectedData<ProjectMilestone> data)
     {
         clickedMilestone = data?.DataPoint?.Items?.FirstOrDefault();
@@ -410,12 +422,12 @@ else if (selectedData != null)
             if (displayedMilestones.Contains(clickedMilestone))
             {
                 displayedMilestones.Remove(clickedMilestone);
-                await RedrawAnnotations(); 
+                await RedrawAnnotations();
             }
             else
             {
                 displayedMilestones.Add(clickedMilestone);
-                await RedrawAnnotations(); 
+                await RedrawAnnotations();
             }
         }
     }
@@ -533,7 +545,9 @@ else if (selectedData != null)
     }
 
 
-    public List<GanttData> SortTasksByDependencies(List<GanttData> tasks)
+    public List<T> SortTasksByDependencies<T, U>(List<T> tasks)
+        where T : GanttData
+        where U : Dependency
     {
         var graph = new Dictionary<string, List<string>>();
         var inDegree = new Dictionary<string, int>();
@@ -562,13 +576,13 @@ else if (selectedData != null)
             }
         }
 
-        var sortedTasks = new List<GanttData>();
+        var sortedTasks = new List<T>();
         var queue = new Queue<string>(inDegree.Where(entry => entry.Value == 0).Select(entry => entry.Key));
 
         while (queue.Count > 0)
         {
             var currentTaskName = queue.Dequeue();
-            var currentTask = tasks.First(task => task.Name == currentTaskName);
+            var currentTask = tasks.First(task => (task as GanttData).Name == currentTaskName);
 
             sortedTasks.Add(currentTask);
 
@@ -584,6 +598,7 @@ else if (selectedData != null)
 
         return sortedTasks;
     }
+
 
 
     private string CompareUserProgress(GanttData task)
@@ -642,7 +657,8 @@ else if (selectedData != null)
                 }
             }
             selectedData = null; // Reset selected data after removal
-            sortedTasks = SortTasksByDependencies(project);
+            List<GanttData> sortedTasks = SortTasksByDependencies<GanttData, Dependency>(project);
+
             project = sortedTasks;
         }
         await chart.UpdateSeriesAsync();
@@ -734,7 +750,7 @@ else if (selectedData != null)
                     };
 
                 predecessorTask.Dependencies.Add(newDependency);
-                sortedTasks = SortTasksByDependencies(project);
+                List<GanttData> sortedTasks = SortTasksByDependencies<GanttData, Dependency>(project);
                 TaskManager.Reschedule(predecessorTask, sortedTasks, chart);
                 foreach (var task in sortedTasks)
                 {
@@ -786,5 +802,39 @@ else if (selectedData != null)
         showEditTaskCommentsModal = !showEditTaskCommentsModal;
     }
     #endregion
+
+    private string CheckEstimatedProgress(GanttData task)
+    {
+        if (task.Progress == 100)
+        {
+            return "Task " + task.Name + " is already complete.";
+        }
+        else
+        {
+            double remainingDays = (task.EndDate - DateTime.Now).TotalDays;
+
+            if (task.Progress >= task.AutoProgress)
+            {
+                return "Task " + task.Name + " should be finished on time.";
+            }
+            else
+            {
+                var team = task.Team;
+                int additionalPeopleNeeded = CalculateAdditionalPeople(task, team);
+                return "Task " + task.Name + " is behind schedule. Consider adding " + additionalPeopleNeeded + " more people.";
+            }
+        }
+    }
+
+    private int CalculateAdditionalPeople(GanttData task, ProjectTeam team)
+    {
+        double remainingProgress = task.AutoProgress - task.Progress;
+        double remainingDays = (task.EndDate - DateTime.Now).TotalDays;
+
+        // Assuming all team members contribute equally, calculate the number of additional people needed
+        int additionalPeopleNeeded = (int)Math.Ceiling((remainingProgress / 100) / (remainingDays / team.Members.Count));
+
+        return additionalPeopleNeeded;
+    }
 
 }
