@@ -30,7 +30,7 @@ public class cat_a_logBContext : IdentityDbContext<IdentityUser>
         builder.Entity<Dependency>()
             .HasOne(op => op.DependeeTask)
             .WithMany()
-            .HasForeignKey(op => op.DependeeTaskId)
+            .HasForeignKey(op => op.PredecessorTaskId)
             .OnDelete(DeleteBehavior.NoAction);
 
         builder.Entity<Member>()

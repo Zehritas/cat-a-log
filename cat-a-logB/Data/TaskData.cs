@@ -8,19 +8,20 @@ namespace cat_a_logB.Data
     {
         [Key]
         public int Id { get; set; }
-        public string Name { get; set; }
+        public string? Name { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public string PointColor { get; set; }
-        public string Comments { get; set; }
+        public string? PointColor { get; set; }
+        public string? Comments { get; set; }
 
+        [Required]
         public int TeamId { get; set; }
         [ForeignKey("TeamId")]
         public ProjectTeam Team { get; set; }
 
-        public int MilestoneId { get; set; }
+        public int? MilestoneId { get; set; }
         [ForeignKey("MilestoneId")]
-        public ProjectMilestone Milestone { get; set; }
+        public ProjectMilestone? Milestone { get; set; }
 
         public int Progress { get; set; } // Add a Progress property
 

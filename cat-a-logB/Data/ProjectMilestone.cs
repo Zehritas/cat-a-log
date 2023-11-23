@@ -6,11 +6,11 @@ namespace cat_a_logB.Data
     {
         [Key]
         public int Id { get; set; }
-        public string Name { get; set; }
+        public string? Name { get; set; }
         public List<TaskData> Tasks { get; set; }
-        public string Color { get; set; }
+        public string? Color { get; set; }
 
-        public DateTime TargetDate { get; set; }
+        public DateTime TargetDate { get; set; } = DateTime.Now;
 
 
 

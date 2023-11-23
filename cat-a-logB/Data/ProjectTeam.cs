@@ -1,22 +1,25 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
+
 namespace cat_a_logB.Data
 {
+
     public class ProjectTeam
     {
         [Key]
         public int Id { get; set; }
 
+        [Required]
         public int ProjectId { get; set; }
         [ForeignKey("ProjectId")]
-        public Project Project { get; set; }
+        public Project? Project { get; set; }
 
-        public string Color { get; set; }
-        public string Name { get; set; }
-        public List<TaskData> Tasks { get; set; }
+        public string? Color { get; set; }
+        public string? Name { get; set; }
+        public List<TaskData> Tasks { get; set; } = new List<TaskData>();
 
-        public List<Member> TeamMembers { get; set; }
+        public List<Member> TeamMembers { get; set; } = new List<Member>();
 
         [NotMapped]
         private List<String> members;

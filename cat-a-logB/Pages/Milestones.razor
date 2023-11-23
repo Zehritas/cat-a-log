@@ -1,6 +1,7 @@
 ﻿@page "/Milestones"
 @using cat_a_logB.Data
 @inject cat_a_logB.Pages.SampleData SampleData
+@inject cat_a_logBContext DbContext
 
 <PageTitle>Milestones</PageTitle>
 
@@ -128,6 +129,8 @@ else
 
             newMilestone = new ProjectMilestone(milestoneName, selectedTasks.ToList(), milestoneDate, "blue");
 
+            DbContext.ProjectMilestone.Add(newMilestone);
+            DbContext.SaveChanges();
             milestones.Add(newMilestone);
             newMilestone = new ProjectMilestone();
             milestoneName = string.Empty;

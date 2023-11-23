@@ -17,9 +17,9 @@ namespace cat_a_logB.Data
         public async Task EditComments(List<TaskData> project, ApexChart<TaskData> chart, SelectedData<TaskData> selectedData, EventCallback OnClose, string editedComments)
         {
             if (selectedData != null && selectedData.DataPoint != null
-             && selectedData.DataPoint.Items.First().Name is string selectedTaskName)
+             && selectedData.DataPoint.Items.First().Id is int selectedTaskId)
             {
-                TaskData taskToUpdate = project.FirstOrDefault(task => task.Name == selectedTaskName);
+                TaskData taskToUpdate = project.FirstOrDefault(task => task.Id == selectedTaskId);
                 if (taskToUpdate != null)
                 {
                     taskToUpdate.Comments = editedComments;
@@ -37,9 +37,9 @@ namespace cat_a_logB.Data
         public async Task EditTaskProgress(ApexChart<ProjectMilestone> mileChart, List<TaskData> project, ApexChart<TaskData> chart, SelectedData<TaskData> selectedData, EventCallback OnClose, List<ProjectMilestone> milestones, int progressValue)
         {
             if (selectedData != null && selectedData.DataPoint != null &&
-                selectedData.DataPoint.Items.First().Name is string selectedTaskName)
+                selectedData.DataPoint.Items.First().Id is int selectedTaskId)
             {
-                TaskData taskToUpdate = project.FirstOrDefault(task => task.Name == selectedTaskName);
+                TaskData taskToUpdate = project.FirstOrDefault(task => task.Id == selectedTaskId);
                 if (taskToUpdate != null)
                 {
                     taskToUpdate.Progress = progressValue;
@@ -70,10 +70,10 @@ namespace cat_a_logB.Data
         public async Task EditTaskTime(List<TaskData> project, ApexChart<TaskData> chart, SelectedData<TaskData> selectedData, EventCallback OnClose, DateTime newStartDate, DateTime newEndDate)
         {
             if (selectedData != null && selectedData.DataPoint != null &&
-                selectedData.DataPoint.Items.First().Name is string selectedTaskName)
+                selectedData.DataPoint.Items.First().Id is int selectedTaskId)
             {
                 // Find the task in the project list with the matching name and update its StartDate and EndDate properties
-                TaskData taskToUpdate = project.FirstOrDefault(task => task.Name == selectedTaskName);
+                TaskData taskToUpdate = project.FirstOrDefault(task => task.Id == selectedTaskId);
                 if (taskToUpdate != null)
                 {
                     taskToUpdate.StartDate = newStartDate;
@@ -92,9 +92,9 @@ namespace cat_a_logB.Data
         public async Task EditTaskName(List<TaskData> project, ApexChart<TaskData> chart, SelectedData<TaskData> selectedData, EventCallback OnClose, string newTaskName) // Strictly to edit the name and refresh
         {
             if (selectedData != null && selectedData.DataPoint != null &&
-            selectedData.DataPoint.Items.First().Name is string selectedTaskName)
+            selectedData.DataPoint.Items.First().Id is int selectedTaskId)
             {
-                TaskData taskToUpdate = project.FirstOrDefault(task => task.Name == selectedTaskName);
+                TaskData taskToUpdate = project.FirstOrDefault(task => task.Id == selectedTaskId);
                 if (taskToUpdate != null)
                 {
                     taskToUpdate.Name = newTaskName;
@@ -112,12 +112,12 @@ namespace cat_a_logB.Data
         {
             foreach (var dependency in predecessorTask.Dependencies)
             {
-                TaskData successorTask = tasks.FirstOrDefault(task => task.Name == dependency.SuccessorTaskName);
+                TaskData successorTask = tasks.FirstOrDefault(task => task.Id == dependency.SuccessorTaskId);
 
                 if (successorTask == null)
                 {
                     // Handle the case where the successor task is not found
-                    throw new InvalidOperationException($"Task not found for dependency: {dependency.SuccessorTaskName}");
+                    throw new InvalidOperationException($"Task not found for dependency: {dependency.SuccessorTaskId}");
                 }
                 double successorTaskLength = (successorTask.EndDate - successorTask.StartDate).TotalDays;
 

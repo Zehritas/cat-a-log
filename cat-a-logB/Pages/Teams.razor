@@ -1,6 +1,7 @@
 @page "/teams"
 @using cat_a_logB.Data
 @inject cat_a_logB.Pages.SampleData SampleData
+@inject cat_a_logBContext DbContext
 
 <PageTitle>Teams</PageTitle>
 
@@ -120,33 +121,35 @@ else
 
 
 @code {
-   private List<ProjectTeam> teams;
-   private List<TaskData> tasks;
-   private ProjectTeam newTeam = new ProjectTeam();
-   private string errorMessage = "";
-   private ProjectTeam selectedTeam;
-   private ProjectTeam teamToRemove;
-   private bool showRemoveModal = false;
+    private List<ProjectTeam> teams;
+    private List<TaskData> tasks;
+    private ProjectTeam newTeam = new ProjectTeam(){ProjectId = 1};
+    private string errorMessage = "";
+    private ProjectTeam selectedTeam;
+    private ProjectTeam teamToRemove;
+    private bool showRemoveModal = false;
 
-   protected override async Task OnInitializedAsync()
-   {
-      teams = SampleData.GetTeams();
-      tasks = SampleData.GetProject();
-   }
+    protected override async Task OnInitializedAsync()
+    {
+        teams = SampleData.GetTeams();
+        tasks = SampleData.GetProject();
+    }
 
-   private async Task AddTeam()
-   {
-      if (string.IsNullOrWhiteSpace(newTeam.Name))
-      {
-         errorMessage = "Team name is required.";
-         return;
-      }
+    private async Task AddTeam()
+    {
+        if (string.IsNullOrWhiteSpace(newTeam.Name))
+        {
+            errorMessage = "Team name is required.";
+            return;
+        }
 
-      errorMessage = "";
+        errorMessage = "";
 
-      teams.Add(newTeam);
-      newTeam = new ProjectTeam(); // Reset the new team object after adding
-      StateHasChanged();
+        DbContext.ProjectTeam.Add(newTeam);
+        DbContext.SaveChanges();
+        teams.Add(newTeam);
+        newTeam = new ProjectTeam(); // Reset the new team object after adding
+        StateHasChanged();
    }
 
    private void RemoveTeam(ProjectTeam team)

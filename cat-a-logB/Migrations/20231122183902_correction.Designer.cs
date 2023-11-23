@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using cat_a_logB.Data;
 
@@ -11,9 +12,11 @@ using cat_a_logB.Data;
 namespace cat_a_logB.Migrations
 {
     [DbContext(typeof(cat_a_logBContext))]
-    partial class cat_a_logBContextModelSnapshot : ModelSnapshot
+    [Migration("20231122183902_correction")]
+    partial class correction
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -235,11 +238,15 @@ namespace cat_a_logB.Migrations
                     b.Property<int?>("DependeeTaskId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("PredecessorTaskId")
+                    b.Property<int>("PredecessorTaskId")
                         .HasColumnType("int");
 
                     b.Property<int>("SuccessorTaskId")
                         .HasColumnType("int");
+
+                    b.Property<string>("SuccessorTaskName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Type")
                         .HasColumnType("int");
@@ -261,13 +268,15 @@ namespace cat_a_logB.Migrations
                     b.Property<int>("TeamId")
                         .HasColumnType("int");
 
-                    b.Property<float?>("Efficiency")
+                    b.Property<float>("Efficiency")
                         .HasColumnType("real");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Position")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("UserId", "TeamId");
@@ -306,9 +315,11 @@ namespace cat_a_logB.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Color")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("TargetDate")
@@ -328,9 +339,11 @@ namespace cat_a_logB.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Color")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ProjectId")
@@ -355,6 +368,7 @@ namespace cat_a_logB.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Comments")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("DayProgress")
@@ -363,13 +377,15 @@ namespace cat_a_logB.Migrations
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("MilestoneId")
+                    b.Property<int>("MilestoneId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PointColor")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Progress")
@@ -399,6 +415,7 @@ namespace cat_a_logB.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -462,7 +479,8 @@ namespace cat_a_logB.Migrations
                     b.HasOne("cat_a_logB.Data.TaskData", "DependeeTask")
                         .WithMany()
                         .HasForeignKey("PredecessorTaskId")
-                        .OnDelete(DeleteBehavior.NoAction);
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.HasOne("cat_a_logB.Data.TaskData", "SuccessorTask")
                         .WithMany("Dependencies")
@@ -509,7 +527,9 @@ namespace cat_a_logB.Migrations
                 {
                     b.HasOne("cat_a_logB.Data.ProjectMilestone", "Milestone")
                         .WithMany("Tasks")
-                        .HasForeignKey("MilestoneId");
+                        .HasForeignKey("MilestoneId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("cat_a_logB.Data.ProjectTeam", "Team")
                         .WithMany("Tasks")
@@ -541,7 +561,8 @@ namespace cat_a_logB.Migrations
 
             modelBuilder.Entity("cat_a_logB.Data.User", b =>
                 {
-                    b.Navigation("Member");
+                    b.Navigation("Member")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

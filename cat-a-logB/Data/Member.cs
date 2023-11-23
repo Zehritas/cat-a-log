@@ -6,7 +6,9 @@ namespace cat_a_logB.Data
 {
     public class Member
     {
+        [Required]
         public int UserId { get; set; }
+        [Required]
         public int TeamId { get; set; }
 
         [ForeignKey("UserId")]
@@ -15,8 +17,8 @@ namespace cat_a_logB.Data
         [ForeignKey("TeamId")]
         public ProjectTeam? Team { get; set; }
 
-        public string Name { get; set; }
-        public string Position { get; set; }
-        public float Efficiency { get; set; }
+        public string? Name { get; set; }
+        public string? Position { get; set; }
+        public float? Efficiency { get; set; }
     }
 }
