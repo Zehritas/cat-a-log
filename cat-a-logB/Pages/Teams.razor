@@ -131,8 +131,8 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        teams = DbContext.ProjectTeam.ToList();
-        tasks = DbContext.TaskData.ToList();
+        teams = SampleData.GetTeams();
+        tasks = SampleData.GetProject();
     }
 
     private async Task AddTeam()

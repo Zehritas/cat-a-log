@@ -176,7 +176,7 @@
                             @foreach (var dependency in selectedData.DataPoint.Items.First().Dependencies)
                             {
                                 <div>
-                                    <span>@selectedData.DataPoint.Items.First().Name -> @dependency.SuccessorTask.Name|
+                                    <span>@selectedData.DataPoint.Items.First(). -> @dependency.SuccessorTask.Name|
                                         @dependency.Type </span>
                                     <button type="button" class="btn btn-link"
                                         @onclick="() => DeleteDependency(selectedData.DataPoint.Items.First().Dependencies, dependency)">
@@ -339,16 +339,14 @@ else if (selectedData != null)
 
     protected override async Task OnInitializedAsync()
     {
-        sortedTasks = DbContext.TaskData.ToList();
-        teams = DbContext.ProjectTeam.ToList();
-        milestones = DbContext.ProjectMilestone.ToList();
+        project = SampleData.GetProject();
+        sortedTasks = project;
+        teams = SampleData.GetTeams();
+        milestones = SampleData.GetMilestones();
         var colors = teams.Select(team => team.Color).ToList();
         lineData = milestones.Select(_ => 100.0).ToList();
 
-        foreach(var projectTask in sortedTasks)
-        {
-            
-        }
+
         options1.Yaxis = new List<YAxis>();
         options1.Yaxis.Add(new YAxis
             {

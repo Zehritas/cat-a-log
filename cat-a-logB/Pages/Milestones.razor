@@ -101,8 +101,8 @@ else
 
     protected override void OnInitialized()
     {
-        milestones = DbContext.ProjectMilestone.ToList();
-        tasks = DbContext.TaskData.ToList();
+        milestones = SampleData.GetMilestones();
+        tasks = SampleData.GetProject();
     }
 
     private void ToggleTaskSelection(TaskData task)
