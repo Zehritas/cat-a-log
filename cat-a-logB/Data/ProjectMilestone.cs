@@ -27,6 +27,11 @@
         {
         }
 
+        public void LoadMilestoneTasks(List<GanttData> allTasks)
+        {
+            Tasks = allTasks.Where(task => task.Name == Name).ToList();
+        }
+
 
         public enum TaskCompletionStatus
         {
