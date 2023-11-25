@@ -8,17 +8,20 @@ namespace cat_a_logB.Data
     {
         [Required]
         public int UserId { get; set; }
+
         [Required]
         public int TeamId { get; set; }
+
+        public string? Name { get; set; }
+
+        public string? Position { get; set; }
+
+        public float? Efficiency { get; set; }
 
         [ForeignKey("UserId")]
         public User? User { get; set; }
 
         [ForeignKey("TeamId")]
         public ProjectTeam? Team { get; set; }
-
-        public string? Name { get; set; }
-        public string? Position { get; set; }
-        public float? Efficiency { get; set; }
     }
 }

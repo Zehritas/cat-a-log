@@ -6,10 +6,17 @@ namespace cat_a_logB.Data
     {
         [Key]
         public int Id { get; set; }
-        public string? Name { get; set; }
-        public List<TaskData> Tasks { get; set; }
-        public string? Color { get; set; }
 
+        [Required]
+        public string? Name { get; set; }
+
+        [Required]
+        public List<TaskData> Tasks { get; set; }
+
+        [Required]
+        public string Color { get; set; }
+
+        [Required]
         public DateTime TargetDate { get; set; } = DateTime.Now;
 
 
@@ -61,10 +68,5 @@ namespace cat_a_logB.Data
 
             return TaskCompletionStatus.Incomplete;
         }
-
-
-
-
-
     }
 }
