@@ -86,7 +86,7 @@ namespace cat_a_logB.Data
                     selectedData.DataPoint.Items.First().Id is int selectedTaskId)
             {
 
-                // Find the task in the project list with the matching name and update its StartDate and EndDate properties
+                
                 TaskData taskToUpdate = project.FirstOrDefault(task => task.Id == selectedTaskId);
                 if (taskToUpdate != null)
                 {
