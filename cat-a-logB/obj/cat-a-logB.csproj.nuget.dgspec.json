@@ -47,7 +47,7 @@
           "dependencies": {
             "Blazor-ApexCharts": {
               "target": "Package",
-              "version": "[1.2.1, )"
+              "version": "[2.1.0, )"
             },
             "Microsoft.ASPNetCore.Diagnostics.EntityFrameworkCore": {
               "target": "Package",
@@ -74,6 +74,14 @@
             "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
               "target": "Package",
               "version": "[7.0.9, )"
+            },
+            "NUnit": {
+              "target": "Package",
+              "version": "[3.14.0, )"
+            },
+            "NUnit3TestAdapter": {
+              "target": "Package",
+              "version": "[4.5.0, )"
             }
           },
           "imports": [

@@ -411,9 +411,6 @@ else if (selectedData != null)
         teams = ProjectTeamService.GetAllTeams();
         milestones = MilestoneService.GetAllMilestones();
 
-        // Update other data properties here...
-
-        // Update the UI
         StateHasChanged();
     }
 
@@ -641,50 +638,24 @@ else if (selectedData != null)
             return "User is on track.";
         }
     }
+
     private async Task RemoveTask()
     {
-        if (selectedData != null && selectedData.DataPoint
-        != null)
-        {
-            if (selectedData != null && selectedData.DataPoint != null &&
-           selectedData.DataPoint.Items.First().Id is int selectedTaskId)
-            { // Use LINQ to create a new list of tasks
-                var taskToRemove = project.FirstOrDefault(task => task.Id == selectedTaskId);
+        if (selectedData != null && selectedData.DataPoint != null &&
+        selectedData.DataPoint.Items.First().Id is int selectedTaskId)
+        { // Use LINQ to create a new list of tasks
+            var taskToRemove = project.FirstOrDefault(task => task.Id == selectedTaskId);
 
-                if (taskToRemove != null)
-                {
-                    // might have to think of efficiency sometime later over here
-                    foreach (var team in teams)
-                    {
-                        foreach (var teamTask in team.Tasks)
-                        {
-                            DependencyService.RemoveDependencies(teamTask.Dependencies, taskToRemove.Id);
-                            //teamTask.Dependencies.RemoveAll(dep => dep.SuccessorTaskId == taskToRemove.Id);
-                        }
-                    }
-
-                    foreach (var otherTask in project)
-                    {
-                        DependencyService.RemoveDependencies(otherTask.Dependencies, taskToRemove.Id);
-                        //otherTask.Dependencies.RemoveAll(dep => dep.SuccessorTaskId == taskToRemove.Id);
-                    }
-
-                    // Remove the task from the project
-                    TaskDataService.RemoveTask(taskToRemove);
-                    //project.Remove(taskToRemove);
-
-                    // Find the team containing the task
-                    var teamContainingTask = teams.FirstOrDefault(team => team.Tasks.Contains(taskToRemove));
-
-                    // Remove the task from the team
-                    teamContainingTask?.Tasks.Remove(taskToRemove);
-                }
+            if (taskToRemove != null)
+            {
+                TaskDataService.RemoveTask(taskToRemove);
             }
-            selectedData = null; // Reset selected data after removal
-            List<TaskData> sortedTasks = SortTasksByDependencies<TaskData, Dependency>(project);
-
-            project = sortedTasks;
         }
+        await RefreshData();
+        selectedData = null; // Reset selected data after removal
+        List<TaskData> sortedTasks = SortTasksByDependencies<TaskData, Dependency>(project);
+
+        project = sortedTasks;
 
         await RefreshData();
         await chart.UpdateSeriesAsync();
@@ -693,7 +664,6 @@ else if (selectedData != null)
     async void DeleteDependency(List<Dependency> dependencies, Dependency dependency)
     {
         DependencyService.RemoveDependency(dependency);
-        //project.Remove(taskToRemove);
         await RefreshData();
     }
     private async Task<bool> DetectCycleInternal(TaskData currentTask, TaskData startingTask, HashSet<TaskData> visited,

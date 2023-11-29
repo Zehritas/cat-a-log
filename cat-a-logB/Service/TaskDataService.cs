@@ -1,4 +1,5 @@
 ﻿using cat_a_logB.Data;
+using cat_a_logB.Pages;
 using System.Linq;
 
 namespace cat_a_logB.Service
@@ -18,13 +19,24 @@ namespace cat_a_logB.Service
              _dbContext.SaveChanges();
          }
 
-         public void RemoveTask(TaskData task)
-         {
-             _dbContext.TaskData.Remove(task);
-             _dbContext.SaveChanges();
-         }
+        public void RemoveTask(TaskData taskToRemove)
+        {
+            List<Dependency> dependenciesToRemove;
+            List<ProjectTeam> allTeams = _dbContext.ProjectTeam.ToList();
+            foreach (ProjectTeam team in allTeams)
+            {
+                foreach (TaskData task in team.Tasks)
+                {
+                    dependenciesToRemove = _dbContext.Dependency.Where(d => d.SuccessorTaskId == taskToRemove.Id).ToList();
+                    _dbContext.RemoveRange(dependenciesToRemove);
+                }
+            }
 
-         public void AddTasks(List<TaskData> tasks)
+            _dbContext.TaskData.Remove(taskToRemove);
+            _dbContext.SaveChanges();
+        }
+
+        public void AddTasks(List<TaskData> tasks)
          {
              foreach (TaskData task in tasks)
              {

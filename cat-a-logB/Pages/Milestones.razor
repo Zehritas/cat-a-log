@@ -87,6 +87,13 @@ else
     <p>No milestone selected.</p>
 }
 
+@if (!string.IsNullOrWhiteSpace(errorMessage))
+{
+    <div class="alert alert-danger" role="alert">
+        @errorMessage
+    </div>
+}
+
 @code {
     private List<TaskData> tasks;
     private List<ProjectMilestone> milestones;
@@ -133,9 +140,28 @@ else
 
     private async void CreateMilestone()
     {
-        if (!string.IsNullOrWhiteSpace(milestoneName) && selectedTasks != null && selectedTasks.Any())
-        {
 
+        errorMessage = ""; // Clear any previous error message
+
+        if (string.IsNullOrWhiteSpace(milestoneName))
+        {
+            errorMessage = "Milestone name is required.";
+            return; 
+        }
+
+        if (milestones.Any(m => m.Name.Equals(milestoneName, StringComparison.OrdinalIgnoreCase)))
+        {
+            errorMessage = "Milestone name already exists.";
+            return; 
+        }
+
+        if (selectedTasks == null || !selectedTasks.Any())
+        {
+            errorMessage = "Please select at least one task.";
+            return; 
+        }
+
+       
             newMilestone = new ProjectMilestone(milestoneName, selectedTasks.ToList(), milestoneDate, "blue");
 
             MilestoneService.AddMilestone(newMilestone);
@@ -145,7 +171,8 @@ else
             selectedTasks.Clear();
 
             await RefreshData();
-        }
+            StateHasChanged();
+        
     }
 
     private void ToggleMilestoneSelection(ProjectMilestone milestone)
