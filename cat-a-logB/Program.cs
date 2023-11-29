@@ -1,11 +1,15 @@
 using ApexCharts;
 using cat_a_logB.Areas.Identity;
 using cat_a_logB.Data;
+using cat_a_logB.Service;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic;
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("cat_a_logBContextConnection") ?? throw new InvalidOperationException("Connection string 'cat_a_logBContextConnection' not found.");
@@ -15,6 +19,13 @@ builder.Services.AddDbContext<cat_a_logBContext>(options => options.UseSqlServer
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<cat_a_logBContext>();
+
+builder.Services.AddScoped<IDependencyService, DependencyService>();
+builder.Services.AddScoped<IMilestoneService, MilestoneService>();
+builder.Services.AddScoped<IProjectTeamService, ProjectTeamService>();
+builder.Services.AddScoped<ITaskDataService, TaskDataService>();
+
+
 
 // Add services to the container.
 builder.Services.AddRazorPages();
