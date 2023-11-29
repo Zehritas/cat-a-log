@@ -11,5 +11,11 @@ namespace cat_a_logB.Service
         public void AddTasks(List<TaskData> tasks);
 
         public void RemoveTasks(List<TaskData> tasks);
+
+        public List<TaskData> GetAllTasks();
+
+        public void SyncColorWithTeam(TaskData task);
+
+        public string GetTaskName(int Id);
     }
 }

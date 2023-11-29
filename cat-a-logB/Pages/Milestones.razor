@@ -1,7 +1,8 @@
 ﻿@page "/Milestones"
 @using cat_a_logB.Data
 @inject cat_a_logB.Pages.SampleData SampleData
-@inject cat_a_logBContext DbContext
+@inject Service.ITaskDataService TaskDataService
+@inject Service.IMilestoneService MilestoneService
 
 <PageTitle>Milestones</PageTitle>
 
@@ -101,8 +102,16 @@ else
 
     protected override void OnInitialized()
     {
-        milestones = DbContext.ProjectMilestone.ToList();
-        tasks = DbContext.TaskData.ToList();
+        milestones = MilestoneService.GetAllMilestones();
+        tasks = TaskDataService.GetAllTasks();
+    }
+
+    private async Task RefreshData()
+    {
+        milestones = MilestoneService.GetAllMilestones();
+        tasks = tasks = TaskDataService.GetAllTasks();
+
+        StateHasChanged();
     }
 
     private void ToggleTaskSelection(TaskData task)
@@ -122,20 +131,20 @@ else
         }
     }
 
-    private void CreateMilestone()
+    private async void CreateMilestone()
     {
         if (!string.IsNullOrWhiteSpace(milestoneName) && selectedTasks != null && selectedTasks.Any())
         {
 
             newMilestone = new ProjectMilestone(milestoneName, selectedTasks.ToList(), milestoneDate, "blue");
 
-            DbContext.ProjectMilestone.Add(newMilestone);
-            DbContext.SaveChanges();
+            MilestoneService.AddMilestone(newMilestone);
             milestones.Add(newMilestone);
             newMilestone = new ProjectMilestone();
             milestoneName = string.Empty;
             selectedTasks.Clear();
-            StateHasChanged();
+
+            await RefreshData();
         }
     }
 

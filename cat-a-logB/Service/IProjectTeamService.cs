@@ -1,8 +1,9 @@
 ﻿using cat_a_logB.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace cat_a_logB.Service
 {
-    public interface IProjetTeamService
+    public interface IProjectTeamService
     {
         public void AddTeam(ProjectTeam projectTeam);
 
@@ -11,5 +12,7 @@ namespace cat_a_logB.Service
         public void AddTeams(List<ProjectTeam> projectTeams);
 
         public void RemoveTeams(List<ProjectTeam> projectTeams);
+
+        public List<ProjectTeam> GetAllTeams();
     }
 }

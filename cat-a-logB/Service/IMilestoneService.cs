@@ -11,5 +11,8 @@ namespace cat_a_logB.Service
         public void AddMilestones(List<ProjectMilestone> milestones);
 
         public void RemoveMilestones(List<ProjectMilestone> milestones);
+
+        public List<ProjectMilestone> GetAllMilestones();
+
     }
 }

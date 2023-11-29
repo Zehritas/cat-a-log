@@ -1,4 +1,5 @@
 ﻿using cat_a_logB.Data;
+using System.Linq;
 
 namespace cat_a_logB.Service
 {
@@ -40,5 +41,25 @@ namespace cat_a_logB.Service
              }
              _dbContext.SaveChanges();
          }
+
+        public List<TaskData> GetAllTasks()
+        {
+            return _dbContext.TaskData.ToList();
+        }
+
+        public void SyncColorWithTeam(TaskData task)
+        {
+            ProjectTeam projectTeam = _dbContext.ProjectTeam.Where(t => task.TeamId == t.Id).FirstOrDefault();
+            task.PointColor = projectTeam.Color;
+            _dbContext.SaveChanges();
+        }
+
+        public string GetTaskName(int Id)
+        {
+            TaskData task;
+            task = _dbContext.TaskData.Where(t => t.Id == Id).FirstOrDefault();
+
+            return task.Name;
+        }
     }
 }

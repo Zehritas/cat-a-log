@@ -1633,9 +1633,6 @@ C:\Users\aldas\OneDrive\Stalinis kompiuteris\PSI5\cat-a-logB\obj\Debug\net7.0\ca
 C:\Users\aldas\OneDrive\Stalinis kompiuteris\PSI5\cat-a-logB\obj\Debug\net7.0\cat-a-logB.RazorAssemblyInfo.cache
 C:\Users\aldas\OneDrive\Stalinis kompiuteris\PSI5\cat-a-logB\obj\Debug\net7.0\cat-a-logB.RazorAssemblyInfo.cs
 C:\Users\aldas\OneDrive\Stalinis kompiuteris\PSI5\cat-a-logB\obj\Debug\net7.0\cat-a-logB.sourcelink.json
-C:\Users\aldas\OneDrive\Stalinis kompiuteris\PSI5\cat-a-logB\obj\Debug\net7.0\cat-a-logB.dll
-C:\Users\aldas\OneDrive\Stalinis kompiuteris\PSI5\cat-a-logB\obj\Debug\net7.0\refint\cat-a-logB.dll
-C:\Users\aldas\OneDrive\Stalinis kompiuteris\PSI5\cat-a-logB\obj\Debug\net7.0\cat-a-logB.pdb
 C:\Users\aldas\OneDrive\Stalinis kompiuteris\PSI5\cat-a-logB\bin\Debug\net7.0\appsettings.Development.json
 C:\Users\aldas\OneDrive\Stalinis kompiuteris\PSI5\cat-a-logB\bin\Debug\net7.0\appsettings.json
 C:\Users\aldas\OneDrive\Stalinis kompiuteris\PSI5\cat-a-logB\bin\Debug\net7.0\cat-a-logB.staticwebassets.runtime.json
@@ -1887,5 +1884,8 @@ C:\Users\aldas\OneDrive\Stalinis kompiuteris\PSI5\cat-a-logB\obj\Debug\net7.0\sc
 C:\Users\aldas\OneDrive\Stalinis kompiuteris\PSI5\cat-a-logB\obj\Debug\net7.0\scopedcss\bundle\cat-a-logB.styles.css
 C:\Users\aldas\OneDrive\Stalinis kompiuteris\PSI5\cat-a-logB\obj\Debug\net7.0\scopedcss\projectbundle\cat-a-logB.bundle.scp.css
 C:\Users\aldas\OneDrive\Stalinis kompiuteris\PSI5\cat-a-logB\obj\Debug\net7.0\cat-a-logB.csproj.CopyComplete
+C:\Users\aldas\OneDrive\Stalinis kompiuteris\PSI5\cat-a-logB\obj\Debug\net7.0\cat-a-logB.dll
+C:\Users\aldas\OneDrive\Stalinis kompiuteris\PSI5\cat-a-logB\obj\Debug\net7.0\refint\cat-a-logB.dll
+C:\Users\aldas\OneDrive\Stalinis kompiuteris\PSI5\cat-a-logB\obj\Debug\net7.0\cat-a-logB.pdb
 C:\Users\aldas\OneDrive\Stalinis kompiuteris\PSI5\cat-a-logB\obj\Debug\net7.0\cat-a-logB.genruntimeconfig.cache
 C:\Users\aldas\OneDrive\Stalinis kompiuteris\PSI5\cat-a-logB\obj\Debug\net7.0\ref\cat-a-logB.dll

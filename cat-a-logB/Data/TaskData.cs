@@ -48,12 +48,6 @@ namespace cat_a_logB.Data
             return this.Progress.CompareTo(other.Progress);
         }
 
-        public void SyncColorWithTeam(ProjectTeam projectTeam)
-        {
-
-            PointColor = projectTeam.Color;
-        }
-
         public TaskData()
         {
             StartDate = DateTime.Now.Date;

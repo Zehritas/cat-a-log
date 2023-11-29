@@ -3,9 +3,14 @@
 @using cat_a_logB;
 @using ApexCharts;
 @using Microsoft.AspNetCore.Components;
+@using Service
 @inject cat_a_logB.Pages.SampleData SampleData
 @inject cat_a_logB.Data.TaskManager TaskManager
-@inject cat_a_logBContext DbContext
+@inject Service.ITaskDataService TaskDataService
+@inject Service.IDependencyService DependencyService
+@inject Service.IMilestoneService MilestoneService
+@inject Service.IProjectTeamService ProjectTeamService
+
 
 <PageTitle>Gantt Chart</PageTitle>
 
@@ -206,7 +211,7 @@
                                     <option value="0">-</option>
                                     @foreach (var task in project)
                                     {
-                                        if (task.Name != selectedData.DataPoint.Items.First().Name)
+                                        if (task.Id != selectedData.DataPoint.Items.First().Id)
                                         {
                                             <option value="@task.Id">@task.Name</option>
                                         }
@@ -252,7 +257,7 @@
                     @foreach (var dependency in selectedData.DataPoint.Items.First().Dependencies)
                     {
                         <li class="list-group-item">
-                            Task: @dependency.SuccessorTaskId,
+                            Task: @TaskDataService.GetTaskName(dependency.SuccessorTaskId),
                             Type: @dependency.Type
                         </li>
                     }
@@ -350,13 +355,13 @@ else if (selectedData != null)
 
     protected override async Task OnInitializedAsync()
     {
-        project = DbContext.TaskData.ToList();
+        project = TaskDataService.GetAllTasks();
+        teams = ProjectTeamService.GetAllTeams();
+        milestones = MilestoneService.GetAllMilestones();
+
         sortedTasks = project;
-        teams = DbContext.ProjectTeam.ToList();
-        milestones = DbContext.ProjectMilestone.ToList();
         var colors = teams.Select(team => team.Color).ToList();
         lineData = milestones.Select(_ => 100.0).ToList();
-
 
         options1.Yaxis = new List<YAxis>();
         options1.Yaxis.Add(new YAxis
@@ -398,6 +403,18 @@ else if (selectedData != null)
 
         options.Legend = new Legend { Position = LegendPosition.Bottom, FontSize = "14px", HorizontalAlign = Align.Center };
 
+    }
+
+    private async Task RefreshData()
+    {
+        project = TaskDataService.GetAllTasks();
+        teams = ProjectTeamService.GetAllTeams();
+        milestones = MilestoneService.GetAllMilestones();
+
+        // Update other data properties here...
+
+        // Update the UI
+        StateHasChanged();
     }
 
     private void OnClick(SelectedData<TaskData> data)
@@ -505,18 +522,17 @@ else if (selectedData != null)
                 StartDate = newTask.StartDate,
                 EndDate = newTask.EndDate,
                 TeamId = selectedTeam.Id,
-                Team = selectedTeam,
                 Progress = 0,
                 Comments = newTask.Comments
             };
-            newTaskData.SyncColorWithTeam(DbContext.ProjectTeam.Where(t => newTaskData.TeamId == t.Id).FirstOrDefault());
-
+            TaskDataService.SyncColorWithTeam(newTaskData);
             newTaskData.AutoProgress = (double)CalculateAutoProgress(newTaskData);
-            DbContext.TaskData.Add(newTaskData);
-            DbContext.SaveChanges();
+
+            TaskDataService.AddTask(newTaskData);
             project.Add(newTaskData);
+
+            await RefreshData();
             await chart.UpdateSeriesAsync();
-            StateHasChanged();
         }
         else
         {
@@ -642,17 +658,20 @@ else if (selectedData != null)
                     {
                         foreach (var teamTask in team.Tasks)
                         {
-                            teamTask.Dependencies.RemoveAll(dep => dep.SuccessorTaskId == taskToRemove.Id);
+                            DependencyService.RemoveDependencies(teamTask.Dependencies, taskToRemove.Id);
+                            //teamTask.Dependencies.RemoveAll(dep => dep.SuccessorTaskId == taskToRemove.Id);
                         }
                     }
 
                     foreach (var otherTask in project)
                     {
-                        otherTask.Dependencies.RemoveAll(dep => dep.SuccessorTaskId == taskToRemove.Id);
+                        DependencyService.RemoveDependencies(otherTask.Dependencies, taskToRemove.Id);
+                        //otherTask.Dependencies.RemoveAll(dep => dep.SuccessorTaskId == taskToRemove.Id);
                     }
 
                     // Remove the task from the project
-                    project.Remove(taskToRemove);
+                    TaskDataService.RemoveTask(taskToRemove);
+                    //project.Remove(taskToRemove);
 
                     // Find the team containing the task
                     var teamContainingTask = teams.FirstOrDefault(team => team.Tasks.Contains(taskToRemove));
@@ -666,13 +685,16 @@ else if (selectedData != null)
 
             project = sortedTasks;
         }
+
+        await RefreshData();
         await chart.UpdateSeriesAsync();
-        StateHasChanged();
     }
 
-    void DeleteDependency(List<Dependency> dependencies, Dependency dependency)
+    async void DeleteDependency(List<Dependency> dependencies, Dependency dependency)
     {
-        dependencies.Remove(dependency);
+        DependencyService.RemoveDependency(dependency);
+        //project.Remove(taskToRemove);
+        await RefreshData();
     }
     private async Task<bool> DetectCycleInternal(TaskData currentTask, TaskData startingTask, HashSet<TaskData> visited,
     HashSet<TaskData> currentlyVisiting)
@@ -729,7 +751,6 @@ else if (selectedData != null)
                 DependencyType dependencyType = selectedDependencyType;
                 int  selectedSuccessorTaskId = selectedSuccessorTask;
                 // input checks
-                Console.WriteLine("sssss");
 
                 if (selectedSuccessorTaskId == 0)
                 {
@@ -751,13 +772,12 @@ else if (selectedData != null)
 
                 // creeaate
                 Dependency newDependency = new Dependency
-                    {
-                        SuccessorTaskId = selectedSuccessorTaskId,
-                        Type = dependencyType
-                    };
+                {
+                    SuccessorTaskId = selectedSuccessorTaskId,
+                    Type = dependencyType
+                };
 
-                DbContext.Dependency.Add(newDependency);
-                DbContext.SaveChanges();
+                DependencyService.AddDependency(newDependency);
                 predecessorTask.Dependencies.Add(newDependency);
                 List<TaskData> sortedTasks = SortTasksByDependencies<TaskData, Dependency>(project);
                 TaskManager.Reschedule(predecessorTask, sortedTasks, chart);
@@ -772,8 +792,8 @@ else if (selectedData != null)
         selectedSuccessorTaskName = "";
         selectedDependencyType = DependencyType.FS;
 
+        await RefreshData();
         await chart.UpdateSeriesAsync();
-        StateHasChanged();
     }
 
 

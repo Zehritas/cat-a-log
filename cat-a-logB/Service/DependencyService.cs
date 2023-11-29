@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace cat_a_logB.Service
 {
-    public class DependencyService : IDependencySvervice
+    public class DependencyService : IDependencyService
     {
         private readonly cat_a_logBContext _dbContext;
 
@@ -33,13 +33,21 @@ namespace cat_a_logB.Service
             _dbContext.SaveChanges();
         }
 
-        public void RemoveDependencies(List<Dependency> dependencies)
+        public void RemoveDependencies(List<Dependency> dependencies, int taskId)
         {
             foreach(Dependency dependency in dependencies)
             {
-                _dbContext.Dependency.Remove(dependency);
+                if(taskId == dependency.SuccessorTaskId)
+                {
+                    _dbContext.Dependency.Remove(dependency);
+                }
             }
             _dbContext.SaveChanges();
+        }
+
+        public List<Dependency> GetAllDependencies()
+        {
+            return _dbContext.Dependency.ToList();
         }
     }
 }

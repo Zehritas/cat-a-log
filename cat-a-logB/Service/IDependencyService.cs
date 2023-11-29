@@ -2,7 +2,7 @@
 
 namespace cat_a_logB.Service
 {
-    public interface IDependencySvervice
+    public interface IDependencyService
     {
         public void AddDependency(Dependency dependency);
 
@@ -10,8 +10,8 @@ namespace cat_a_logB.Service
 
         public void AddDependencies(List<Dependency> dependencies);
 
-        public void RemoveDependencies(List<Dependency> dependencies);
+        public void RemoveDependencies(List<Dependency> dependencies, int taskId);
 
-
+        public List<Dependency> GetAllDependencies();
     }
 }

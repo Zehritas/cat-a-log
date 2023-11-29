@@ -40,5 +40,10 @@ namespace cat_a_logB.Service
             }
             _dbContext.SaveChanges();
         }
+
+        public List<ProjectMilestone> GetAllMilestones()
+        {
+            return _dbContext.ProjectMilestone.ToList();
+        }
     }
 }

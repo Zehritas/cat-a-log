@@ -2,6 +2,10 @@
 @using cat_a_logB.Data
 @inject cat_a_logB.Pages.SampleData SampleData
 @inject cat_a_logBContext DbContext
+@inject Service.ITaskDataService TaskDataService
+@inject Service.IDependencyService DependencyService
+@inject Service.IMilestoneService MilestoneService
+@inject Service.IProjectTeamService ProjectTeamService
 
 <PageTitle>Teams</PageTitle>
 
@@ -131,8 +135,16 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        teams = DbContext.ProjectTeam.ToList();
-        tasks = DbContext.TaskData.ToList();
+        teams = ProjectTeamService.GetAllTeams();
+        tasks = TaskDataService.GetAllTasks();
+    }
+
+    private async Task RefreshData()
+    {
+        teams = ProjectTeamService.GetAllTeams();
+        tasks = tasks = TaskDataService.GetAllTasks();
+
+        StateHasChanged();
     }
 
     private async Task AddTeam()
@@ -145,28 +157,33 @@ else
 
         errorMessage = "";
 
-        DbContext.ProjectTeam.Add(newTeam);
-        DbContext.SaveChanges();
+        ProjectTeamService.AddTeam(newTeam);
         teams.Add(newTeam);
         newTeam = new ProjectTeam(); // Reset the new team object after adding
         StateHasChanged();
+
+        await RefreshData();
     }
 
-    private void RemoveTeam(ProjectTeam team)
+    private async void RemoveTeam(ProjectTeam team)
     {
         // Remove the team
-        teams.Remove(team);
+        ProjectTeamService.RemoveTeam(team);
+        //teams.Remove(team);
 
         // Remove associated tasks
-        tasks.RemoveAll(task => task.Team == team);
+        //TaskDataService.RemoveTasks(team.Tasks);
+        //tasks.RemoveAll(task => task.Team == team);
+
 
         // Reset the selected team
-        if (selectedTeam != null && selectedTeam.Name == team.Name)
+        if (selectedTeam != null && selectedTeam.Id == team.Id)
         {
             selectedTeam = null;
         }
         ToggleRemoveModal();
-        StateHasChanged();
+
+        await RefreshData();
     }
 
     private void ShowTasksForTeam(ProjectTeam team)
