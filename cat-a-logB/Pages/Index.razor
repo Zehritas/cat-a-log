@@ -3,7 +3,7 @@
 @using cat_a_logB;
 @using ApexCharts;
 @using Microsoft.AspNetCore.Components;
-@using Service
+@using Service;
 @inject cat_a_logB.Pages.SampleData SampleData
 @inject cat_a_logB.Data.TaskManager TaskManager
 @inject Service.ITaskDataService TaskDataService
@@ -579,7 +579,7 @@ else if (selectedData != null)
         {
             foreach (var dependency in task.Dependencies)
             {
-                if (graph.ContainsKey(dependency.SuccessorTaskId)) // Check if the key exists
+                if (graph.ContainsKey(dependency.SuccessorTaskId) && task.Id != dependency.SuccessorTaskId) // Check if the key exists
                 {
                     graph[dependency.SuccessorTaskId].Add(task.Id);
                     inDegree[task.Id]++;
@@ -743,12 +743,14 @@ else if (selectedData != null)
                 // creeaate
                 Dependency newDependency = new Dependency
                 {
-                    SuccessorTaskId = selectedSuccessorTaskId,
-                    Type = dependencyType
+                        PredecessorTaskId = predecessorTask.Id,
+                        SuccessorTaskId = selectedSuccessorTaskId,
+                        Type = dependencyType
                 };
 
                 DependencyService.AddDependency(newDependency);
                 predecessorTask.Dependencies.Add(newDependency);
+
                 List<TaskData> sortedTasks = SortTasksByDependencies<TaskData, Dependency>(project);
                 TaskManager.Reschedule(predecessorTask, sortedTasks, chart);
                 foreach (var task in sortedTasks)

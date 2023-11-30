@@ -14,5 +14,6 @@ namespace cat_a_logB.Service
 
         public List<ProjectMilestone> GetAllMilestones();
 
+        public void ChangeMilestoneColor(int id, string  newColor);
     }
 }

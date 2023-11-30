@@ -1,12 +1,29 @@
 ﻿using ApexCharts;
+using cat_a_logB.Service;
 using Microsoft.AspNetCore.Components;
 using static cat_a_logB.Data.ProjectMilestone;
+
 
 
 namespace cat_a_logB.Data
 {
     public class TaskManager
     {
+        private readonly IDependencyService dependencyService;
+        private readonly ITaskDataService taskDataService;
+        private readonly IProjectTeamService projectTeamService;
+        private readonly IMilestoneService milestoneService;
+
+        public TaskManager(IDependencyService _dependencyService, ITaskDataService _taskDataService, IProjectTeamService _projectTeamService, IMilestoneService _milestoneService)
+        {
+            dependencyService = _dependencyService;
+            taskDataService = _taskDataService;
+            projectTeamService = _projectTeamService;
+            milestoneService = _milestoneService;
+        }
+
+        public TaskManager(){ }
+
         public List<TaskData> project;
         public ApexChart<TaskData> chart;
         public SelectedData<TaskData> selectedData;
@@ -27,8 +44,10 @@ namespace cat_a_logB.Data
                 TaskData taskToUpdate = project.FirstOrDefault(task => task.Id == selectedTaskId);
                 if (taskToUpdate != null)
                 {
-                    taskToUpdate.Comments = editedComments;
+                    taskDataService.ChangeTaskComment(taskToUpdate.Id, editedComments);
+                    //taskToUpdate.Comments = editedComments;
                 }
+
 
                 OnClose.InvokeAsync();
                 await chart.UpdateSeriesAsync();
@@ -57,7 +76,8 @@ namespace cat_a_logB.Data
                             TaskCompletionStatus completionStatus = milestone.GetTaskCompletionStatus();
                             if (completionStatus == TaskCompletionStatus.Completed)
                             {
-                                milestone.Color = "green";
+                                milestoneService.ChangeMilestoneColor(milestone.Id, "green");
+                                //milestone.Color = "green";
                                 await mileChart.RenderAsync();
                             }
                         }
@@ -90,6 +110,8 @@ namespace cat_a_logB.Data
                 TaskData taskToUpdate = project.FirstOrDefault(task => task.Id == selectedTaskId);
                 if (taskToUpdate != null)
                 {
+                    taskDataService.ChangeTaskStartDate(taskToUpdate.Id, newStartDate);
+                    taskDataService.ChangeTaskEndDate(taskToUpdate.Id, newEndDate);
                     taskToUpdate.StartDate = newStartDate;
                     taskToUpdate.EndDate = newEndDate;
                 }
@@ -125,7 +147,8 @@ namespace cat_a_logB.Data
                 TaskData taskToUpdate = project.FirstOrDefault(task => task.Id == selectedTaskId);
                 if (taskToUpdate != null)
                 {
-                    taskToUpdate.Name = newTaskName;
+                    taskDataService.ChangeTaskName(taskToUpdate.Id, newTaskName);
+                    //taskToUpdate.Name = newTaskName;
                 }
             }
             else
@@ -156,8 +179,13 @@ namespace cat_a_logB.Data
                     case DependencyType.FS:
                         if (predecessorTask.EndDate > successorTask.StartDate)
                         {
-                            successorTask.StartDate = predecessorTask.EndDate;
-                            successorTask.EndDate = successorTask.StartDate.AddDays(successorTaskLength);
+                            taskDataService.ChangeTaskStartDate(successorTask.Id, predecessorTask.EndDate);
+                            taskDataService.UpdateTask(successorTask);
+                            taskDataService.ChangeTaskEndDate(successorTask.Id, successorTask.StartDate.AddDays(successorTaskLength));
+                            //successorTask.StartDate = predecessorTask.EndDate;
+                            //successorTask.EndDate = successorTask.StartDate.AddDays(successorTaskLength);
+
+                            taskDataService.UpdateTask(successorTask);
                             await Reschedule(successorTask, tasks, chart);
                             await chart.UpdateSeriesAsync();
                             // StateHasChanged();
@@ -167,8 +195,11 @@ namespace cat_a_logB.Data
                     case DependencyType.SF:
                         if (predecessorTask.EndDate < successorTask.StartDate)
                         {
-                            successorTask.StartDate = predecessorTask.EndDate;
-                            successorTask.EndDate = successorTask.StartDate.AddDays(successorTaskLength);
+                            taskDataService.ChangeTaskStartDate(successorTask.Id, predecessorTask.EndDate);
+                            taskDataService.ChangeTaskEndDate(successorTask.Id, successorTask.StartDate.AddDays(successorTaskLength));
+                            //successorTask.StartDate = predecessorTask.EndDate;
+                            //successorTask.EndDate = successorTask.StartDate.AddDays(successorTaskLength);
+                            taskDataService.UpdateTask(successorTask);
                             await Reschedule(successorTask, tasks, chart);
                             await chart.UpdateSeriesAsync();
                             // StateHasChanged();
@@ -178,8 +209,12 @@ namespace cat_a_logB.Data
                     case DependencyType.SS:
                         if (predecessorTask.StartDate > successorTask.StartDate)
                         {
-                            successorTask.StartDate = predecessorTask.StartDate;
-                            successorTask.EndDate = successorTask.StartDate.AddDays(successorTaskLength);
+                            taskDataService.ChangeTaskStartDate(successorTask.Id, predecessorTask.StartDate);
+                            taskDataService.ChangeTaskEndDate(successorTask.Id, successorTask.StartDate.AddDays(successorTaskLength));
+                            //successorTask.StartDate = predecessorTask.StartDate;
+                            //successorTask.EndDate = successorTask.StartDate.AddDays(successorTaskLength);
+
+                            taskDataService.UpdateTask(successorTask);
                             await Reschedule(successorTask, tasks, chart);
                             await chart.UpdateSeriesAsync();
                             // StateHasChanged();
@@ -189,8 +224,12 @@ namespace cat_a_logB.Data
                     case DependencyType.FF:
                         if (predecessorTask.EndDate > successorTask.EndDate)
                         {
-                            successorTask.EndDate = predecessorTask.EndDate;
-                            successorTask.StartDate = successorTask.EndDate.AddDays(-successorTaskLength);
+                            taskDataService.ChangeTaskStartDate(successorTask.Id, successorTask.EndDate.AddDays(-successorTaskLength));
+                            taskDataService.ChangeTaskEndDate(successorTask.Id, predecessorTask.EndDate);
+                            //successorTask.EndDate = predecessorTask.EndDate;
+                            //successorTask.StartDate = successorTask.EndDate.AddDays(-successorTaskLength);
+
+                            taskDataService.UpdateTask(successorTask);
                             await Reschedule(successorTask, tasks, chart);
                             await chart.UpdateSeriesAsync();
                             // StateHasChanged();

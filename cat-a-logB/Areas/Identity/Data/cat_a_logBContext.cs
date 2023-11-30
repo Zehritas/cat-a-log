@@ -25,13 +25,13 @@ public class cat_a_logBContext : IdentityDbContext<IdentityUser>
             .HasOne(op => op.SuccessorTask)
             .WithMany(p => p.Dependencies)
             .HasForeignKey(op => op.SuccessorTaskId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.SetNull);
 
         builder.Entity<Dependency>()
-            .HasOne(op => op.DependeeTask)
+            .HasOne(op => op.PredecessorTask)
             .WithMany()
             .HasForeignKey(op => op.PredecessorTaskId)
-            .OnDelete(DeleteBehavior.NoAction);
+            .OnDelete(DeleteBehavior.SetNull);
 
         builder.Entity<Member>()
         .HasKey(op => new { op.UserId, op.TeamId });
