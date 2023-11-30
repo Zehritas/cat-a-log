@@ -482,46 +482,55 @@ else if (selectedData != null)
 
     private async Task AddTask()
     {
-        if (!newTask.Name.IsTaskNameValid())
+        try
         {
-            errorMessage = "Task name is required.";
-            return;
-        }
-
-        if (!newTask.StartDate.IsEndDateGreaterThanStartDate(newTask.EndDate))
-        {
-            errorMessage = "End date must be greater than start date.";
-            return;
-        }
-
-        errorMessage = "";
-        var selectedTeam = teams.FirstOrDefault(t => t.Name == selectedTeamName);
-
-        if (selectedTeam != null)
-        {
-            var newTaskData = new TaskData()
+            if (!newTask.Name.IsTaskNameValid())
             {
-                Name = newTask.Name,
-                StartDate = newTask.StartDate,
-                EndDate = newTask.EndDate,
-                TeamId = selectedTeam.Id,
-                Team = selectedTeam,
-                Progress = 0,
-                Comments = newTask.Comments
-            };
-            newTaskData.SyncColorWithTeam(DbContext.ProjectTeam.Where(t => newTaskData.TeamId == t.Id).FirstOrDefault());
+                errorMessage = "Task name is required.";
+                return;
+            }
 
-            newTaskData.AutoProgress = (double)CalculateAutoProgress(newTaskData);
-            DbContext.TaskData.Add(newTaskData);
-            DbContext.SaveChanges();
-            project.Add(newTaskData);
-            await chart.UpdateSeriesAsync();
-            StateHasChanged();
+            if (!newTask.StartDate.IsEndDateGreaterThanStartDate(newTask.EndDate))
+            {
+                errorMessage = "End date must be greater than start date.";
+                return;
+            }
+
+            errorMessage = "";
+            var selectedTeam = teams.FirstOrDefault(t => t.Name == selectedTeamName);
+
+            if (selectedTeam != null)
+            {
+                var newTaskData = new TaskData()
+                    {
+                        Name = newTask.Name,
+                        StartDate = newTask.StartDate,
+                        EndDate = newTask.EndDate,
+                        TeamId = selectedTeam.Id,
+                        Team = selectedTeam,
+                        Progress = 0,
+                        Comments = newTask.Comments
+                    };
+                newTaskData.SyncColorWithTeam(DbContext.ProjectTeam.Where(t => newTaskData.TeamId == t.Id).FirstOrDefault());
+
+                newTaskData.AutoProgress = (double)CalculateAutoProgress(newTaskData);
+                DbContext.TaskData.Add(newTaskData);
+                DbContext.SaveChanges();
+                project.Add(newTaskData);
+                await chart.UpdateSeriesAsync();
+                StateHasChanged();
+            }
+            else
+            {
+                errorMessage = "Selected team not found.";
+                throw new UnexpectedDataScenarioException(errorMessage);
+            }
         }
-        else
+        catch (UnexpectedDataScenarioException ex)
         {
-            errorMessage = "Selected team not found.";
+            ExceptionLogger.LogException(ex);
         }
+
     }
 
     private double CalculateAutoProgress(TaskData task)

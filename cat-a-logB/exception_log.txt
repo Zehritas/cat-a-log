@@ -1,0 +1,4 @@
+Exception occurred at 11/30/2023 4:31:46 PM
+Message: Selected team not found.
+Stack Trace:    at cat_a_logB.Pages.Index.AddTask() in C:\Users\Lenovo\Desktop\cat-a-log\cat-a-logB\Pages\Index.razor:line 526
+-------------------------------------------------------------

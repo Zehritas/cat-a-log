@@ -136,17 +136,16 @@ namespace cat_a_logB_UnitTests
             var project = new List<TaskData>
                 {
                     new TaskData { Name = "Task 1", StartDate = DateTime.Today, EndDate = DateTime.Today.AddDays(1) }
-
                 };
 
             var selectedData = new SelectedData<TaskData>
             {
                 DataPoint = new DataPoint<TaskData>
                 {
-                    Items = new List<TaskData> { new TaskData { Name = "Nonexistent Task" } }
+                    Items = new List<TaskData> { null }
                 }
             };
-            SelectedData<TaskData> invalidSelectedData = null;
+
             var chartMock = new ApexChart<TaskData>();
             var onCloseCallbackMock = new EventCallback();
             var taskManager = new TaskManager();
@@ -159,14 +158,16 @@ namespace cat_a_logB_UnitTests
             // Assert
             NUnit.Framework.Assert.IsEmpty(taskManager.errorMessage);
 
-
+            
             var updatedTask = project.FirstOrDefault(task => task.Name == "Task 1");
             NUnit.Framework.Assert.IsNotNull(updatedTask); // Ensure the task still exists
 
-
+            
             NUnit.Framework.Assert.AreEqual(DateTime.Today, updatedTask.StartDate);
             NUnit.Framework.Assert.AreEqual(DateTime.Today.AddDays(1), updatedTask.EndDate);
         }
+
+
         [Test]
         public async Task EditTaskTime_NullChartParameter_NoUpdate()
         {
@@ -181,7 +182,7 @@ namespace cat_a_logB_UnitTests
             {
                 DataPoint = new DataPoint<TaskData>
                 {
-                    Items = new List<TaskData> { new TaskData { Name = "Nonexistent Task" } }
+                    Items = new List<TaskData> { null }
                 }
             };
             SelectedData<TaskData> invalidSelectedData = null;
