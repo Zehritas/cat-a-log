@@ -1,5 +1,5 @@
 ﻿@page "/";
-@using cat_a_logB.Data
+@using cat_a_logB.Data;
 @using cat_a_logB;
 @using ApexCharts;
 @using Microsoft.AspNetCore.Components;
@@ -479,6 +479,10 @@ else if (selectedData != null)
 
     }
 
+    // public bool IsValidTaskName(string taskName)
+    // {
+    //     return System.Text.RegularExpressions.Regex.IsMatch(taskName, "^[a-zA-Z0-9 ]+$");
+    // }
 
     private async Task AddTask()
     {
@@ -489,12 +493,19 @@ else if (selectedData != null)
                 errorMessage = "Task name is required.";
                 return;
             }
+            if (!newTask.Name.IsValidTaskName())
+            {
+                errorMessage = "Invalid task name. Only alphanumeric characters and spaces are allowed.";
+                return;
+            }
 
             if (!newTask.StartDate.IsEndDateGreaterThanStartDate(newTask.EndDate))
             {
                 errorMessage = "End date must be greater than start date.";
                 return;
             }
+
+            
 
             errorMessage = "";
             var selectedTeam = teams.FirstOrDefault(t => t.Name == selectedTeamName);
@@ -532,6 +543,8 @@ else if (selectedData != null)
         }
 
     }
+
+    
 
     private double CalculateAutoProgress(TaskData task)
     {

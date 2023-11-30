@@ -117,6 +117,12 @@ namespace cat_a_logB.Data
                 errorMessage = "Task name is already in use.";
                 return;
             }
+            if (!ValidationExtensions.IsValidTaskName(newTaskName))
+            {
+                errorMessage = "Invalid task name. Only alphanumeric characters and spaces are allowed.";
+                return;
+            }
+
 
             errorMessage = "";
             if (selectedData != null && selectedData.DataPoint != null &&
@@ -136,6 +142,7 @@ namespace cat_a_logB.Data
             await chart.UpdateSeriesAsync();
             OnClose.InvokeAsync();
         }
+
 
         public async Task Reschedule(TaskData predecessorTask, List<TaskData> tasks, ApexChart<TaskData> chart)
         {
