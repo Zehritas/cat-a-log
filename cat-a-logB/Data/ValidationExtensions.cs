@@ -11,5 +11,9 @@
         {
             return startDate < endDate;
         }
+        public static bool IsValidTaskName(this string taskName)
+        {
+            return System.Text.RegularExpressions.Regex.IsMatch(taskName, "^[a-zA-Z0-9 ]+$");
+        }
     }
 }

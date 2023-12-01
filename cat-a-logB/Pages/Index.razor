@@ -501,6 +501,11 @@ else if (selectedData != null)
             errorMessage = "Task name is required.";
             return;
         }
+        if (!newTask.Name.IsValidTaskName())
+        {
+            errorMessage = "Invalid task name. Only alphanumeric characters and spaces are allowed.";
+            return;
+        }
 
         if (!newTask.StartDate.IsEndDateGreaterThanStartDate(newTask.EndDate))
         {

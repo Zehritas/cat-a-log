@@ -140,6 +140,12 @@ namespace cat_a_logB.Data
                 return;
             }
 
+            if (!ValidationExtensions.IsValidTaskName(newTaskName))
+            {
+                errorMessage = "Invalid task name. Only alphanumeric characters and spaces are allowed.";
+                return;
+            }
+
             errorMessage = "";
             if (selectedData != null && selectedData.DataPoint != null &&
             selectedData.DataPoint.Items.First().Id is int selectedTaskId)
