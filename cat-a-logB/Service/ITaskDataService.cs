@@ -17,5 +17,15 @@ namespace cat_a_logB.Service
         public void SyncColorWithTeam(TaskData task);
 
         public string GetTaskName(int Id);
+
+        public void ChangeTaskComment(int taskId, string newComment);
+
+        public void ChangeTaskStartDate(int taskId, DateTime newStartDate);
+
+        public void ChangeTaskEndDate(int taskId, DateTime newEndDate);
+
+        public void ChangeTaskName(int taskId, string newName);
+
+        public TaskData UpdateTask(TaskData task);
     }
 }

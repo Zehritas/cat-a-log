@@ -69,9 +69,45 @@ namespace cat_a_logB.Service
         public string GetTaskName(int Id)
         {
             TaskData task;
-            task = _dbContext.TaskData.Where(t => t.Id == Id).FirstOrDefault();
+            task = _dbContext.TaskData.Find(Id);
 
             return task.Name;
         }
+
+        public void ChangeTaskComment(int taskId, string newComment)
+        {
+            TaskData task = _dbContext.TaskData.Find(taskId);
+            task.Comments = newComment;
+            _dbContext.SaveChanges();
+        }
+
+        public void ChangeTaskStartDate(int taskId, DateTime newStartDate)
+        {
+            TaskData task = _dbContext.TaskData.Find(taskId);
+            task.StartDate = newStartDate;
+            _dbContext.SaveChanges();
+        }
+
+        public void ChangeTaskEndDate(int taskId, DateTime newEndDate)
+        {
+            TaskData task = _dbContext.TaskData.Find(taskId);
+            task.EndDate = newEndDate;
+            _dbContext.SaveChanges();
+        }
+
+        public void ChangeTaskName(int taskId, string newName)
+        {
+            TaskData task = _dbContext.TaskData.Find(taskId);
+            task.Name = newName;
+            _dbContext.SaveChanges();
+        }
+
+        public TaskData UpdateTask(TaskData task)
+        {
+            TaskData updatedTask = _dbContext.TaskData.Find(task.Id);
+
+            return updatedTask;
+        }
+
     }
 }

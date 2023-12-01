@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using cat_a_logB.Data;
 
@@ -11,9 +12,11 @@ using cat_a_logB.Data;
 namespace cat_a_logB.Migrations
 {
     [DbContext(typeof(cat_a_logBContext))]
-    partial class cat_a_logBContextModelSnapshot : ModelSnapshot
+    [Migration("20231130203444_gotRidOfDependee")]
+    partial class gotRidOfDependee
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -247,7 +250,7 @@ namespace cat_a_logB.Migrations
 
                     b.HasIndex("SuccessorTaskId");
 
-                    b.ToTable("Dependency", (string)null);
+                    b.ToTable("Dependency");
                 });
 
             modelBuilder.Entity("cat_a_logB.Data.Member", b =>
@@ -274,7 +277,7 @@ namespace cat_a_logB.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Member", (string)null);
+                    b.ToTable("Member");
                 });
 
             modelBuilder.Entity("cat_a_logB.Data.Project", b =>
@@ -291,7 +294,7 @@ namespace cat_a_logB.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Project", (string)null);
+                    b.ToTable("Project");
                 });
 
             modelBuilder.Entity("cat_a_logB.Data.ProjectMilestone", b =>
@@ -315,7 +318,7 @@ namespace cat_a_logB.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProjectMilestone", (string)null);
+                    b.ToTable("ProjectMilestone");
                 });
 
             modelBuilder.Entity("cat_a_logB.Data.ProjectTeam", b =>
@@ -341,7 +344,7 @@ namespace cat_a_logB.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.ToTable("ProjectTeam", (string)null);
+                    b.ToTable("ProjectTeam");
                 });
 
             modelBuilder.Entity("cat_a_logB.Data.TaskData", b =>
@@ -390,7 +393,7 @@ namespace cat_a_logB.Migrations
 
                     b.HasIndex("TeamId");
 
-                    b.ToTable("TaskData", (string)null);
+                    b.ToTable("TaskData");
                 });
 
             modelBuilder.Entity("cat_a_logB.Data.User", b =>
@@ -407,7 +410,7 @@ namespace cat_a_logB.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("User", (string)null);
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

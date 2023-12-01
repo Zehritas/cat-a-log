@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "yx5BRSORtW5oygTErTk0jIonH8CBugT2YvpxMp6GSaw=",
+  "Hash": "Bv8diVMbSeFL2n7CbMS6++2Q0CWYI5CkbEdQ8gdW5qY=",
   "Source": "cat-a-logB",
   "BasePath": "_content/cat-a-logB",
   "Mode": "Default",
@@ -17,10 +17,10 @@
   ],
   "Assets": [
     {
-      "Identity": "C:\\Users\\aldas\\.nuget\\packages\\blazor-apexcharts\\2.1.0\\staticwebassets\\css\\apexcharts.css",
+      "Identity": "C:\\Users\\aldas\\.nuget\\packages\\blazor-apexcharts\\2.0.0\\staticwebassets\\css\\apexcharts.css",
       "SourceId": "Blazor-ApexCharts",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\aldas\\.nuget\\packages\\blazor-apexcharts\\2.1.0\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\aldas\\.nuget\\packages\\blazor-apexcharts\\2.0.0\\staticwebassets\\",
       "BasePath": "_content/Blazor-ApexCharts",
       "RelativePath": "css/apexcharts.css",
       "AssetKind": "All",
@@ -33,13 +33,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\aldas\\.nuget\\packages\\blazor-apexcharts\\2.1.0\\staticwebassets\\css\\apexcharts.css"
+      "OriginalItemSpec": "C:\\Users\\aldas\\.nuget\\packages\\blazor-apexcharts\\2.0.0\\staticwebassets\\css\\apexcharts.css"
     },
     {
-      "Identity": "C:\\Users\\aldas\\.nuget\\packages\\blazor-apexcharts\\2.1.0\\staticwebassets\\js\\apexcharts.esm.js",
+      "Identity": "C:\\Users\\aldas\\.nuget\\packages\\blazor-apexcharts\\2.0.0\\staticwebassets\\js\\apexcharts.esm.js",
       "SourceId": "Blazor-ApexCharts",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\aldas\\.nuget\\packages\\blazor-apexcharts\\2.1.0\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\aldas\\.nuget\\packages\\blazor-apexcharts\\2.0.0\\staticwebassets\\",
       "BasePath": "_content/Blazor-ApexCharts",
       "RelativePath": "js/apexcharts.esm.js",
       "AssetKind": "All",
@@ -52,13 +52,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\aldas\\.nuget\\packages\\blazor-apexcharts\\2.1.0\\staticwebassets\\js\\apexcharts.esm.js"
+      "OriginalItemSpec": "C:\\Users\\aldas\\.nuget\\packages\\blazor-apexcharts\\2.0.0\\staticwebassets\\js\\apexcharts.esm.js"
     },
     {
-      "Identity": "C:\\Users\\aldas\\.nuget\\packages\\blazor-apexcharts\\2.1.0\\staticwebassets\\js\\blazor-apexcharts.js",
+      "Identity": "C:\\Users\\aldas\\.nuget\\packages\\blazor-apexcharts\\2.0.0\\staticwebassets\\js\\blazor-apexcharts.js",
       "SourceId": "Blazor-ApexCharts",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\aldas\\.nuget\\packages\\blazor-apexcharts\\2.1.0\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\aldas\\.nuget\\packages\\blazor-apexcharts\\2.0.0\\staticwebassets\\",
       "BasePath": "_content/Blazor-ApexCharts",
       "RelativePath": "js/blazor-apexcharts.js",
       "AssetKind": "All",
@@ -71,7 +71,7 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\aldas\\.nuget\\packages\\blazor-apexcharts\\2.1.0\\staticwebassets\\js\\blazor-apexcharts.js"
+      "OriginalItemSpec": "C:\\Users\\aldas\\.nuget\\packages\\blazor-apexcharts\\2.0.0\\staticwebassets\\js\\blazor-apexcharts.js"
     },
     {
       "Identity": "C:\\Users\\aldas\\.nuget\\packages\\microsoft.aspnetcore.identity.ui\\7.0.10\\staticwebassets\\V5\\css\\site.css",

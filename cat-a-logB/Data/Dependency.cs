@@ -21,7 +21,7 @@ namespace cat_a_logB.Data
         [ForeignKey("SuccessorTaskId")]
         public TaskData? SuccessorTask { get; set; }
 
-        [ForeignKey("DependeeTaskId")]
-        public TaskData? DependeeTask { get; set; }
+        [ForeignKey("PredecessorTaskId")]
+        public TaskData? PredecessorTask { get; set; }
     }
 }

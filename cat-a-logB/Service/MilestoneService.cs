@@ -45,5 +45,12 @@ namespace cat_a_logB.Service
         {
             return _dbContext.ProjectMilestone.ToList();
         }
+
+        public void ChangeMilestoneColor(int id, string color)
+        {
+            ProjectMilestone milestone = _dbContext.ProjectMilestone.Find(id);
+            milestone.Color = color;
+            _dbContext.SaveChanges();
+        }
     }
 }
