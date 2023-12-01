@@ -84,7 +84,6 @@ namespace cat_a_logB_UnitTests
             var project = new List<TaskData>
             {
                 new TaskData { Name = "Task 1", Comments = "Initial comment" }
-
             };
 
             var chartMock = new ApexChart<TaskData>();
@@ -93,7 +92,7 @@ namespace cat_a_logB_UnitTests
             {
                 DataPoint = new DataPoint<TaskData>
                 {
-                    Items = new List<TaskData> { new TaskData { Name = "Nonexistent Task" } }
+                    Items = new List<TaskData> { null }
                 }
             };
 
@@ -106,9 +105,10 @@ namespace cat_a_logB_UnitTests
             taskManager.EditComments(project, chartMock, selectedData, onCloseCallbackMock, editedComments);
 
             // Assert
-            var updatedTask = project.FirstOrDefault(task => task.Name == "Task 1");
-            NUnit.Framework.Assert.IsNotNull(updatedTask);
-            NUnit.Framework.Assert.AreEqual("Initial comment", updatedTask.Comments);
+            var updatedTask1 = project.FirstOrDefault(task => task.Name == "Task 1");
+            NUnit.Framework.Assert.AreEqual("Initial comment", updatedTask1.Comments);
+            var taskToUpdate = project.FirstOrDefault(task => task.Name == "Nonexistent Task");
+            NUnit.Framework.Assert.IsNull(taskToUpdate);
         }
     }
 }
