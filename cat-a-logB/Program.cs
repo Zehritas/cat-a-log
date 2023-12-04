@@ -1,7 +1,8 @@
 using ApexCharts;
 using cat_a_logB.Areas.Identity;
 using cat_a_logB.Data;
-using cat_a_logB.Service;
+using cat_a_logB.Service.Implementation;
+using cat_a_logB.Service.Interfaces;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;

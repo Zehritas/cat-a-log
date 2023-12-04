@@ -1,8 +1,10 @@
 ﻿@page "/Milestones"
 @using cat_a_logB.Data
+@using cat_a_logB.Service.Interfaces;
+
 @inject cat_a_logB.Pages.SampleData SampleData
-@inject Service.ITaskDataService TaskDataService
-@inject Service.IMilestoneService MilestoneService
+@inject ITaskDataService TaskDataService
+@inject IMilestoneService MilestoneService
 
 <PageTitle>Milestones</PageTitle>
 

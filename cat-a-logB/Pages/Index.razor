@@ -4,12 +4,14 @@
 @using ApexCharts;
 @using Microsoft.AspNetCore.Components;
 @using Service;
+@using cat_a_logB.Service.Interfaces;
+
 @inject cat_a_logB.Pages.SampleData SampleData
 @inject cat_a_logB.Data.TaskManager TaskManager
-@inject Service.ITaskDataService TaskDataService
-@inject Service.IDependencyService DependencyService
-@inject Service.IMilestoneService MilestoneService
-@inject Service.IProjectTeamService ProjectTeamService
+@inject ITaskDataService TaskDataService
+@inject IDependencyService DependencyService
+@inject IMilestoneService MilestoneService
+@inject IProjectTeamService ProjectTeamService
 
 
 <PageTitle>Gantt Chart</PageTitle>

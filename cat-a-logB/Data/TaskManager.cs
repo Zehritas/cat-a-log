@@ -1,5 +1,5 @@
 ﻿using ApexCharts;
-using cat_a_logB.Service;
+using cat_a_logB.Service.Interfaces;
 using Microsoft.AspNetCore.Components;
 using static cat_a_logB.Data.ProjectMilestone;
 
