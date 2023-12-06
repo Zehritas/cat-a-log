@@ -13,36 +13,7 @@
     <div class="row">
         <div class="col-12 mb-4">
             <style>
-                .modern-heading {
-                    text-align: center;
-                    font-size: 1.8rem;
-                    font-weight: 700;
-                    color: #333;
-                    /* Set your preferred text color */
-                    text-transform: uppercase;
-                    letter-spacing: 2px;
-                    margin-bottom: 1.5rem;
-                    border-bottom: 2px solid #193a5e;
-                    /* Set your preferred border color */
-                    padding-bottom: 0.5rem;
-                }
 
-                span {
-                    font-family: 'Roboto', sans-serif;
-                    /* Use your preferred font here */
-                }
-
-                button {
-                    font-family: 'Roboto', sans-serif;
-                }
-
-                h4 {
-                    font-family: 'Roboto', sans-serif;
-                }
-
-                label {
-                    font-family: 'Roboto', sans-serif;
-                }
             </style>
 
             <h3 class="mb-4 modern-heading">Current Teams</h3>
@@ -55,6 +26,9 @@
                             <style>
                                 .team-name-btn-@team.Id {
                                     transition: background-color 0.3s;
+                                    background-color: white;
+                                    border: 1px solid var(--accent-color-3);
+                                    color: #1f1f1f;
                                 }
 
                                 .team-name-btn-@team.Id:hover {
@@ -62,14 +36,13 @@
                                     color: white;
                                 }
                             </style>
-                            <button class="btn btn-outline-primary team-name-btn-@team.Id"
-                                @onclick="() => ShowTasksForTeam(team)">
+                            <button class="primary-button team-name-btn-@team.Id" @onclick="() => ShowTasksForTeam(team)">
                                 <span class="ml-2 team-name">@team.Name</span>
                             </button>
                             <div class="d-flex align-items-center">
-                                <button class="btn btn-warning ml-2" @onclick="() => EditTeamMembers(team)">Edit
+                                <button class="edit-button" @onclick="() => EditTeamMembers(team)">Edit
                                     Members</button>
-                                <button class="btn btn-danger" style="margin-left: 8px;"
+                                <button class="remove-button" style="margin-left: 8px;"
                                     @onclick="() => ToggleRemoveTeamModal(team)">Remove Team</button>
                             </div>
                         </div>
@@ -88,7 +61,7 @@
     <div class="row">
         <div class="col-12 mb-4">
             <div class="list-group">
-                <button class="btn btn-primary btn-block" @onclick="ToggleCreateForm">Create New Team</button>
+                <button class="primary-button" @onclick="ToggleCreateForm">Create New Team</button>
             </div>
         </div>
     </div>
@@ -112,7 +85,7 @@
                                 <input class="form-control" type="color" id="teamColor" @bind="newTeam.Color" />
                             </div>
                             <br />
-                            <button class="btn btn-primary" type="button" @onclick="AddTeam">Add Team</button>
+                            <button class="primary-button" type="button" @onclick="AddTeam">Add Team</button>
                         </form>
                     </div>
                 </div>
@@ -173,8 +146,7 @@
                 {
                     <style>
                         .list-group-item:hover {
-                            background-color: #f0f0f0;
-                            /* Change the background color on hover */
+                            background-color: var(--background-color);
                         }
                     </style>
                     <h4 class="mb-4 font-weight-bold text-center">Tasks for @selectedTeam.Name</h4>

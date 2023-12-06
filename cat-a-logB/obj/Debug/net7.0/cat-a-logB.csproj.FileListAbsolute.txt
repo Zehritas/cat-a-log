@@ -1903,3 +1903,4 @@ C:\Users\Marijonas\source\repos\cat-a-log\cat-a-logB\bin\Debug\net7.0\nunit.engi
 C:\Users\Marijonas\source\repos\cat-a-log\cat-a-logB\bin\Debug\net7.0\nunit.engine.core.dll
 C:\Users\Marijonas\source\repos\cat-a-log\cat-a-logB\bin\Debug\net7.0\testcentric.engine.metadata.dll
 C:\Users\Marijonas\source\repos\cat-a-log\cat-a-logB\bin\Debug\net7.0\nunit.framework.dll
+C:\Users\Marijonas\source\repos\cat-a-log\cat-a-logB\obj\Debug\net7.0\scopedcss\Pages\Teams.razor.rz.scp.css
