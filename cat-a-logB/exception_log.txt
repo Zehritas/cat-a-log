@@ -1,0 +1,32 @@
+Exception occurred at 12/6/2023 4:38:46 PM
+Message: Selected team not found.
+Stack Trace:    at cat_a_logB.Data.TaskManager.AddTask(List`1 project, ApexChart`1 chart, TaskData newTask, List`1 teams) in C:\Users\Lenovo\Desktop\cat-a-log\cat-a-logB\Data\TaskManager.cs:line 477
+-------------------------------------------------------------
+Exception occurred at 12/6/2023 4:38:51 PM
+Message: Selected team not found.
+Stack Trace:    at cat_a_logB.Data.TaskManager.AddTask(List`1 project, ApexChart`1 chart, TaskData newTask, List`1 teams) in C:\Users\Lenovo\Desktop\cat-a-log\cat-a-logB\Data\TaskManager.cs:line 477
+-------------------------------------------------------------
+Exception occurred at 12/6/2023 4:38:51 PM
+Message: Selected team not found.
+Stack Trace:    at cat_a_logB.Data.TaskManager.AddTask(List`1 project, ApexChart`1 chart, TaskData newTask, List`1 teams) in C:\Users\Lenovo\Desktop\cat-a-log\cat-a-logB\Data\TaskManager.cs:line 477
+-------------------------------------------------------------
+Exception occurred at 12/6/2023 4:38:58 PM
+Message: Selected team not found.
+Stack Trace:    at cat_a_logB.Data.TaskManager.AddTask(List`1 project, ApexChart`1 chart, TaskData newTask, List`1 teams) in C:\Users\Lenovo\Desktop\cat-a-log\cat-a-logB\Data\TaskManager.cs:line 477
+-------------------------------------------------------------
+Exception occurred at 12/6/2023 4:39:00 PM
+Message: Selected team not found.
+Stack Trace:    at cat_a_logB.Data.TaskManager.AddTask(List`1 project, ApexChart`1 chart, TaskData newTask, List`1 teams) in C:\Users\Lenovo\Desktop\cat-a-log\cat-a-logB\Data\TaskManager.cs:line 477
+-------------------------------------------------------------
+Exception occurred at 12/6/2023 4:39:00 PM
+Message: Selected team not found.
+Stack Trace:    at cat_a_logB.Data.TaskManager.AddTask(List`1 project, ApexChart`1 chart, TaskData newTask, List`1 teams) in C:\Users\Lenovo\Desktop\cat-a-log\cat-a-logB\Data\TaskManager.cs:line 477
+-------------------------------------------------------------
+Exception occurred at 12/6/2023 4:39:00 PM
+Message: Selected team not found.
+Stack Trace:    at cat_a_logB.Data.TaskManager.AddTask(List`1 project, ApexChart`1 chart, TaskData newTask, List`1 teams) in C:\Users\Lenovo\Desktop\cat-a-log\cat-a-logB\Data\TaskManager.cs:line 477
+-------------------------------------------------------------
+Exception occurred at 12/6/2023 4:39:01 PM
+Message: Selected team not found.
+Stack Trace:    at cat_a_logB.Data.TaskManager.AddTask(List`1 project, ApexChart`1 chart, TaskData newTask, List`1 teams) in C:\Users\Lenovo\Desktop\cat-a-log\cat-a-logB\Data\TaskManager.cs:line 477
+-------------------------------------------------------------

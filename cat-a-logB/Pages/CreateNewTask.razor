@@ -1,84 +1,110 @@
-@* <form>
-<div class="form-group">
-<label for="taskName">Task Name:</label>
-<input class="form-control" type="text" id="taskName" @bind="newTask.Name" />
-</div>
+@using cat_a_logB.Data;
+@using Service;
+@inject Service.ITaskDataService TaskDataService
+@inject cat_a_logB.Pages.SampleData SampleData
+@inject cat_a_logB.Data.TaskManager TaskManager
+@inject cat_a_logB.Data.CalculationData CalculationData
+<form>
+    <div class="form-group">
+        <label for="taskName">Task Name:</label>
+        <input class="form-control" type="text" id="taskName" @bind="newTask.Name" />
+    </div>
 
-<div class="form-group">
-<label for="startDate">Start Date:</label>
-<input class="form-control" type="date" id="startDate" @bind="newTask.StartDate" />
-</div>
+    <div class="form-group">
+        <label for="startDate">Start Date:</label>
+        <input class="form-control" type="date" id="startDate" @bind="newTask.StartDate" />
+    </div>
 
-<div class="form-group">
-<label for="endDate">End Date:</label>
-<input class="form-control" type="date" id="endDate" @bind="newTask.EndDate" />
-</div>
+    <div class="form-group">
+        <label for="endDate">End Date:</label>
+        <input class="form-control" type="date" id="endDate" @bind="newTask.EndDate" />
+    </div>
 
-<div class="form-group">
-<label for="comments">Comments:</label>
-<input class="form-control" id="comments" @bind="newTask.Comments">
-</div>
+    <div class="form-group">
+        <label for="comments">Comments:</label>
+        <input class="form-control" id="comments" @bind="newTask.Comments">
+    </div>
 
-<div class="form-group">
-<label for="taskTeam">Task Team:</label>
-<select class="form-control" id="taskTeam" @bind="selectedTeamName">
-@foreach (var team in teams)
-{
-<option value="@team.Name">@team.Name</option>
-}
-</select>
+    <div class="form-group">
+        <label for="taskTeam">Task Team:</label>
+        <select class="form-control" id="taskTeam" @bind="selectedTeamName">
+            <option value="">-</option>
+            @foreach (var team in teams)
+            {
+                <option value="@team.Name">@team.Name</option>
+            }
+        </select>
 
-</div>
+    </div>
 
-<br>
-<button class="btn btn-primary" type="button" @onclick="AddTask">Add Task</button>
+    <br>
+    <button class="btn btn-primary" type="button" @onclick="AddTask">Add Task</button>
 </form>
 
 @code {
+    [Parameter] public List<TaskData> project { get; set; }
+    [Parameter] public ApexChart<TaskData> chart { get; set; }
+    [Parameter] public List<ProjectTeam> teams { get; set; }
+    [Parameter] public SelectedData<TaskData> selectedData { get; set; }
+    [Parameter] public EventCallback OnClose { get; set; }
+    [Parameter] public Func<Task> RefreshData{ get; set; }
 
-[Parameter] public List<GanttData> project { get; set; }
-[Parameter] public ApexChart<GanttData> chart { get; set; }
-[Parameter] public List<ProjectTeam> teams { get; set; }
-[Parameter] public SelectedData<GanttData> selectedData { get; set; }
-// [Parameter] public EventCallback OnClose { get; set; }
+    private TaskData newTask = new TaskData();
+    private string selectedTeamName;
+    public string errorMessage = "";
+    private async Task AddTask()
+    {
+        try
+        {
+            if (!newTask.Name.IsTaskNameValid())
+            {
+                errorMessage = "Task name is required.";
+                return;
+            }
+            if (!newTask.Name.IsValidTaskName())
+            {
+                errorMessage = "Invalid task name. Only alphanumeric characters and spaces are allowed.";
+                return;
+            }
 
+            if (!newTask.StartDate.IsEndDateGreaterThanStartDate(newTask.EndDate))
+            {
+                errorMessage = "End date must be greater than start date.";
+                return;
+            }
 
-private async Task AddTask()
-{
-if (!newTask.Name.IsTaskNameValid())
-{
-errorMessage = "Task name is required.";
-return;
-}
+            errorMessage = "";
+            var selectedTeam = teams.FirstOrDefault(t => t.Name == selectedTeamName);
 
-if (!newTask.StartDate.IsEndDateGreaterThanStartDate(newTask.EndDate))
-{
-errorMessage = "End date must be greater than start date.";
-return;
-}
+            if (selectedTeam != null)
+            {
+                var newTaskData = new TaskData()
+                    {
+                        Name = newTask.Name,
+                        StartDate = newTask.StartDate,
+                        EndDate = newTask.EndDate,
+                        TeamId = selectedTeam.Id,
+                        Progress = 0,
+                        Comments = newTask.Comments
+                    };
+                TaskDataService.SyncColorWithTeam(newTaskData);
+                newTaskData.AutoProgress = (double)CalculationData.CalculateAutoProgress(newTaskData);
 
-errorMessage = "";
-var selectedTeam = teams.FirstOrDefault(t => t.Name == selectedTeamName);
+                TaskDataService.AddTask(newTaskData);
+                project.Add(newTaskData);
 
-if (selectedTeam != null)
-{
-var newTaskData = new GanttData(
-newTask.Name,
-newTask.StartDate,
-newTask.EndDate,
-selectedTeam,
-0,
-newTask.Comments
-);
-newTaskData.AutoProgress = (int)CalculateAutoProgress(newTaskData);
-project.Add(newTaskData);
-await chart.UpdateSeriesAsync();
-StateHasChanged();
-}
-else
-{
-// Handle the case where no team with the selected name is found
-errorMessage = "Selected team not found.";
-}
-}
-} *@
+                await RefreshData();
+                await chart.UpdateSeriesAsync();
+            }
+            else
+            {
+                errorMessage = "Selected team not found.";
+                throw new UnexpectedDataScenarioException(errorMessage);
+            }
+        }
+        catch (UnexpectedDataScenarioException ex)
+        {
+            ExceptionLogger.LogException(ex);
+        }
+    }
+} 

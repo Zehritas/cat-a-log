@@ -1,7 +1,9 @@
 @page "/teams"
 @using cat_a_logB.Data
 @inject cat_a_logB.Pages.SampleData SampleData
+@inject cat_a_logB.Data.CalculationData CalculationData
 @inject cat_a_logBContext DbContext
+@inject cat_a_logB.Data.TeamManager TeamManager
 @inject Service.ITaskDataService TaskDataService
 @inject Service.IDependencyService DependencyService
 @inject Service.IMilestoneService MilestoneService
@@ -125,7 +127,7 @@ else
 
 
 @code {
-    private List<ProjectTeam> teams;
+    public List<ProjectTeam> teams;
     private List<TaskData> tasks;
     private ProjectTeam newTeam = new ProjectTeam() { ProjectId = 1 };
     private string errorMessage = "";
@@ -141,25 +143,28 @@ else
 
     private async Task RefreshData()
     {
-        teams = ProjectTeamService.GetAllTeams();
-        tasks = tasks = TaskDataService.GetAllTasks();
+        // teams = ProjectTeamService.GetAllTeams();
+        // tasks = tasks = TaskDataService.GetAllTasks();
 
+        TeamManager.RefreshData(teams, tasks);
         StateHasChanged();
     }
 
     private async Task AddTeam()
     {
-        if (string.IsNullOrWhiteSpace(newTeam.Name))
-        {
-            errorMessage = "Team name is required.";
-            return;
-        }
+        // if (string.IsNullOrWhiteSpace(newTeam.Name))
+        // {
+        //     errorMessage = "Team name is required.";
+        //     return;
+        // }
 
-        errorMessage = "";
+        // errorMessage = "";
 
-        ProjectTeamService.AddTeam(newTeam);
-        teams.Add(newTeam);
-        newTeam = new ProjectTeam(); // Reset the new team object after adding
+        // ProjectTeamService.AddTeam(newTeam);
+        // teams.Add(newTeam);
+        // newTeam = new ProjectTeam(); // Reset the new team object after adding
+
+        TeamManager.AddTeam(teams, newTeam);
         StateHasChanged();
 
         await RefreshData();

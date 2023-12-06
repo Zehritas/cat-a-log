@@ -1,0 +1,37 @@
+@* @using cat_a_logB.Data
+@using Service;
+@inject Service.ITaskDataService TaskDataService
+@inject cat_a_logB.Data.TaskManager TaskManager
+
+@code{
+    [Parameter] public SelectedData<TaskData> selectedData { get; set; }
+    [Parameter] public List<TaskData> project { get; set; }
+    [Parameter] public ApexChart<TaskData> chart { get; set; }
+    [Parameter] public EventCallback OnClose { get; set; }
+    [Parameter] public Func<Task> RefreshData { get; set; }
+    
+    public delegate List<TaskData> SortTasksByDependenciesDelegate(List<TaskData> tasks);
+    [Parameter] public SortTasksByDependenciesDelegate SortTasksByDependencies { get; set; }
+
+    private async Task RemoveTask()
+    {
+        if (selectedData != null && selectedData.DataPoint != null &&
+        selectedData.DataPoint.Items.First().Id is int selectedTaskId)
+        { // Use LINQ to create a new list of tasks
+            var taskToRemove = project.FirstOrDefault(task => task.Id == selectedTaskId);
+
+            if (taskToRemove != null)
+            {
+                TaskDataService.RemoveTask(taskToRemove);
+            }
+        }
+        await RefreshData();
+        selectedData = null; // Reset selected data after removal
+        List<TaskData> sortedTasks = SortTasksByDependencies<TaskData, Dependency>(project);
+
+        project = sortedTasks;
+
+        await RefreshData();
+        await chart.UpdateSeriesAsync();
+    }
+} *@
