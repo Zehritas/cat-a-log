@@ -20,8 +20,15 @@ namespace cat_a_logB.Service
 
         public void RemoveDependency(Dependency dependency)
         {
+
             _dbContext.Dependency.Remove(dependency);
             _dbContext.SaveChanges();
+            Dependency newDependency = _dbContext.Dependency.Where(d => d.PredecessorTaskId == d.SuccessorTaskId).FirstOrDefault();
+            if (newDependency != null)
+            {
+                _dbContext.Dependency.Remove(newDependency);
+                _dbContext.SaveChanges();
+            }
         }
 
         public void AddDependencies(List<Dependency> dependencies)
@@ -35,9 +42,9 @@ namespace cat_a_logB.Service
 
         public void RemoveDependencies(List<Dependency> dependencies, int taskId)
         {
-            foreach(Dependency dependency in dependencies)
+            foreach (Dependency dependency in dependencies)
             {
-                if(taskId == dependency.SuccessorTaskId)
+                if (taskId == dependency.SuccessorTaskId)
                 {
                     _dbContext.Dependency.Remove(dependency);
                 }
