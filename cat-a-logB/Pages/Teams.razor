@@ -152,19 +152,7 @@ else
 
     private async Task AddTeam()
     {
-        // if (string.IsNullOrWhiteSpace(newTeam.Name))
-        // {
-        //     errorMessage = "Team name is required.";
-        //     return;
-        // }
-
-        // errorMessage = "";
-
-        // ProjectTeamService.AddTeam(newTeam);
-        // teams.Add(newTeam);
-        // newTeam = new ProjectTeam(); // Reset the new team object after adding
-
-        TeamManager.AddTeam(teams, newTeam);
+       TeamManager.AddTeam(teams, newTeam);
         StateHasChanged();
 
         await RefreshData();
@@ -174,14 +162,7 @@ else
     {
         // Remove the team
         ProjectTeamService.RemoveTeam(team);
-        //teams.Remove(team);
-
-        // Remove associated tasks
-        //TaskDataService.RemoveTasks(team.Tasks);
-        //tasks.RemoveAll(task => task.Team == team);
-
-
-        // Reset the selected team
+       
         if (selectedTeam != null && selectedTeam.Id == team.Id)
         {
             selectedTeam = null;
