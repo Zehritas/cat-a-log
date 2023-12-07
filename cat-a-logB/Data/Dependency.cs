@@ -1,7 +1,6 @@
 //using cat_a_logB.Data;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using Microsoft.EntityFrameworkCore;
 
 namespace cat_a_logB.Data
 {

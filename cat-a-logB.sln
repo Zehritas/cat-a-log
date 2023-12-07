@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "cat-a-logB", "cat-a-logB\ca
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "cat-a-logTests", "cat-a-logTests\cat-a-logTests.csproj", "{ECC4B0D5-7D62-491C-A948-791541A54C32}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cat-a-logAPI", "WebApplication1\cat-a-logAPI.csproj", "{377BC708-DEE8-4EB4-A716-5D1EE6ECEA14}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cat_a_logAPI", "WebApplication1\Cat_a_logAPI.csproj", "{377BC708-DEE8-4EB4-A716-5D1EE6ECEA14}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,6 +1,5 @@
 ﻿using cat_a_logB.Data;
 using cat_a_logB.Service.Interfaces;
-using Microsoft.EntityFrameworkCore;
 
 namespace cat_a_logB.Service.Implementation
 {

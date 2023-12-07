@@ -1,11 +1,29 @@
+using Cat_a_logAPI.Data;
+using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
+using Cat_a_logAPI.Service.Interfaces;
+using Cat_a_logAPI.Service.Implementation;
+using Microsoft.AspNetCore.Identity;
 
-var builder = WebApplication.CreateSlimBuilder(args);
+var builder = WebApplication.CreateBuilder(args);
+var connectionString = builder.Configuration.GetConnectionString("cat_a_logBContextConnection") ?? throw new InvalidOperationException("Connection string 'cat_a_logBContextConnection' not found.");
+
+builder.Services.AddDbContext<Cat_a_logBContext>(options => options.UseSqlServer(connectionString));
+
 
 builder.Services.ConfigureHttpJsonOptions(options =>
 {
     options.SerializerOptions.TypeInfoResolverChain.Insert(0, AppJsonSerializerContext.Default);
 });
+
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<Cat_a_logBContext>();
+
+builder.Services.AddScoped<IDependencyService, DependencyService>();
+builder.Services.AddScoped<IMilestoneService, MilestoneService>();
+builder.Services.AddScoped<IProjectTeamService, ProjectTeamService>();
+builder.Services.AddScoped<ITaskDataService, TaskDataService>();
 
 var app = builder.Build();
 

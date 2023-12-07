@@ -1,7 +1,5 @@
 ﻿using cat_a_logB.Data;
-using cat_a_logB.Pages;
 using cat_a_logB.Service.Interfaces;
-using System.Linq;
 
 namespace cat_a_logB.Service.Implementation
 {

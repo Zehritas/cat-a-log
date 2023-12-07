@@ -5,11 +5,8 @@ using cat_a_logB.Service.Implementation;
 using cat_a_logB.Service.Interfaces;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualBasic;
-
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -36,8 +33,6 @@ builder.Services.AddScoped<ApexChart<cat_a_logB.Data.TaskData>>();
 builder.Services.AddScoped<TaskManager>();
 builder.Services.AddScoped<AuthenticationStateProvider,
     RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
-builder.Services.AddSingleton<WeatherForecastService>();
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

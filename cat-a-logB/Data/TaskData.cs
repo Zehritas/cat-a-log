@@ -1,5 +1,4 @@
-﻿using cat_a_logB.Pages;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace cat_a_logB.Data
