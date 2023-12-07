@@ -4,7 +4,7 @@ using Microsoft.Build.Framework;
 
 namespace cat_a_logB.Service
 {
-    public class ProjectTeamService :IProjectTeamService
+    public class ProjectTeamService : IProjectTeamService
     {
         private readonly cat_a_logBContext _dbContext;
 
@@ -39,8 +39,8 @@ namespace cat_a_logB.Service
         public void RemoveTeam(ProjectTeam projectTeam)
         {
             List<TaskData> teamTasks = projectTeam.Tasks;
-            
-            for (int i = teamTasks.Count-1; i >=0; i--)
+
+            for (int i = teamTasks.Count - 1; i >= 0; i--)
             {
                 RemoveTask(teamTasks.ElementAt(i));
             }
@@ -70,6 +70,10 @@ namespace cat_a_logB.Service
         public List<ProjectTeam> GetAllTeams()
         {
             return _dbContext.ProjectTeam.ToList();
+        }
+        public List<Member> GetAllMembers()
+        {
+            return _dbContext.Member.ToList();
         }
     }
 }
