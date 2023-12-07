@@ -1,12 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "aL4pu/xwcbsooIM7X4vSfT10yP8gT/vA5MdFvGMvyBPByBl/4OmL9/z13yLnh2q8Mxm9/cGXfstonA9QsL38Rw==",
+  "dgSpecHash": "jaeQuZ4AWqCpeF4SS0Hz+gMZY0vkcsitlNPcPHChnT6NZN5eU0w7U1FZ8J9z4plYJ8ANJpu/oeczmzSWuNVW4A==",
   "success": true,
   "projectFilePath": "C:\\Users\\aldas\\OneDrive\\Stalinis kompiuteris\\PSI5\\cat-a-logB\\cat-a-logB.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\aldas\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "C:\\Users\\aldas\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",
-    "C:\\Users\\aldas\\.nuget\\packages\\blazor-apexcharts\\2.1.0\\blazor-apexcharts.2.1.0.nupkg.sha512",
+    "C:\\Users\\aldas\\.nuget\\packages\\blazor-apexcharts\\2.2.0\\blazor-apexcharts.2.2.0.nupkg.sha512",
     "C:\\Users\\aldas\\.nuget\\packages\\humanizer\\2.14.1\\humanizer.2.14.1.nupkg.sha512",
     "C:\\Users\\aldas\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\aldas\\.nuget\\packages\\humanizer.core.af\\2.14.1\\humanizer.core.af.2.14.1.nupkg.sha512",

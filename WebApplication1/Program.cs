@@ -21,9 +21,12 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
     .AddEntityFrameworkStores<Cat_a_logBContext>();
 
 builder.Services.AddScoped<IDependencyService, DependencyService>();
+builder.Services.AddScoped<IMemberService, MemberService>();
 builder.Services.AddScoped<IMilestoneService, MilestoneService>();
+builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<IProjectTeamService, ProjectTeamService>();
 builder.Services.AddScoped<ITaskDataService, TaskDataService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 

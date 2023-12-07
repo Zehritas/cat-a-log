@@ -14,13 +14,14 @@
 @inject IProjectTeamService ProjectTeamService
 
 
-<PageTitle>Gantt Chart</PageTitle>
+<PageTitle>Gantt Chart | Cat-a-log</PageTitle>
 
 @* <button type="button" class="btn btn-primary" @onclick=ShowMilestones>Show Milestones</button> *@
 
 <DemoContainer>
-    <ApexChart @ref=MileChart TItem="ProjectMilestone" Title="@title" Height="120" Options=options1 Debug OnClick=HandleMilestoneClick>
-    
+    <ApexChart @ref=MileChart TItem="ProjectMilestone" Title="@title" Height="120" Options=options1 Debug
+        OnClick=HandleMilestoneClick>
+
 
         <ApexPointTooltip>
             <div class="m-2" style="width: 300px; max-height: 100px; font-size: 12px;">
@@ -48,7 +49,7 @@
 
                             }
                         </ul>
-                        
+
                     }
                 }
                 else
@@ -90,9 +91,8 @@
     {
 
         <ApexChart OnClick=OnClick @ref=chart TItem="TaskData" Title="Project Gantt chart" Options="options"
-
             XAxisType="XAxisType.Datetime">
-             
+
 
             <ApexPointTooltip>
 
@@ -152,7 +152,7 @@
 
     <form>
         <!-- Buttons for editing tasks -->
-        
+
         <button type="button" class="btn btn-primary" @onclick="RemoveTask">Remove Task</button>
         <button type="button" class="btn btn-primary" @onclick="ToggleEditTaskName">Edit Task Name</button>
         <button type="button" class="btn btn-primary" @onclick="ToggleEditTaskTime">Edit Task Time</button>
@@ -448,7 +448,7 @@ else if (selectedData != null)
 
     private async Task RedrawAnnotations()
     {
-        await chart.ClearAnnotationsAsync(); 
+        await chart.ClearAnnotationsAsync();
 
         foreach (var milestone in displayedMilestones)
         {
@@ -498,49 +498,57 @@ else if (selectedData != null)
 
     private async Task AddTask()
     {
-        if (!newTask.Name.IsTaskNameValid())
+        try
         {
-            errorMessage = "Task name is required.";
-            return;
-        }
-        if (!newTask.Name.IsValidTaskName())
-        {
-            errorMessage = "Invalid task name. Only alphanumeric characters and spaces are allowed.";
-            return;
-        }
-
-        if (!newTask.StartDate.IsEndDateGreaterThanStartDate(newTask.EndDate))
-        {
-            errorMessage = "End date must be greater than start date.";
-            return;
-        }
-
-        errorMessage = "";
-        var selectedTeam = teams.FirstOrDefault(t => t.Name == selectedTeamName);
-
-        if (selectedTeam != null)
-        {
-            var newTaskData = new TaskData()
+            if (!newTask.Name.IsTaskNameValid())
             {
-                Name = newTask.Name,
-                StartDate = newTask.StartDate,
-                EndDate = newTask.EndDate,
-                TeamId = selectedTeam.Id,
-                Progress = 0,
-                Comments = newTask.Comments
-            };
-            TaskDataService.SyncColorWithTeam(newTaskData);
-            newTaskData.AutoProgress = (double)CalculateAutoProgress(newTaskData);
+                errorMessage = "Task name is required.";
+                return;
+            }
+            if (!newTask.Name.IsValidTaskName())
+            {
+                errorMessage = "Invalid task name. Only alphanumeric characters and spaces are allowed.";
+                return;
+            }
 
-            TaskDataService.AddTask(newTaskData);
-            project.Add(newTaskData);
+            if (!newTask.StartDate.IsEndDateGreaterThanStartDate(newTask.EndDate))
+            {
+                errorMessage = "End date must be greater than start date.";
+                return;
+            }
 
-            await RefreshData();
-            await chart.UpdateSeriesAsync();
+            errorMessage = "";
+            var selectedTeam = teams.FirstOrDefault(t => t.Name == selectedTeamName);
+
+            if (selectedTeam != null)
+            {
+                var newTaskData = new TaskData()
+                    {
+                        Name = newTask.Name,
+                        StartDate = newTask.StartDate,
+                        EndDate = newTask.EndDate,
+                        TeamId = selectedTeam.Id,
+                        Progress = 0,
+                        Comments = newTask.Comments
+                    };
+                TaskDataService.SyncColorWithTeam(newTaskData);
+                newTaskData.AutoProgress = (double)CalculateAutoProgress(newTaskData);
+
+                TaskDataService.AddTask(newTaskData);
+                project.Add(newTaskData);
+
+                //await RefreshData();
+                await chart.UpdateSeriesAsync();
+            }
+            else
+            {
+                errorMessage = "Selected team not found.";
+                throw new UnexpectedDataScenarioException(errorMessage);
+            }
         }
-        else
+        catch (UnexpectedDataScenarioException ex)
         {
-            errorMessage = "Selected team not found.";
+            ExceptionLogger.LogException(ex);
         }
     }
 
@@ -569,8 +577,8 @@ else if (selectedData != null)
 
 
     public List<T> SortTasksByDependencies<T, U>(List<T> tasks)
-        where T : TaskData
-        where U : Dependency
+    where T : TaskData
+    where U : Dependency
     {
         var graph = new Dictionary<int, List<int>>();
         var inDegree = new Dictionary<int, int>();
@@ -719,14 +727,14 @@ else if (selectedData != null)
     private async Task AddDependency()
     {
         if (selectedData != null && selectedData.DataPoint != null &&
-            selectedData.DataPoint.Items.First().Id is int selectedTaskId)
+        selectedData.DataPoint.Items.First().Id is int selectedTaskId)
         {
             TaskData predecessorTask = project.FirstOrDefault(task => task.Id == selectedTaskId);
 
             if (predecessorTask != null)
             {
                 DependencyType dependencyType = selectedDependencyType;
-                int  selectedSuccessorTaskId = selectedSuccessorTask;
+                int selectedSuccessorTaskId = selectedSuccessorTask;
                 // input checks
 
                 if (selectedSuccessorTaskId == 0)
@@ -749,17 +757,17 @@ else if (selectedData != null)
 
                 // creeaate
                 Dependency newDependency = new Dependency
-                {
+                    {
                         PredecessorTaskId = predecessorTask.Id,
                         SuccessorTaskId = selectedSuccessorTaskId,
                         Type = dependencyType
-                };
+                    };
 
                 DependencyService.AddDependency(newDependency);
                 predecessorTask.Dependencies.Add(newDependency);
 
                 List<TaskData> sortedTasks = SortTasksByDependencies<TaskData, Dependency>(project);
-                TaskManager.Reschedule(predecessorTask, sortedTasks, chart);
+                TaskManager.Reschedule(predecessorTask.Id, sortedTasks, chart);
                 foreach (var task in sortedTasks)
                 {
                     Console.WriteLine(task.Name);
@@ -841,7 +849,8 @@ else if (selectedData != null)
         double remainingTime = 100 - task.AutoProgress;
 
         // Assuming all team members contribute equally, calculate the number of additional people needed
-        int additionalPeopleNeeded = (int)Math.Ceiling((100 - progressWithoutOriginalPeople) / (remainingTime / task.AutoProgress * progressPerPerson));
+        int additionalPeopleNeeded = (int)Math.Ceiling((100 - progressWithoutOriginalPeople) / (remainingTime /
+        task.AutoProgress * progressPerPerson));
 
         return additionalPeopleNeeded;
     }

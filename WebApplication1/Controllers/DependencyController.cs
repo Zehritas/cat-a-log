@@ -1,6 +1,5 @@
 ﻿using Cat_a_logAPI.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Identity.Client;
 
 namespace Cat_a_logAPI.Controllers
 {

@@ -6,95 +6,162 @@
 @inject ITaskDataService TaskDataService
 @inject IMilestoneService MilestoneService
 
-<PageTitle>Milestones</PageTitle>
+<PageTitle>Milestones | Cat-a-log</PageTitle>
 
-<h1 class="mb-4">Milestone settings</h1>
-
-<div class="row">
-    <div class="col-md-6">
-        @if (milestones != null && milestones.Any())
-        {
-            <ul class="list-group">
-                @foreach (var milestone in milestones)
-                {
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <button class="btn btn-link" @onclick="() => ToggleMilestoneSelection(milestone)">
-                            @milestone.Name - Target Date: @milestone.TargetDate.ToShortDateString()
-                        </button>
-                    </li>
+<div class="container" style="max-width: 700px;">
+    <div class="row">
+        <div class="col-12 mb-4">
+            <style>
+                .modern-heading {
+                    text-align: center;
+                    font-size: 1.8rem;
+                    font-weight: 700;
+                    color: #333;
+                    text-transform: uppercase;
+                    letter-spacing: 2px;
+                    margin-bottom: 1.5rem;
+                    border-bottom: 2px solid #193a5e;
+                    padding-bottom: 0.5rem;
+                    font-family: 'Roboto', sans-serif;
+                    /* Use your preferred font here */
                 }
-            </ul>
-        }
-        else
-        {
-            <p>No Milestones found.</p>
-        }
+
+                button {
+                    font-family: 'Roboto', sans-serif;
+                }
+
+                h4 {
+                    font-family: 'Roboto', sans-serif;
+                }
+            </style>
+
+            <h3 class="mb-4 modern-heading">Current Milestones</h3>
+            @if (milestones != null && milestones.Any())
+            {
+                <div class="list-group">
+                    @foreach (var milestone in milestones)
+                    {
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <style>
+                                .milestone-btn-@milestone.Id {
+                                    transition: background-color 0.3s;
+                                }
+
+                                .milestone-btn-@milestone.Id:hover {
+                                    background-color: #007bff;
+                                    /* Blue color for hover */
+                                    color: white;
+                                }
+                            </style>
+                            <button class="btn btn-outline-primary milestone-btn-@milestone.Id"
+                                @onclick="() => ToggleMilestoneSelection(milestone)">
+                                <span class="ml-2 milestone-name">@milestone.Name</span>
+                            </button>
+                            <span class="text-secondary-bold">Target date: @milestone.TargetDate.ToShortDateString()</span>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <p>No Milestones found.</p>
+            }
+        </div>
     </div>
 
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-body">
-                <h3 class="card-title mb-3">New Milestone:</h3>
-                <form>
-                    <div class="form-group">
-                        <label for="milestoneName">Milestone Name:</label>
-                        <input class="form-control" type="text" id="milestoneName" @bind="milestoneName" />
-                    </div>
-
-                    <div class="form-group">
-                        <label>Tasks:</label>
-                        @foreach (var task in tasks)
-                        {
-                            <label>
-                                <input type="checkbox" @onclick="() => ToggleTaskSelection(task)"
-                                       checked="@selectedTasks.Contains(task)" />
-                                @task.Name
-                            </label>
-                        }
-                    </div>
-                    <div class="form-group">
-                        <label>Target completion date:</label>
-                        <input class="form-control" type="date" id="targetDate" @bind="milestoneDate" />
-
-                    </div>
-                    <br>
-                    <button class="btn btn-primary" type="button" @onclick="CreateMilestone">Create Milestone</button>
-                </form>
+    <div class="row">
+        <div class="col-12 mb-4">
+            <div class="list-group">
+                <button class="btn btn-primary btn-block" @onclick="ToggleCreateForm">Create New Milestone</button>
             </div>
         </div>
     </div>
-</div>
 
-
-@if (selectedMilestone != null)
-{
-    <h3>Selected Milestone: @selectedMilestone.Name</h3>
-    @if (selectedMilestone.Tasks != null && selectedMilestone.Tasks.Any())
+    @if (isFormVisible)
     {
-        <h3>Tasks for @selectedMilestone.Name</h3>
-        <ul>
-            @foreach (var task in selectedMilestone.Tasks)
-            {
-                <li>@task.Name</li>
-            }
-        </ul>
+        <div class="row">
+            <div class="col-12 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="milestoneName">Milestone Name:</label>
+                                <input class="form-control" type="text" id="milestoneName" @bind="milestoneName" />
+                            </div>
+
+                            <div class="form-group">
+                                <label>Select tasks:</label>
+                                <div class="row">
+                                    @foreach (var task in tasks)
+                                    {
+                                        <div class="col-md-4">
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" @onclick="() => ToggleTaskSelection(task)"
+                                                    checked="@selectedTasks.Contains(task)" />
+                                                @task.Name
+                                            </label>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Target completion date:</label>
+                                <input class="form-control" type="date" id="targetDate" @bind="milestoneDate" />
+                            </div>
+
+                            <br />
+                            <button class="btn btn-primary btn-block" type="button" @onclick="CreateMilestone">Create
+                                Milestone</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (selectedMilestone != null)
+    {
+        @if (selectedMilestone.Tasks != null && selectedMilestone.Tasks.Any())
+        {
+            <style>
+                .list-group-item:hover {
+                    background-color: #f0f0f0;
+                    /* Change the background color on hover */
+                }
+            </style>
+            <h4 class="mb-4 font-weight-bold text-center">Tasks for milestone @selectedMilestone.Name</h4>
+            <div class="list-group">
+                @foreach (var task in selectedMilestone.Tasks)
+                {
+                    <div class="list-group-item">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">@task.Name</h5>
+                            <!-- Add more information if needed -->
+                            <small>Due: @task.EndDate.ToString("yyyy-MM-dd")</small>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <h4 class="mb-4 font-weight-bold text-center">@selectedMilestone.Name has no tasks.</h4>
+        }
     }
     else
     {
-        <p>No tasks found for @selectedMilestone.Name</p>
+        <h4 class="mb-4 font-weight-bold text-center">Click on a milestone name to see its information!</h4>
     }
-}
-else
-{
-    <p>No milestone selected.</p>
-}
 
-@if (!string.IsNullOrWhiteSpace(errorMessage))
-{
-    <div class="alert alert-danger" role="alert">
-        @errorMessage
-    </div>
-}
+    @if (!string.IsNullOrWhiteSpace(errorMessage))
+    {
+        <div class="alert alert-danger" role="alert">
+            @errorMessage
+        </div>
+    }
+</div>
+
 
 @code {
     private List<TaskData> tasks;
@@ -105,6 +172,8 @@ else
     private ProjectMilestone selectedMilestone;
     private ProjectMilestone newMilestone = new ProjectMilestone();
     private string errorMessage = "";
+    bool isFormVisible = false;
+
 
 
 
@@ -148,37 +217,49 @@ else
         if (string.IsNullOrWhiteSpace(milestoneName))
         {
             errorMessage = "Milestone name is required.";
-            return; 
+            return;
         }
 
         if (milestones.Any(m => m.Name.Equals(milestoneName, StringComparison.OrdinalIgnoreCase)))
         {
             errorMessage = "Milestone name already exists.";
-            return; 
+            return;
         }
 
         if (selectedTasks == null || !selectedTasks.Any())
         {
             errorMessage = "Please select at least one task.";
-            return; 
+            return;
         }
 
-       
-            newMilestone = new ProjectMilestone(milestoneName, selectedTasks.ToList(), milestoneDate, "blue");
 
-            MilestoneService.AddMilestone(newMilestone);
-            milestones.Add(newMilestone);
-            newMilestone = new ProjectMilestone();
-            milestoneName = string.Empty;
-            selectedTasks.Clear();
+        newMilestone = new ProjectMilestone(milestoneName, selectedTasks.ToList(), milestoneDate, "blue");
 
-            await RefreshData();
-            StateHasChanged();
-        
+        MilestoneService.AddMilestone(newMilestone);
+        milestones.Add(newMilestone);
+        newMilestone = new ProjectMilestone();
+        milestoneName = string.Empty;
+        selectedTasks.Clear();
+
+        await RefreshData();
+        StateHasChanged();
+
     }
 
     private void ToggleMilestoneSelection(ProjectMilestone milestone)
     {
-        selectedMilestone = milestone;
+        if (selectedMilestone != milestone)
+        {
+            selectedMilestone = milestone;
+            // ProjectTeam.GetTasksForTeam(tasks, milestone);
+        }
+        else
+        {
+            selectedMilestone = null;
+        }
+    }
+    void ToggleCreateForm()
+    {
+        isFormVisible = !isFormVisible;
     }
 }
