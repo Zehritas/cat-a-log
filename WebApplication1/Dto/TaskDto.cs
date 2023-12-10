@@ -1,7 +1,7 @@
 ﻿
 namespace Cat_a_logAPI.Dto
 {
-    public class TaskDataDto
+    public class TaskDto
     {
         public int Id { get; set; }
 

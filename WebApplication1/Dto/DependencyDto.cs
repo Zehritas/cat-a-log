@@ -1,6 +1,6 @@
 namespace Cat_a_logAPI.Dto
 {
-    public class Dependency
+    public class DependencyDto
     {
         public int Id { get; set; }
 

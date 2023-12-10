@@ -4,15 +4,17 @@ namespace Cat_a_logAPI.Service.Interfaces
 {
     public interface ITaskDataService
     {
-        public void AddTask(TaskData task);
+        public bool AddTask(TaskData task);
 
-        public void RemoveTask(TaskData task);
+        public bool RemoveTask(TaskData task);
 
-        public void AddTasks(List<TaskData> tasks);
+        public bool AddTasks(IEnumerable<TaskData> tasks);
 
-        public void RemoveTasks(List<TaskData> tasks);
+        public bool RemoveTasks(IEnumerable<TaskData> tasks);
 
-        public List<TaskData> GetAllTasks();
+        public IEnumerable<TaskData> GetTasks();
+
+        public TaskData GetTask(int id);
 
         public void SyncColorWithTeam(TaskData task);
 
@@ -26,6 +28,8 @@ namespace Cat_a_logAPI.Service.Interfaces
 
         public void ChangeTaskName(int taskId, string newName);
 
-        public TaskData UpdateTask(TaskData task);
+        public bool UpdateTask(TaskData task);
+
+        public bool TaskExists(int id);
     }
 }

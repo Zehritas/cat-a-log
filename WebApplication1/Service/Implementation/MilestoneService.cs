@@ -12,37 +12,42 @@ namespace Cat_a_logAPI.Service.Implementation
             _dbContext = dbContext;
         }
 
-        public void AddMilestone(ProjectMilestone milestone)
+        public bool AddMilestone(ProjectMilestone milestone)
         {
             _dbContext.ProjectMilestone.Add(milestone);
-            _dbContext.SaveChanges();
+            return Save();
         }
 
-        public void RemoveMilestone(ProjectMilestone milestone)
+        public bool RemoveMilestone(ProjectMilestone milestone)
         {
             _dbContext.ProjectMilestone.Remove(milestone);
-            _dbContext.SaveChanges();
+            return Save();
         }
 
-        public void AddMilestones(List<ProjectMilestone> projectMilestones)
+        public bool AddMilestones(IEnumerable<ProjectMilestone> projectMilestones)
         {
             foreach (ProjectMilestone projectMilestone in projectMilestones)
             {
                 _dbContext.ProjectMilestone.Add(projectMilestone);
             }
-            _dbContext.SaveChanges();
+            return Save();
         }
 
-        public void RemoveMilestones(List<ProjectMilestone> projectMilestones)
+        public bool RemoveMilestones(IEnumerable<ProjectMilestone> projectMilestones)
         {
             foreach (ProjectMilestone projectMilestone in projectMilestones)
             {
                 _dbContext.ProjectMilestone.Remove(projectMilestone);
             }
-            _dbContext.SaveChanges();
+            return Save();
         }
 
-        public List<ProjectMilestone> GetAllMilestones()
+        public ProjectMilestone GetMilestone(int Id)
+        {
+            return _dbContext.ProjectMilestone.Find(Id);
+        }
+
+        public IEnumerable<ProjectMilestone> GetMilestones()
         {
             return _dbContext.ProjectMilestone.ToList();
         }
@@ -52,6 +57,24 @@ namespace Cat_a_logAPI.Service.Implementation
             ProjectMilestone milestone = _dbContext.ProjectMilestone.Find(id);
             milestone.Color = color;
             _dbContext.SaveChanges();
+        }
+
+        public bool Save()
+        {
+            var saved = _dbContext.SaveChanges();
+            return saved > 0 ? true : false;
+        }
+
+        public bool UpdateMilestone(ProjectMilestone milestone)
+        {
+            _dbContext.ProjectMilestone.Update(milestone);
+
+            return Save();
+        }
+
+        public bool MilestoneExists(int id)
+        {
+            return _dbContext.ProjectMilestone.Any(m => m.Id == id);
         }
     }
 }

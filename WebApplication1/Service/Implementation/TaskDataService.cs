@@ -12,16 +12,16 @@ namespace Cat_a_logAPI.Service.Implementation
             _dbContext = dbContext;
         }
 
-        public void AddTask(TaskData task)
+        public bool AddTask(TaskData task)
         {
             _dbContext.TaskData.Add(task);
-            _dbContext.SaveChanges();
+            return Save();
         }
 
-        public void RemoveTask(TaskData taskToRemove)
+        public bool RemoveTask(TaskData taskToRemove)
         {
-            List<Dependency> dependenciesToRemove;
-            List<ProjectTeam> allTeams = _dbContext.ProjectTeam.ToList();
+            IEnumerable<Dependency> dependenciesToRemove;
+            IEnumerable<ProjectTeam> allTeams = _dbContext.ProjectTeam.ToList();
             foreach (ProjectTeam team in allTeams)
             {
                 foreach (TaskData task in team.Tasks)
@@ -32,30 +32,35 @@ namespace Cat_a_logAPI.Service.Implementation
             }
 
             _dbContext.TaskData.Remove(taskToRemove);
-            _dbContext.SaveChanges();
+            return Save();
         }
 
-        public void AddTasks(List<TaskData> tasks)
+        public bool AddTasks(IEnumerable<TaskData> tasks)
         {
             foreach (TaskData task in tasks)
             {
                 _dbContext.TaskData.Add(task);
             }
-            _dbContext.SaveChanges();
+            return Save();
         }
 
-        public void RemoveTasks(List<TaskData> tasks)
+        public bool RemoveTasks(IEnumerable <TaskData> tasks)
         {
             foreach (TaskData task in tasks)
             {
                 _dbContext.TaskData.Remove(task);
             }
-            _dbContext.SaveChanges();
+            return Save();
         }
 
-        public List<TaskData> GetAllTasks()
+        public IEnumerable<TaskData> GetTasks()
         {
             return _dbContext.TaskData.ToList();
+        }
+
+        public TaskData GetTask(int Id)
+        {
+            return _dbContext.TaskData.Find(Id);
         }
 
         public void SyncColorWithTeam(TaskData task)
@@ -101,12 +106,22 @@ namespace Cat_a_logAPI.Service.Implementation
             _dbContext.SaveChanges();
         }
 
-        public TaskData UpdateTask(TaskData task)
+        public bool Save()
         {
-            TaskData updatedTask = _dbContext.TaskData.Find(task.Id);
-
-            return updatedTask;
+            var saved = _dbContext.SaveChanges();
+            return saved > 0 ? true : false;
         }
 
+        public bool UpdateTask(TaskData task)
+        {
+            _dbContext.TaskData.Update(task);
+
+            return Save();
+        }
+
+        public bool TaskExists(int id)
+        {
+            return _dbContext.TaskData.Any(t => t.Id == id);
+        }
     }
 }

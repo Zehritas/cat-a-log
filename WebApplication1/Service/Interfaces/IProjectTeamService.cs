@@ -5,14 +5,20 @@ namespace Cat_a_logAPI.Service.Interfaces
 {
     public interface IProjectTeamService
     {
-        public void AddTeam(ProjectTeam projectTeam);
+        public bool AddTeam(ProjectTeam projectTeam);
 
-        public void RemoveTeam(ProjectTeam projectTeam);
+        public bool RemoveTeam(ProjectTeam projectTeam);
 
-        public void AddTeams(List<ProjectTeam> projectTeams);
+        public bool AddTeams(IEnumerable<ProjectTeam> projectTeams);
 
-        public void RemoveTeams(List<ProjectTeam> projectTeams);
+        public bool RemoveTeams(IEnumerable<ProjectTeam> projectTeams);
 
-        public List<ProjectTeam> GetAllTeams();
+        public ProjectTeam GetTeam(int Id);
+
+        public IEnumerable<ProjectTeam> GetTeams();
+
+        public bool UpdateTeam(ProjectTeam team);
+
+        public bool TeamExists(int id);
     }
 }

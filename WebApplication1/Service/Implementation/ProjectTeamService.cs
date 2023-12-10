@@ -12,16 +12,16 @@ namespace Cat_a_logAPI.Service.Implementation
             _dbContext = dbContext;
         }
 
-        public void AddTeam(ProjectTeam projectTeam)
+        public bool AddTeam(ProjectTeam projectTeam)
         {
             _dbContext.ProjectTeam.Add(projectTeam);
-            _dbContext.SaveChanges();
+            return Save();
         }
 
-        public void RemoveTask(TaskData taskToRemove)
+        public bool RemoveTask(TaskData taskToRemove)
         {
-            List<Dependency> dependenciesToRemove;
-            List<ProjectTeam> allTeams = _dbContext.ProjectTeam.ToList();
+            IEnumerable<Dependency> dependenciesToRemove;
+            IEnumerable<ProjectTeam> allTeams = _dbContext.ProjectTeam.ToList();
             foreach (ProjectTeam team in allTeams)
             {
                 foreach (TaskData task in team.Tasks)
@@ -32,10 +32,10 @@ namespace Cat_a_logAPI.Service.Implementation
             }
 
             _dbContext.TaskData.Remove(taskToRemove);
-            _dbContext.SaveChanges();
+            return Save();
         }
 
-        public void RemoveTeam(ProjectTeam projectTeam)
+        public bool RemoveTeam(ProjectTeam projectTeam)
         {
             List<TaskData> teamTasks = projectTeam.Tasks;
 
@@ -45,30 +45,48 @@ namespace Cat_a_logAPI.Service.Implementation
             }
 
             _dbContext.ProjectTeam.Remove(projectTeam);
-            _dbContext.SaveChanges();
+            return Save();
         }
 
-        public void AddTeams(List<ProjectTeam> projectTeams)
+        public bool AddTeams(IEnumerable<ProjectTeam> projectTeams)
         {
             foreach (ProjectTeam projectTeam in projectTeams)
             {
                 _dbContext.ProjectTeam.Add(projectTeam);
             }
-            _dbContext.SaveChanges();
+            return Save();
         }
 
-        public void RemoveTeams(List<ProjectTeam> projectTeams)
+        public bool RemoveTeams(IEnumerable<ProjectTeam> projectTeams)
         {
             foreach (ProjectTeam projectTeam in projectTeams)
             {
                 _dbContext.ProjectTeam.Remove(projectTeam);
             }
-            _dbContext.SaveChanges();
+            return Save();
         }
 
-        public List<ProjectTeam> GetAllTeams()
+        public ProjectTeam GetTeam(int Id)
+        {
+            return _dbContext.ProjectTeam.Find(Id);
+        }
+
+        public IEnumerable<ProjectTeam> GetAllTeams()
         {
             return _dbContext.ProjectTeam.ToList();
+        }
+
+        public bool Save()
+        {
+            var saved = _dbContext.SaveChanges();
+            return saved > 0 ? true : false;
+        }
+
+        public bool UpdateTeam(ProjectTeam team)
+        {
+            _dbContext.ProjectTeam.Update(team);
+
+            return Save();
         }
     }
 }

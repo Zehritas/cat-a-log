@@ -1,6 +1,6 @@
 ﻿namespace Cat_a_logAPI.Dto
 {
-    public class ProjectTeamDto
+    public class TeamDto
     {
         public int Id { get; set; }
 

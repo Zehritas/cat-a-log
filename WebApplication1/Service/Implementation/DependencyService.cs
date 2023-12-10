@@ -1,4 +1,5 @@
-﻿using Cat_a_logAPI.Data;
+﻿using AutoMapper;
+using Cat_a_logAPI.Data;
 using Cat_a_logAPI.Service.Interfaces;
 
 namespace Cat_a_logAPI.Service.Implementation
@@ -12,10 +13,10 @@ namespace Cat_a_logAPI.Service.Implementation
             _dbContext = dbContext;
         }
 
-        public void AddDependency(Dependency dependency)
+        public bool AddDependency(Dependency dependency)
         {
             _dbContext.Dependency.Add(dependency);
-            _dbContext.SaveChanges();
+            return Save();
         }
 
         public void RemoveDependency(Dependency dependency)
@@ -31,16 +32,16 @@ namespace Cat_a_logAPI.Service.Implementation
             }
         }
 
-        public void AddDependencies(List<Dependency> dependencies)
+        public bool AddDependencies(IEnumerable<Dependency> dependencies)
         {
             foreach (Dependency dependency in dependencies)
             {
                 _dbContext.Dependency.Add(dependency);
             }
-            _dbContext.SaveChanges();
+            return Save();
         }
 
-        public void RemoveDependencies(List<Dependency> dependencies, int taskId)
+        public bool RemoveDependencies(IEnumerable<Dependency> dependencies, int taskId)
         {
             foreach (Dependency dependency in dependencies)
             {
@@ -49,12 +50,35 @@ namespace Cat_a_logAPI.Service.Implementation
                     RemoveDependency(dependency);
                 }
             }
-            _dbContext.SaveChanges();
+            return Save();
         }
 
-        public List<Dependency> GetDependencies()
+        public Dependency GetDependency(int Id) 
+        {
+            return _dbContext.Dependency.Find(Id);
+        }
+
+        public IEnumerable<Dependency> GetDependencies()
         {
             return _dbContext.Dependency.ToList();
+        }
+
+        public bool Save()
+        {
+            var saved = _dbContext.SaveChanges();
+            return saved > 0 ? true : false;
+        }
+
+        public bool UpdateDependency(Dependency dependency)
+        {
+            _dbContext.Dependency.Update(dependency);
+
+            return Save();
+        }
+
+        public bool DependencyExists(int id)
+        {
+            return _dbContext.Dependency.Any(d => d.Id == id);
         }
     }
 }
