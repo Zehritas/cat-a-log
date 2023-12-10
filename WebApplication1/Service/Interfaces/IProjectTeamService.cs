@@ -1,5 +1,4 @@
 ﻿using Cat_a_logAPI.Data;
-using Microsoft.EntityFrameworkCore;
 
 namespace Cat_a_logAPI.Service.Interfaces
 {

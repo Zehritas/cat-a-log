@@ -22,24 +22,105 @@ namespace Cat_a_logAPI.Controllers
         [HttpGet]
         public IActionResult GetMembers()
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var members = _mapper.Map<List<MemberDto>>(_memberService.GetMembers());
 
             return Ok(members);
         }
 
-        [HttpGet("{Id}")]
-        public IActionResult GetMember(int Id)
+        [HttpGet("{userId}/{teamId}")]
+        public IActionResult GetMember(int userId, int teamId)
         {
-            var member = _mapper.Map<MemberDto>(_memberService.GetMember(Id));
+            if(!_memberService.MemberExists(userId, teamId))
+            {
+                return NotFound();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var member = _mapper.Map<MemberDto>(_memberService.GetMember(userId, teamId));
 
             return Ok(member);
         }
 
-        [HttpPut("{Id}")]
-        public IActionResult UpdateMember(int Id, [FromBody] MemberDto memberToUpdate)
+        [HttpPut("{userId}/{teamId}")]
+        public IActionResult UpdateMember(int userId, int teamId, [FromBody] MemberDto memberToUpdate)
         {
+            if(!_memberService.MemberExists(userId, teamId))
+            {
+                return NotFound();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var memberMap = _mapper.Map<Member>(memberToUpdate);
             _memberService.UpdateMember(memberMap);
+
+            return NoContent();
+        }
+
+        [HttpPost]
+        public IActionResult CreateMember([FromBody] MemberDto memberToCreate)
+        {
+            if (memberToCreate == null)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var member = _memberService.GetMembers()
+                .Where(m => m.Name == memberToCreate.Name).FirstOrDefault();
+
+            if (member != null)
+            {
+                ModelState.AddModelError("", "Member already exists");
+                return StatusCode(422, ModelState);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var memberMap = _mapper.Map<Member>(memberToCreate);
+
+            if (!_memberService.AddMember(memberMap))
+            {
+                ModelState.AddModelError("", "Something went wrong while saving");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successfully created");
+        }
+
+        [HttpDelete("{userId, teamId}")]
+        public IActionResult DeleteMember(int userId, int teamId)
+        {
+            if (!_memberService.MemberExists(userId, teamId))
+            {
+                return NotFound();
+            }
+
+            var memberToDelete = _memberService.GetMember(userId, teamId);
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if(!_memberService.RemoveMember(memberToDelete))
+            {
+                ModelState.AddModelError("", "something went wrong while removing member");
+            }
 
             return NoContent();
         }

@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Cat_a_logAPI.Data;
 using Cat_a_logAPI.Dto;
-using Cat_a_logAPI.Service.Implementation;
 using Cat_a_logAPI.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,6 +23,10 @@ namespace Cat_a_logAPI.Controllers
         [HttpGet]
         public IActionResult GetTeams() 
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             var teams = _teamService.GetTeams();
             return Ok(teams);
         }
@@ -31,6 +34,16 @@ namespace Cat_a_logAPI.Controllers
         [HttpGet("{Id}")]
         public IActionResult GetTeam(int Id)
         {
+            if (!_teamService.TeamExists(Id))
+            {
+                return NotFound();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var team = _mapper.Map<TeamDto>(_teamService.GetTeam(Id));
 
             return Ok(team);
@@ -39,6 +52,16 @@ namespace Cat_a_logAPI.Controllers
         [HttpPut("{Id}")]
         public IActionResult UpdateTeam(int Id, [FromBody] TeamDto teamToUpdate)
         {
+            if (!_teamService.TeamExists(Id))
+            {
+                return NotFound();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var teamMap = _mapper.Map<ProjectTeam>(teamToUpdate);
             _teamService.UpdateTeam(teamMap);
 

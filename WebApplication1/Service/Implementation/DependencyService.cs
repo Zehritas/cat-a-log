@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Cat_a_logAPI.Data;
+﻿using Cat_a_logAPI.Data;
 using Cat_a_logAPI.Service.Interfaces;
 
 namespace Cat_a_logAPI.Service.Implementation

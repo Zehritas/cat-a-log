@@ -71,7 +71,7 @@ namespace Cat_a_logAPI.Service.Implementation
             return _dbContext.ProjectTeam.Find(Id);
         }
 
-        public IEnumerable<ProjectTeam> GetAllTeams()
+        public IEnumerable<ProjectTeam> GetTeams()
         {
             return _dbContext.ProjectTeam.ToList();
         }
@@ -87,6 +87,11 @@ namespace Cat_a_logAPI.Service.Implementation
             _dbContext.ProjectTeam.Update(team);
 
             return Save();
+        }
+
+        public bool TeamExists(int id)
+        {
+            return _dbContext.ProjectTeam.Any(t => t.Id == id);
         }
     }
 }

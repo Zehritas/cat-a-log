@@ -17,10 +17,10 @@ namespace Cat_a_logAPI.Helper
             CreateMap<ProjectDto, Project>();
             CreateMap<ProjectMilestone, MilestoneDto>();
             CreateMap<MilestoneDto, ProjectMilestone>();
-            CreateMap<ProjectTeam, ProjectTeamDto>();
-            CreateMap<ProjectTeamDto, ProjectTeam>();
-            CreateMap<TaskData, TaskDataDto>();
-            CreateMap<TaskDataDto, TaskData>();
+            CreateMap<ProjectTeam, TeamDto>();
+            CreateMap<TeamDto, ProjectTeam>();
+            CreateMap<TaskData, TaskDto>();
+            CreateMap<TaskDto, TaskData>();
             CreateMap<User, UserDto>();
             CreateMap<UserDto, User>();
         }

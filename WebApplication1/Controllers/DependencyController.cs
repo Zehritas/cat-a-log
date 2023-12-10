@@ -22,6 +22,11 @@ namespace Cat_a_logAPI.Controllers
         [HttpGet]
         public IActionResult GetDependencies() 
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var dependencies = _mapper.Map<List<DependencyDto>>(_dependencyService.GetDependencies());
 
             return Ok(dependencies);
@@ -30,6 +35,16 @@ namespace Cat_a_logAPI.Controllers
         [HttpGet("{Id}")]
         public IActionResult GetDependency(int Id)
         {
+            if (!_dependencyService.DependencyExists(Id))
+            {
+                return NotFound();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var dependency = _mapper.Map<DependencyDto>(_dependencyService.GetDependency(Id));
 
             return Ok(dependency);
@@ -38,6 +53,16 @@ namespace Cat_a_logAPI.Controllers
         [HttpPut("{Id}")]
         public IActionResult UpdateDependency(int Id, [FromBody]DependencyDto dependencyToUpdate)
         {
+            if (!_dependencyService.DependencyExists(Id))
+            {
+                return NotFound();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var dependencyMap = _mapper.Map<Dependency>(dependencyToUpdate);
             _dependencyService.UpdateDependency(dependencyMap);
 

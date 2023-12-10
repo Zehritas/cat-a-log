@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Cat_a_logAPI.Data;
 using Cat_a_logAPI.Dto;
-using Cat_a_logAPI.Service.Implementation;
 using Cat_a_logAPI.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,6 +22,11 @@ namespace Cat_a_logAPI.Controllers
         [HttpGet]
         public IActionResult GetMilestones()
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var milestones = _mapper.Map<IEnumerable<MilestoneDto>>(_milestoneService.GetMilestones());
 
             return Ok(milestones);
@@ -31,6 +35,16 @@ namespace Cat_a_logAPI.Controllers
         [HttpGet("{Id}")]
         public IActionResult GetMilestone(int Id)
         {
+            if (!_milestoneService.MilestoneExists(Id))
+            {
+                return NotFound();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var milestone = _mapper.Map<MilestoneDto>(_milestoneService.GetMilestone(Id));
 
             return Ok(milestone);
@@ -39,6 +53,16 @@ namespace Cat_a_logAPI.Controllers
         [HttpPut("{Id}")]
         public IActionResult UpdateMilestone(int Id, [FromBody] MilestoneDto milestoneToUpdate)
         {
+            if (!_milestoneService.MilestoneExists(Id))
+            {
+                return NotFound();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var milestoneMap = _mapper.Map<ProjectMilestone>(milestoneToUpdate);
             _milestoneService.UpdateMilestone(milestoneMap);
 

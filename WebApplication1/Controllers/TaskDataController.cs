@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Cat_a_logAPI.Data;
 using Cat_a_logAPI.Dto;
-using Cat_a_logAPI.Service.Implementation;
 using Cat_a_logAPI.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,6 +22,10 @@ namespace Cat_a_logAPI.Controllers
         [HttpGet]
         public IActionResult GetTasks()
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             var tasks = _mapper.Map<List<TaskDto>>(_taskDataService.GetTasks());
 
             return Ok(tasks);
@@ -31,6 +34,15 @@ namespace Cat_a_logAPI.Controllers
         [HttpGet("{Id}")]
         public IActionResult GetTask(int Id)
         {
+            if (!_taskDataService.TaskExists(Id))
+            {
+                return NotFound();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             var task = _mapper.Map<TaskDto>(_taskDataService.GetTask(Id));
 
             return Ok(task);
@@ -39,6 +51,16 @@ namespace Cat_a_logAPI.Controllers
         [HttpPut("{Id}")]
         public IActionResult UpdateTask(int Id, [FromBody] TaskDto taskToUpdate)
         {
+            if (!_taskDataService.TaskExists(Id))
+            {
+                return NotFound();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var taskMap = _mapper.Map<TaskData>(taskToUpdate);
             _taskDataService.UpdateTask(taskMap);
 

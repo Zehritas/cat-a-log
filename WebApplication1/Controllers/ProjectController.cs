@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Cat_a_logAPI.Data;
 using Cat_a_logAPI.Dto;
-using Cat_a_logAPI.Service.Implementation;
 using Cat_a_logAPI.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,6 +22,11 @@ namespace Cat_a_logAPI.Controllers
         [HttpGet]
         public IActionResult GetProjects()
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var projects = _mapper.Map<List<ProjectDto>>(_projectService.GetProjects());
 
             return Ok(projects);
@@ -31,6 +35,16 @@ namespace Cat_a_logAPI.Controllers
         [HttpGet("{Id}")]
         public IActionResult GetProject(int Id)
         {
+            if (!_projectService.ProjectExists(Id))
+            {
+                return NotFound();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var project = _mapper.Map<ProjectDto>(_projectService.GetProject(Id));
 
             return Ok(project);
@@ -39,6 +53,16 @@ namespace Cat_a_logAPI.Controllers
         [HttpPut("{Id}")]
         public IActionResult UpdateProject(int Id, [FromBody] ProjectDto projectToUpdate)
         {
+            if (!_projectService.ProjectExists(Id))
+            {
+                return NotFound();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var projectMap = _mapper.Map<Project>(projectToUpdate);
             _projectService.UpdateProject(projectMap);
 
