@@ -1,6 +1,8 @@
 ﻿@page "/Milestones"
 @using cat_a_logB.Data
 @inject cat_a_logB.Pages.SampleData SampleData
+@inject cat_a_logB.Data.MilestoneManager MilestoneManager
+@inject cat_a_logB.Data.TeamManager TeamManager
 @inject Service.ITaskDataService TaskDataService
 @inject Service.IMilestoneService MilestoneService
 
@@ -175,9 +177,6 @@
     bool isFormVisible = false;
 
 
-
-
-
     protected override void OnInitialized()
     {
         milestones = MilestoneService.GetAllMilestones();
@@ -211,39 +210,9 @@
 
     private async void CreateMilestone()
     {
-
-        errorMessage = ""; // Clear any previous error message
-
-        if (string.IsNullOrWhiteSpace(milestoneName))
-        {
-            errorMessage = "Milestone name is required.";
-            return;
-        }
-
-        if (milestones.Any(m => m.Name.Equals(milestoneName, StringComparison.OrdinalIgnoreCase)))
-        {
-            errorMessage = "Milestone name already exists.";
-            return;
-        }
-
-        if (selectedTasks == null || !selectedTasks.Any())
-        {
-            errorMessage = "Please select at least one task.";
-            return;
-        }
-
-
-        newMilestone = new ProjectMilestone(milestoneName, selectedTasks.ToList(), milestoneDate, "blue");
-
-        MilestoneService.AddMilestone(newMilestone);
-        milestones.Add(newMilestone);
-        newMilestone = new ProjectMilestone();
-        milestoneName = string.Empty;
-        selectedTasks.Clear();
-
-        await RefreshData();
-        StateHasChanged();
-
+            MilestoneManager.CreateMilestone(selectedTasks, milestones, newMilestone, milestoneName, milestoneDate);
+            await RefreshData();
+            StateHasChanged();
     }
 
     private void ToggleMilestoneSelection(ProjectMilestone milestone)
@@ -262,4 +231,5 @@
     {
         isFormVisible = !isFormVisible;
     }
+    
 }
