@@ -321,7 +321,7 @@ namespace cat_a_logB.Data
             return sortedTasks;
         }
 
-        private async Task<bool> DetectCycleInternal(TaskData currentTask, TaskData startingTask, HashSet<TaskData> visited,
+        public async Task<bool> DetectCycleInternal(TaskData currentTask, TaskData startingTask, HashSet<TaskData> visited,
          HashSet<TaskData> currentlyVisiting)
         {
             if (currentlyVisiting.Contains(currentTask))
