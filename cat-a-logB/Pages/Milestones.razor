@@ -156,12 +156,14 @@
         <h4 class="mb-4 font-weight-bold text-center">Click on a milestone name to see its information!</h4>
     }
 
-@if (!string.IsNullOrWhiteSpace(errorMessage))
-{
-    <div class="alert alert-danger" role="alert">
-        @errorMessage
-    </div>
-}
+    @if (!string.IsNullOrWhiteSpace(errorMessage))
+    {
+        <div class="alert alert-danger" role="alert">
+            @errorMessage
+        </div>
+    }
+</div>
+
 
 @code {
     private List<TaskData> tasks;
@@ -172,6 +174,7 @@
     private ProjectMilestone selectedMilestone;
     private ProjectMilestone newMilestone = new ProjectMilestone();
     private string errorMessage = "";
+    bool isFormVisible = false;
 
 
     protected override void OnInitialized()
@@ -214,6 +217,19 @@
 
     private void ToggleMilestoneSelection(ProjectMilestone milestone)
     {
-        selectedMilestone = milestone;
+        if (selectedMilestone != milestone)
+        {
+            selectedMilestone = milestone;
+            // ProjectTeam.GetTasksForTeam(tasks, milestone);
+        }
+        else
+        {
+            selectedMilestone = null;
+        }
     }
+    void ToggleCreateForm()
+    {
+        isFormVisible = !isFormVisible;
+    }
+    
 }

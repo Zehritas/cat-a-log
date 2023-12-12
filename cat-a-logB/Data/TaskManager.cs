@@ -414,7 +414,7 @@ namespace cat_a_logB.Data
                     predecessorTask.Dependencies.Add(newDependency);
 
                     List<TaskData> sortedTasks = SortTasksByDependencies<TaskData, Dependency>(project);
-                    await Reschedule(predecessorTask, sortedTasks, chart);
+                    await Reschedule(predecessorTask.Id, sortedTasks, chart);
                     foreach (var task in sortedTasks)
                     {
                         Console.WriteLine(task.Name);
