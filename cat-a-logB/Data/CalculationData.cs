@@ -49,7 +49,7 @@ namespace cat_a_logB.Data
             }
         }
 
-        private int CalculateAdditionalPeople(TaskData task, ProjectTeam team)
+        public int CalculateAdditionalPeople(TaskData task, ProjectTeam team)
         {
             double progressPerPerson = task.Progress / team.Members.Count;
             double progressWithoutOriginalPeople = (100 / task.AutoProgress) * task.Progress;
@@ -103,5 +103,9 @@ namespace cat_a_logB.Data
 
             return dayProgress;
         }
+
+
+
+
     }
 }
