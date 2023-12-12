@@ -9,55 +9,94 @@
 @inject Service.IMilestoneService MilestoneService
 @inject Service.IProjectTeamService ProjectTeamService
 
-<PageTitle>Teams</PageTitle>
+<PageTitle>Teams | Cat-a-log</PageTitle>
 
-<h1 class="mb-4">Team Management</h1>
+<div class="container" style="max-width: 700px;">
+    <div class="row">
+        <div class="col-12 mb-4">
+            <style>
 
-<div class="row">
-    <div class="col-md-6 mb-4">
-        @if (teams != null && teams.Any())
-        {
-            <ul class="list-group">
-                @foreach (var team in teams)
-                {
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <button class="btn btn-link" @onclick="() => ShowTasksForTeam(team)">
-                            @team.Name
-                        </button>
-                        <span style="color: @team.Color;">&#9632;</span>
+            </style>
 
-                        <button class="btn btn-danger" @onclick="() => ToggleRemoveTeamModal(team)">Remove</button>
-                    </li>
-                }
-            </ul>
-        }
-        else
-        {
-            <p>No teams found.</p>
-        }
-    </div>
+            <h3 class="mb-4 modern-heading">Current Teams</h3>
+            @if (teams != null && teams.Any())
+            {
+                <div class="list-group">
+                    @foreach (var team in teams)
+                    {
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <style>
+                                .team-name-btn-@team.Id {
+                                    transition: background-color 0.3s;
+                                    background-color: white;
+                                    border: 1px solid var(--accent-color-3);
+                                    color: #1f1f1f;
+                                }
 
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-body">
-                <h3 class="card-title mb-3">New Team:</h3>
-                <form>
-                    <div class="form-group">
-                        <label for="teamName">Team Name:</label>
-                        <input class="form-control" type="text" id="teamName" @bind="newTeam.Name" />
-                    </div>
-                    <div class="form-group">
-                        <label for="teamColor">Team Color:</label>
-                        <input class="form-control" type="color" id="teamColor" @bind="newTeam.Color" />
-                    </div>
-                    <br>
-                    <button class="btn btn-primary" type="button" @onclick="AddTeam">Add Team</button>
-                </form>
-            </div>
+                                .team-name-btn-@team.Id:hover {
+                                    background-color: @team.Color;
+                                    color: white;
+                                }
+                            </style>
+                            <button class="primary-button team-name-btn-@team.Id" @onclick="() => ShowTasksForTeam(team)">
+                                <span class="ml-2 team-name">@team.Name</span>
+                            </button>
+                            <div class="d-flex align-items-center">
+                                <button class="edit-button" @onclick="() => EditTeamMembers(team)">Edit
+                                    Members</button>
+                                <button class="remove-button" style="margin-left: 8px;"
+                                    @onclick="() => ToggleRemoveTeamModal(team)">Remove Team</button>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <p class="text-center">No teams found.</p>
+            }
         </div>
-        <p class="text-danger mt-3">@errorMessage</p>
     </div>
 </div>
+
+<div class="container" style="max-width: 700px;">
+    <div class="row">
+        <div class="col-12 mb-4">
+            <div class="list-group">
+                <button class="primary-button" @onclick="ToggleCreateForm">Create New Team</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (isFormVisible)
+{
+    <div class="container" style="max-width: 700px;">
+        <div class="row">
+            <div class="col-12 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        @* <h3 class="card-title mb-3">New Team:</h3> *@
+                        <form>
+                            <div class="form-group">
+                                <label for="teamName">Team Name:</label>
+                                <input class="form-control" type="text" id="teamName" @bind="newTeam.Name" />
+                            </div>
+                            <div class="form-group">
+                                <label for="teamColor">Team Color:</label>
+                                <input class="form-control" type="color" id="teamColor" @bind="newTeam.Color" />
+                            </div>
+                            <br />
+                            <button class="primary-button" type="button" @onclick="AddTeam">Add Team</button>
+                        </form>
+                    </div>
+                </div>
+                <p class="text-danger mt-3">@errorMessage</p>
+            </div>
+        </div>
+    </div>
+}
+
 
 @if (showRemoveModal)
 {
@@ -81,46 +120,62 @@
         </div>
     </div>
     <div class="modal-backdrop show"></div>
+
 }
 
 @if (selectedTeam != null)
 {
-    @if (selectedTeam.Members != null && selectedTeam.Members.Any())
-    {
-        <h3>Team Members for @selectedTeam.Name</h3>
+    <div class="container" style="max-width: 700px;">
+        <div class="row">
+            <div class="col-12 mb-4">
+                @if (selectedTeam.TeamMembers != null && selectedTeam.TeamMembers.Any())
+                {
+                    <h4 class="mb-4 font-weight-bold text-center">Team Members for @selectedTeam.Name</h4>
 
-        <ul>
-            @foreach (var member in selectedTeam.Members)
-            {
-                <li>@member</li>
-            }
-        </ul>
-    }
-    else
-    {
-        <h3>@selectedTeam.Name has no members yet</h3>
-    }
+                    <ul>
+                        @foreach (var member in selectedTeam.TeamMembers)
+                        {
+                            <li>@member.Name</li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <h4 class="mb-4 font-weight-bold text-center">@selectedTeam.Name has no members.</h4>
+                }
 
-    @if (selectedTeam.Tasks != null && selectedTeam.Tasks.Any())
-    {
-        <h3>Tasks for @selectedTeam.Name</h3>
-        <ul class="list-group">
-            @foreach (var task in selectedTeam.Tasks)
-            {
-                <li class="list-group-item">
-                    @task.Name
-                </li>
-            }
-        </ul>
-    }
-    else
-    {
-        <p>No tasks found for @selectedTeam.Name</p>
-    }
+                @if (selectedTeam.Tasks != null && selectedTeam.Tasks.Any())
+                {
+                    <style>
+                        .list-group-item:hover {
+                            background-color: var(--background-color);
+                        }
+                    </style>
+                    <h4 class="mb-4 font-weight-bold text-center">Tasks for @selectedTeam.Name</h4>
+                    <div class="list-group">
+                        @foreach (var task in selectedTeam.Tasks)
+                        {
+                            <div class="list-group-item">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1">@task.Name</h5>
+                                    <!-- Add more information if needed -->
+                                    <small>Due: @task.EndDate.ToString("yyyy-MM-dd")</small>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <h4 class="mb-4 font-weight-bold text-center">@selectedTeam.Name has no tasks.</h4>
+                }
+            </div>
+        </div>
+    </div>
 }
 else
 {
-    <p>No team selected.</p>
+    <h4 class="mb-4 font-weight-bold text-center">Click on a team name to see its information!</h4>
 }
 
 
@@ -134,6 +189,7 @@ else
     private ProjectTeam selectedTeam;
     private ProjectTeam teamToRemove;
     private bool showRemoveModal = false;
+    bool isFormVisible = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -154,7 +210,7 @@ else
     {
        TeamManager.AddTeam(teams, newTeam);
         StateHasChanged();
-
+        ToggleCreateForm();
         await RefreshData();
     }
 
@@ -172,10 +228,21 @@ else
         await RefreshData();
     }
 
+    private void EditTeamMembers(ProjectTeam team)
+    {
+
+    }
     private void ShowTasksForTeam(ProjectTeam team)
     {
-        selectedTeam = team;
-        ProjectTeam.GetTasksForTeam(tasks, team);
+        if (selectedTeam != team)
+        {
+            selectedTeam = team;
+            ProjectTeam.GetTasksForTeam(tasks, team);
+        }
+        else
+        {
+            selectedTeam = null;
+        }
     }
 
     private void ToggleRemoveTeamModal(ProjectTeam team)
@@ -189,4 +256,11 @@ else
         showRemoveModal = !showRemoveModal;
     }
 
+
+    void ToggleCreateForm()
+    {
+        isFormVisible = !isFormVisible;
+        newTeam.Name = "";
+        newTeam.Color = "#000";
+    }
 }

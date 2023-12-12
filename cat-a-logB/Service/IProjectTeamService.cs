@@ -14,5 +14,7 @@ namespace cat_a_logB.Service
         public void RemoveTeams(List<ProjectTeam> projectTeams);
 
         public List<ProjectTeam> GetAllTeams();
+
+        public List<Member> GetAllMembers();
     }
 }

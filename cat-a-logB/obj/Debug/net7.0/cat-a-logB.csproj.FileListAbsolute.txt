@@ -1896,10 +1896,10 @@ C:\Users\aldas\OneDrive\Stalinis kompiuteris\PSI5\cat-a-logB\obj\Debug\net7.0\re
 C:\Users\aldas\OneDrive\Stalinis kompiuteris\PSI5\cat-a-logB\obj\Debug\net7.0\cat-a-logB.pdb
 C:\Users\aldas\OneDrive\Stalinis kompiuteris\PSI5\cat-a-logB\obj\Debug\net7.0\cat-a-logB.genruntimeconfig.cache
 C:\Users\aldas\OneDrive\Stalinis kompiuteris\PSI5\cat-a-logB\obj\Debug\net7.0\ref\cat-a-logB.dll
-C:\Users\Lenovo\Desktop\cat-a-log\cat-a-logB\bin\Debug\net7.0\NUnit3.TestAdapter.dll
-C:\Users\Lenovo\Desktop\cat-a-log\cat-a-logB\bin\Debug\net7.0\NUnit3.TestAdapter.pdb
-C:\Users\Lenovo\Desktop\cat-a-log\cat-a-logB\bin\Debug\net7.0\nunit.engine.dll
-C:\Users\Lenovo\Desktop\cat-a-log\cat-a-logB\bin\Debug\net7.0\nunit.engine.api.dll
-C:\Users\Lenovo\Desktop\cat-a-log\cat-a-logB\bin\Debug\net7.0\nunit.engine.core.dll
-C:\Users\Lenovo\Desktop\cat-a-log\cat-a-logB\bin\Debug\net7.0\testcentric.engine.metadata.dll
-C:\Users\Lenovo\Desktop\cat-a-log\cat-a-logB\bin\Debug\net7.0\nunit.framework.dll
+C:\Users\Marijonas\source\repos\cat-a-log\cat-a-logB\bin\Debug\net7.0\NUnit3.TestAdapter.dll
+C:\Users\Marijonas\source\repos\cat-a-log\cat-a-logB\bin\Debug\net7.0\NUnit3.TestAdapter.pdb
+C:\Users\Marijonas\source\repos\cat-a-log\cat-a-logB\bin\Debug\net7.0\nunit.engine.dll
+C:\Users\Marijonas\source\repos\cat-a-log\cat-a-logB\bin\Debug\net7.0\nunit.engine.api.dll
+C:\Users\Marijonas\source\repos\cat-a-log\cat-a-logB\bin\Debug\net7.0\nunit.engine.core.dll
+C:\Users\Marijonas\source\repos\cat-a-log\cat-a-logB\bin\Debug\net7.0\testcentric.engine.metadata.dll
+C:\Users\Marijonas\source\repos\cat-a-log\cat-a-logB\bin\Debug\net7.0\nunit.framework.dll

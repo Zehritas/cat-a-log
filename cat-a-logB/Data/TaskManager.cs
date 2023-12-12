@@ -23,7 +23,7 @@ namespace cat_a_logB.Data
             milestoneService = _milestoneService;
         }
 
-        public TaskManager(){ }
+        public TaskManager() { }
 
         public List<TaskData> project;
         public ApexChart<TaskData> chart;
@@ -119,7 +119,7 @@ namespace cat_a_logB.Data
                     selectedData.DataPoint.Items.First().Id is int selectedTaskId)
             {
 
-                
+
                 TaskData taskToUpdate = project.FirstOrDefault(task => task.Id == selectedTaskId);
                 if (taskToUpdate != null)
                 {
@@ -127,13 +127,13 @@ namespace cat_a_logB.Data
                     taskDataService.ChangeTaskEndDate(taskToUpdate.Id, newEndDate);
                     taskToUpdate.StartDate = newStartDate;
                     taskToUpdate.EndDate = newEndDate;
+                    await Reschedule(taskToUpdate.Id, project, chart);
                 }
             }
             else
             {
                 Console.WriteLine("SelectedData is null");
             }
-
             await chart.UpdateSeriesAsync();
             OnClose.InvokeAsync();
 
@@ -179,88 +179,91 @@ namespace cat_a_logB.Data
             OnClose.InvokeAsync();
         }
 
-        public async Task Reschedule(TaskData predecessorTask, List<TaskData> tasks, ApexChart<TaskData> chart)
+        public async Task Reschedule(int updatedTaskId, List<TaskData> tasks, ApexChart<TaskData> chart) // it should take taskID and it should not assume it is the predecessor
         {
-            foreach (var dependency in predecessorTask.Dependencies)
             {
-                TaskData successorTask = tasks.FirstOrDefault(task => task.Id == dependency.SuccessorTaskId);
-
-                if (successorTask == null)
+                TaskData updatedTask = tasks.FirstOrDefault(task => task.Id == updatedTaskId);
+                foreach (var dependency in updatedTask.Dependencies)
                 {
-                    // Handle the case where the successor task is not found
-                    throw new InvalidOperationException($"Task not found for dependency: {dependency.SuccessorTaskId}");
+                    TaskData predecessorTask = tasks.FirstOrDefault(task => task.Id == dependency.PredecessorTaskId);
+                    TaskData successorTask = tasks.FirstOrDefault(task => task.Id == dependency.SuccessorTaskId);
+                    if (successorTask == null)
+                    {
+                        // Handle the case where the successor task is not found
+                        throw new InvalidOperationException($"Task not found for dependency: {dependency.SuccessorTaskId}");
+                    }
+                    double successorTaskLength = (successorTask.EndDate - successorTask.StartDate).TotalDays;
+
+
+                    switch (dependency.Type)
+                    {
+                        case DependencyType.FS:
+                            if (predecessorTask.EndDate > successorTask.StartDate)
+                            {
+                                taskDataService.ChangeTaskStartDate(successorTask.Id, predecessorTask.EndDate);
+                                taskDataService.UpdateTask(successorTask);
+                                taskDataService.ChangeTaskEndDate(successorTask.Id, successorTask.StartDate.AddDays(successorTaskLength));
+                                //successorTask.StartDate = predecessorTask.EndDate;
+                                //successorTask.EndDate = successorTask.StartDate.AddDays(successorTaskLength);
+
+                                taskDataService.UpdateTask(successorTask);
+                                await Reschedule(successorTask.Id, tasks, chart);
+                                await chart.UpdateSeriesAsync();
+                                // StateHasChanged();
+                            }
+                            break;
+
+                        case DependencyType.SF:
+                            if (predecessorTask.EndDate < successorTask.StartDate)
+                            {
+                                taskDataService.ChangeTaskStartDate(successorTask.Id, predecessorTask.EndDate);
+                                taskDataService.ChangeTaskEndDate(successorTask.Id, successorTask.StartDate.AddDays(successorTaskLength));
+                                //successorTask.StartDate = predecessorTask.EndDate;
+                                //successorTask.EndDate = successorTask.StartDate.AddDays(successorTaskLength);
+                                taskDataService.UpdateTask(successorTask);
+                                await Reschedule(successorTask.Id, tasks, chart);
+                                await chart.UpdateSeriesAsync();
+                                // StateHasChanged();
+                            }
+                            break;
+
+                        case DependencyType.SS:
+                            if (predecessorTask.StartDate > successorTask.StartDate)
+                            {
+                                taskDataService.ChangeTaskStartDate(successorTask.Id, predecessorTask.StartDate);
+                                taskDataService.ChangeTaskEndDate(successorTask.Id, successorTask.StartDate.AddDays(successorTaskLength));
+                                //successorTask.StartDate = predecessorTask.StartDate;
+                                //successorTask.EndDate = successorTask.StartDate.AddDays(successorTaskLength);
+
+                                taskDataService.UpdateTask(successorTask);
+                                await Reschedule(successorTask.Id, tasks, chart);
+                                await chart.UpdateSeriesAsync();
+                                // StateHasChanged();
+                            }
+                            break;
+
+                        case DependencyType.FF:
+                            if (predecessorTask.EndDate > successorTask.EndDate)
+                            {
+                                taskDataService.ChangeTaskStartDate(successorTask.Id, successorTask.EndDate.AddDays(-successorTaskLength));
+                                taskDataService.ChangeTaskEndDate(successorTask.Id, predecessorTask.EndDate);
+                                //successorTask.EndDate = predecessorTask.EndDate;
+                                //successorTask.StartDate = successorTask.EndDate.AddDays(-successorTaskLength);
+
+                                taskDataService.UpdateTask(successorTask);
+                                await Reschedule(successorTask.Id, tasks, chart);
+                                await chart.UpdateSeriesAsync();
+                                // StateHasChanged();
+                            }
+                            break;
+
+                        default:
+                            // Handle unsupported dependency types
+                            throw new ArgumentException("Unsupported DependencyType");
+                    }
                 }
-                double successorTaskLength = (successorTask.EndDate - successorTask.StartDate).TotalDays;
 
-
-                switch (dependency.Type)
-                {
-                    case DependencyType.FS:
-                        if (predecessorTask.EndDate > successorTask.StartDate)
-                        {
-                            taskDataService.ChangeTaskStartDate(successorTask.Id, predecessorTask.EndDate);
-                            taskDataService.UpdateTask(successorTask);
-                            taskDataService.ChangeTaskEndDate(successorTask.Id, successorTask.StartDate.AddDays(successorTaskLength));
-                            //successorTask.StartDate = predecessorTask.EndDate;
-                            //successorTask.EndDate = successorTask.StartDate.AddDays(successorTaskLength);
-
-                            taskDataService.UpdateTask(successorTask);
-                            await Reschedule(successorTask, tasks, chart);
-                            await chart.UpdateSeriesAsync();
-                            // StateHasChanged();
-                        }
-                        break;
-
-                    case DependencyType.SF:
-                        if (predecessorTask.EndDate < successorTask.StartDate)
-                        {
-                            taskDataService.ChangeTaskStartDate(successorTask.Id, predecessorTask.EndDate);
-                            taskDataService.ChangeTaskEndDate(successorTask.Id, successorTask.StartDate.AddDays(successorTaskLength));
-                            //successorTask.StartDate = predecessorTask.EndDate;
-                            //successorTask.EndDate = successorTask.StartDate.AddDays(successorTaskLength);
-                            taskDataService.UpdateTask(successorTask);
-                            await Reschedule(successorTask, tasks, chart);
-                            await chart.UpdateSeriesAsync();
-                            // StateHasChanged();
-                        }
-                        break;
-
-                    case DependencyType.SS:
-                        if (predecessorTask.StartDate > successorTask.StartDate)
-                        {
-                            taskDataService.ChangeTaskStartDate(successorTask.Id, predecessorTask.StartDate);
-                            taskDataService.ChangeTaskEndDate(successorTask.Id, successorTask.StartDate.AddDays(successorTaskLength));
-                            //successorTask.StartDate = predecessorTask.StartDate;
-                            //successorTask.EndDate = successorTask.StartDate.AddDays(successorTaskLength);
-
-                            taskDataService.UpdateTask(successorTask);
-                            await Reschedule(successorTask, tasks, chart);
-                            await chart.UpdateSeriesAsync();
-                            // StateHasChanged();
-                        }
-                        break;
-
-                    case DependencyType.FF:
-                        if (predecessorTask.EndDate > successorTask.EndDate)
-                        {
-                            taskDataService.ChangeTaskStartDate(successorTask.Id, successorTask.EndDate.AddDays(-successorTaskLength));
-                            taskDataService.ChangeTaskEndDate(successorTask.Id, predecessorTask.EndDate);
-                            //successorTask.EndDate = predecessorTask.EndDate;
-                            //successorTask.StartDate = successorTask.EndDate.AddDays(-successorTaskLength);
-
-                            taskDataService.UpdateTask(successorTask);
-                            await Reschedule(successorTask, tasks, chart);
-                            await chart.UpdateSeriesAsync();
-                            // StateHasChanged();
-                        }
-                        break;
-
-                    default:
-                        // Handle unsupported dependency types
-                        throw new ArgumentException("Unsupported DependencyType");
-                }
             }
-
         }
 
        public List<T> SortTasksByDependencies<T, U>(List<T> tasks)
