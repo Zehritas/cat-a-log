@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "jaeQuZ4AWqCpeF4SS0Hz+gMZY0vkcsitlNPcPHChnT6NZN5eU0w7U1FZ8J9z4plYJ8ANJpu/oeczmzSWuNVW4A==",
+  "dgSpecHash": "umdfNyY3FJ1AA9hROZGz6GeDqw1EXBsPWOYeGw0a5nDwzvMfiX+DPC3CP78u7J13uB4QFW3fiZqm8IdhcBNMdw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\aldas\\OneDrive\\Stalinis kompiuteris\\PSI5\\cat-a-logB\\cat-a-logB.csproj",
+  "projectFilePath": "C:\\Users\\aldas\\OneDrive\\Stalinis kompiuteris\\PSI6\\cat-a-logB\\cat-a-logB.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\aldas\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "C:\\Users\\aldas\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",
