@@ -67,9 +67,14 @@ namespace cat_a_logB.Data
         {
             Tasks = allTasks.Where(task => task.Team.Name == Name).ToList();
         }
+        public void LoadTeamMembers(List<Member> allMembers)
+        {
+            TeamMembers = allMembers.Where(member => member.TeamId == Id).ToList();
+        }
         public static void GetTasksForTeam(List<TaskData> allTasks, ProjectTeam team)
         {
             team.Tasks = allTasks.Where(task => task.Team.Name == team.Name).ToList();
         }
+
     }
 }

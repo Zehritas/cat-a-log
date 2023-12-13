@@ -3,8 +3,10 @@
 @using cat_a_logB.Service.Interfaces;
 
 @inject cat_a_logB.Pages.SampleData SampleData
-@inject ITaskDataService TaskDataService
-@inject IMilestoneService MilestoneService
+@inject cat_a_logB.Data.MilestoneManager MilestoneManager
+@inject cat_a_logB.Data.TeamManager TeamManager
+@inject Service.Interfaces.ITaskDataService TaskDataService
+@inject Service.Interfaces.IMilestoneService MilestoneService
 
 <PageTitle>Milestones | Cat-a-log</PageTitle>
 
@@ -44,16 +46,18 @@
                         <div class="list-group-item d-flex justify-content-between align-items-center">
                             <style>
                                 .milestone-btn-@milestone.Id {
+                                    background-color: white;
                                     transition: background-color 0.3s;
+                                    border: 1px solid var(--accent-color-2);
+                                    color: #1f1f1f;
                                 }
 
                                 .milestone-btn-@milestone.Id:hover {
-                                    background-color: #007bff;
-                                    /* Blue color for hover */
+                                    background-color: var(--accent-color-2);
                                     color: white;
                                 }
                             </style>
-                            <button class="btn btn-outline-primary milestone-btn-@milestone.Id"
+                            <button class="primary-button milestone-btn-@milestone.Id"
                                 @onclick="() => ToggleMilestoneSelection(milestone)">
                                 <span class="ml-2 milestone-name">@milestone.Name</span>
                             </button>
@@ -72,7 +76,7 @@
     <div class="row">
         <div class="col-12 mb-4">
             <div class="list-group">
-                <button class="btn btn-primary btn-block" @onclick="ToggleCreateForm">Create New Milestone</button>
+                <button class="primary-button" @onclick="ToggleCreateForm">Create New Milestone</button>
             </div>
         </div>
     </div>
@@ -111,7 +115,7 @@
                             </div>
 
                             <br />
-                            <button class="btn btn-primary btn-block" type="button" @onclick="CreateMilestone">Create
+                            <button class="primary-button" type="button" @onclick="CreateMilestone">Create
                                 Milestone</button>
                         </form>
                     </div>
@@ -175,9 +179,6 @@
     bool isFormVisible = false;
 
 
-
-
-
     protected override void OnInitialized()
     {
         milestones = MilestoneService.GetAllMilestones();
@@ -211,39 +212,9 @@
 
     private async void CreateMilestone()
     {
-
-        errorMessage = ""; // Clear any previous error message
-
-        if (string.IsNullOrWhiteSpace(milestoneName))
-        {
-            errorMessage = "Milestone name is required.";
-            return;
-        }
-
-        if (milestones.Any(m => m.Name.Equals(milestoneName, StringComparison.OrdinalIgnoreCase)))
-        {
-            errorMessage = "Milestone name already exists.";
-            return;
-        }
-
-        if (selectedTasks == null || !selectedTasks.Any())
-        {
-            errorMessage = "Please select at least one task.";
-            return;
-        }
-
-
-        newMilestone = new ProjectMilestone(milestoneName, selectedTasks.ToList(), milestoneDate, "blue");
-
-        MilestoneService.AddMilestone(newMilestone);
-        milestones.Add(newMilestone);
-        newMilestone = new ProjectMilestone();
-        milestoneName = string.Empty;
-        selectedTasks.Clear();
-
-        await RefreshData();
-        StateHasChanged();
-
+            MilestoneManager.CreateMilestone(selectedTasks, milestones, newMilestone, milestoneName, milestoneDate);
+            await RefreshData();
+            StateHasChanged();
     }
 
     private void ToggleMilestoneSelection(ProjectMilestone milestone)
@@ -262,4 +233,5 @@
     {
         isFormVisible = !isFormVisible;
     }
+    
 }

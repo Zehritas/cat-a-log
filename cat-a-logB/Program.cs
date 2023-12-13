@@ -22,6 +22,11 @@ builder.Services.AddScoped<IDependencyService, DependencyService>();
 builder.Services.AddScoped<IMilestoneService, MilestoneService>();
 builder.Services.AddScoped<IProjectTeamService, ProjectTeamService>();
 builder.Services.AddScoped<ITaskDataService, TaskDataService>();
+builder.Services.AddScoped<IMemberService, MemberService>();
+builder.Services.AddScoped<IProjectService, ProjectService>();
+builder.Services.AddScoped<IUserService, UserService>();
+
+
 
 
 
@@ -31,6 +36,10 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddScoped<cat_a_logB.Pages.SampleData>();
 builder.Services.AddScoped<ApexChart<cat_a_logB.Data.TaskData>>();
 builder.Services.AddScoped<TaskManager>();
+builder.Services.AddScoped<CalculationData>();
+//builder.Services.AddScoped<DependencyManager>();
+builder.Services.AddScoped<MilestoneManager>();
+builder.Services.AddScoped<TeamManager>();
 builder.Services.AddScoped<AuthenticationStateProvider,
     RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
 var app = builder.Build();

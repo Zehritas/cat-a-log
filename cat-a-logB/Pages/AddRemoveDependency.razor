@@ -1,0 +1,111 @@
+@using cat_a_logB.Data
+@using Service;
+@inject Service.Interfaces.ITaskDataService TaskDataService
+@inject cat_a_logB.Data.TaskManager TaskManager
+@inject Service.Interfaces.ITaskDataService TaskDataService
+@inject Service.Interfaces.IDependencyService DependencyService
+@inject Service.Interfaces.IMilestoneService MilestoneService
+@inject Service.Interfaces.IProjectTeamService ProjectTeamService
+
+
+<div class="modal fade show" style="display: block;" tabindex="-1" role="dialog" id="addDependenciesModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Manage Dependencies</h5>
+            </div>
+            <div class="modal-body">
+                <h5>Current Dependencies:</h5>
+                <div>
+                    @foreach (var dependency in selectedData.DataPoint.Items.First().Dependencies)
+                    {
+                        <div>
+                            <span>
+                                @selectedData.DataPoint.Items.First().Name -> @dependency.SuccessorTask.Name|
+                                @dependency.Type
+                            </span>
+                            <button type="button" class="btn btn-link"
+                                    @onclick="() => DeleteDependency(selectedData.DataPoint.Items.First().Dependencies, dependency)">
+                                Remove
+                            </button>
+                        </div>
+                    }
+                </div>
+                <hr />
+                <h5>Add a new dependency:</h5>
+                <form>
+                    <div class="form-group">
+                        <label for="selectedSuccessorTask">Select Task:</label>
+                        <select class="form-control" id="selectedSuccessorTask" @bind="selectedSuccessorTask">
+                            <option value="0">-</option>
+                            @foreach (var task in project)
+                            {
+                                if (task.Id != selectedData.DataPoint.Items.First().Id)
+                                {
+                                    <option value="@task.Id">@task.Name</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="dependencyType">Select Dependency Type:</label>
+                        <select class="form-control" id="dependencyType" @bind="selectedDependencyType">
+                            @foreach (var dependencyType in Enum.GetValues(typeof(DependencyType)))
+                            {
+                                <option value="@dependencyType">@dependencyType</option>
+                            }
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" @onclick="CloseDependency">Close</button>
+                <button type="button" class="btn btn-success" @onclick="AddDependency">Add Dependency</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-backdrop fade show"></div>
+<div class="modal-backdrop fade show"></div>
+
+@code{
+
+    [Parameter] public SelectedData<TaskData> selectedData { get; set; }
+    [Parameter] public ApexChart<TaskData> chart { get; set; }
+    [Parameter] public List<TaskData> project { get; set; }
+    [Parameter] public List<ProjectMilestone> milestones { get; set; }
+    [Parameter] public List<ProjectTeam> teams { get; set; }
+    [Parameter] public EventCallback OnClose { get; set; }
+    public DependencyType selectedDependencyType = DependencyType.FS;
+    public string selectedSuccessorTaskName;
+    public int selectedSuccessorTask = 0;
+
+    public async Task CloseDependency()
+    {
+        await OnClose.InvokeAsync();
+    }
+
+
+
+    async void DeleteDependency(List<Dependency> dependencies, Dependency dependency)
+    {
+        DependencyService.RemoveDependency(dependency);
+        await RefreshData();
+    }
+    
+
+    private async Task AddDependency()
+    {
+        
+        await TaskManager.AddDependency(project, chart, selectedData, selectedDependencyType, selectedSuccessorTask);
+    }
+
+    public async Task RefreshData()
+    {
+        await TaskManager.RefreshData();
+        StateHasChanged();
+    }
+
+
+
+}

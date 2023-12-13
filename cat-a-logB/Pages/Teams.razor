@@ -3,10 +3,13 @@
 @using cat_a_logB.Service.Interfaces
 
 @inject cat_a_logB.Pages.SampleData SampleData
-@inject ITaskDataService TaskDataService
-@inject IDependencyService DependencyService
-@inject IMilestoneService MilestoneService
-@inject IProjectTeamService ProjectTeamService
+@inject cat_a_logB.Data.CalculationData CalculationData
+@inject cat_a_logBContext DbContext
+@inject cat_a_logB.Data.TeamManager TeamManager
+@inject Service.Interfaces.ITaskDataService TaskDataService
+@inject Service.Interfaces.IDependencyService DependencyService
+@inject Service.Interfaces.IMilestoneService MilestoneService
+@inject Service.Interfaces.IProjectTeamService ProjectTeamService
 
 <PageTitle>Teams | Cat-a-log</PageTitle>
 
@@ -14,36 +17,7 @@
     <div class="row">
         <div class="col-12 mb-4">
             <style>
-                .modern-heading {
-                    text-align: center;
-                    font-size: 1.8rem;
-                    font-weight: 700;
-                    color: #333;
-                    /* Set your preferred text color */
-                    text-transform: uppercase;
-                    letter-spacing: 2px;
-                    margin-bottom: 1.5rem;
-                    border-bottom: 2px solid #193a5e;
-                    /* Set your preferred border color */
-                    padding-bottom: 0.5rem;
-                }
 
-                span {
-                    font-family: 'Roboto', sans-serif;
-                    /* Use your preferred font here */
-                }
-
-                button {
-                    font-family: 'Roboto', sans-serif;
-                }
-
-                h4 {
-                    font-family: 'Roboto', sans-serif;
-                }
-
-                label {
-                    font-family: 'Roboto', sans-serif;
-                }
             </style>
 
             <h3 class="mb-4 modern-heading">Current Teams</h3>
@@ -56,6 +30,9 @@
                             <style>
                                 .team-name-btn-@team.Id {
                                     transition: background-color 0.3s;
+                                    background-color: white;
+                                    border: 1px solid var(--accent-color-3);
+                                    color: #1f1f1f;
                                 }
 
                                 .team-name-btn-@team.Id:hover {
@@ -63,14 +40,13 @@
                                     color: white;
                                 }
                             </style>
-                            <button class="btn btn-outline-primary team-name-btn-@team.Id"
-                                @onclick="() => ShowTasksForTeam(team)">
+                            <button class="primary-button team-name-btn-@team.Id" @onclick="() => ShowTasksForTeam(team)">
                                 <span class="ml-2 team-name">@team.Name</span>
                             </button>
                             <div class="d-flex align-items-center">
-                                <button class="btn btn-warning ml-2" @onclick="() => EditTeamMembers(team)">Edit
+                                <button class="edit-button" @onclick="() => EditTeamMembers(team)">Edit
                                     Members</button>
-                                <button class="btn btn-danger" style="margin-left: 8px;"
+                                <button class="remove-button" style="margin-left: 8px;"
                                     @onclick="() => ToggleRemoveTeamModal(team)">Remove Team</button>
                             </div>
                         </div>
@@ -89,7 +65,7 @@
     <div class="row">
         <div class="col-12 mb-4">
             <div class="list-group">
-                <button class="btn btn-primary btn-block" @onclick="ToggleCreateForm">Create New Team</button>
+                <button class="primary-button" @onclick="ToggleCreateForm">Create New Team</button>
             </div>
         </div>
     </div>
@@ -113,7 +89,7 @@
                                 <input class="form-control" type="color" id="teamColor" @bind="newTeam.Color" />
                             </div>
                             <br />
-                            <button class="btn btn-primary" type="button" @onclick="AddTeam">Add Team</button>
+                            <button class="primary-button" type="button" @onclick="AddTeam">Add Team</button>
                         </form>
                     </div>
                 </div>
@@ -154,14 +130,14 @@
     <div class="container" style="max-width: 700px;">
         <div class="row">
             <div class="col-12 mb-4">
-                @if (selectedTeam.Members != null && selectedTeam.Members.Any())
+                @if (selectedTeam.TeamMembers != null && selectedTeam.TeamMembers.Any())
                 {
                     <h4 class="mb-4 font-weight-bold text-center">Team Members for @selectedTeam.Name</h4>
 
                     <ul>
-                        @foreach (var member in selectedTeam.Members)
+                        @foreach (var member in selectedTeam.TeamMembers)
                         {
-                            <li>@member</li>
+                            <li>@member.Name</li>
                         }
                     </ul>
                 }
@@ -174,8 +150,7 @@
                 {
                     <style>
                         .list-group-item:hover {
-                            background-color: #f0f0f0;
-                            /* Change the background color on hover */
+                            background-color: var(--background-color);
                         }
                     </style>
                     <h4 class="mb-4 font-weight-bold text-center">Tasks for @selectedTeam.Name</h4>
@@ -209,7 +184,7 @@ else
 
 
 @code {
-    private List<ProjectTeam> teams;
+    public List<ProjectTeam> teams;
     private List<TaskData> tasks;
     private ProjectTeam newTeam = new ProjectTeam() { ProjectId = 1 };
     private string errorMessage = "";
@@ -226,25 +201,16 @@ else
 
     private async Task RefreshData()
     {
-        teams = ProjectTeamService.GetAllTeams();
-        tasks = tasks = TaskDataService.GetAllTasks();
+        // teams = ProjectTeamService.GetAllTeams();
+        // tasks = tasks = TaskDataService.GetAllTasks();
 
+        TeamManager.RefreshData(teams, tasks);
         StateHasChanged();
     }
 
     private async Task AddTeam()
     {
-        if (string.IsNullOrWhiteSpace(newTeam.Name))
-        {
-            errorMessage = "Team name is required.";
-            return;
-        }
-
-        errorMessage = "";
-
-        ProjectTeamService.AddTeam(newTeam);
-        teams.Add(newTeam);
-        newTeam = new ProjectTeam(); // Reset the new team object after adding
+       TeamManager.AddTeam(teams, newTeam);
         StateHasChanged();
         ToggleCreateForm();
         await RefreshData();
@@ -254,14 +220,7 @@ else
     {
         // Remove the team
         ProjectTeamService.RemoveTeam(team);
-        //teams.Remove(team);
-
-        // Remove associated tasks
-        //TaskDataService.RemoveTasks(team.Tasks);
-        //tasks.RemoveAll(task => task.Team == team);
-
-
-        // Reset the selected team
+       
         if (selectedTeam != null && selectedTeam.Id == team.Id)
         {
             selectedTeam = null;
