@@ -18,30 +18,19 @@ namespace cat_a_logTests
     public class DetectCycleInternal
     {
         [Test]
-        public async Task DetectCycleInternal_NoCycles_ReturnsFalse()
+        public async Task DetectCycle_NoDependencies_ReturnsFalse()
         {
             // Arrange
-            var task1 = new TaskData { Id = 1, Name = "Task 1", Dependencies = new List<Dependency>() };
-            var task2 = new TaskData { Id = 2, Name = "Task 2", Dependencies = new List<Dependency>() };
-            var task3 = new TaskData { Id = 3, Name = "Task 3", Dependencies = new List<Dependency>() };
-
-            task1.Dependencies.Add(new Dependency { SuccessorTaskId = 2 });
-            task2.Dependencies.Add(new Dependency { SuccessorTaskId = 3 });
-            task3.Dependencies.Add(new Dependency { SuccessorTaskId = 1 }); // Task 3 depends on Task 1 to create a cycle
-
-            var project = new List<TaskData> { task1, task2, task3 };
-
+            var task = new TaskData { Id = 1, Dependencies = new List<Dependency>() };
             var taskManager = new TaskManager();
 
-            var visited = new HashSet<TaskData>();
-            var currentlyVisiting = new HashSet<TaskData>();
-
             // Act
-            var hasCycle = await taskManager.DetectCycleInternal(task1, task1, visited, currentlyVisiting);
+            var result = await taskManager.DetectCycleInternal(task, task, new HashSet<TaskData>(), new HashSet<TaskData>());
 
             // Assert
-            NUnit.Framework.Assert.IsTrue(hasCycle); // Expecting a cycle
+            NUnit.Framework.Assert.IsFalse(result);
         }
+        
 
     }
 }

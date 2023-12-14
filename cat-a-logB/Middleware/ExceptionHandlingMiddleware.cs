@@ -1,0 +1,45 @@
+using System;
+using System.Drawing.Printing;
+using System.Net;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
+
+public class ExceptionHandlingMiddleware
+{
+   private readonly RequestDelegate _next;
+
+   public ExceptionHandlingMiddleware(RequestDelegate next)
+   {
+      _next = next;
+   }
+
+   public async Task Invoke(HttpContext context)
+   {
+      try
+      {
+         await _next(context);
+      }
+      catch (Exception ex)
+      {
+         Console.WriteLine("\nCaught one!!!\n");
+         await HandleExceptionAsync(context, ex);
+      }
+   }
+
+   private static Task HandleExceptionAsync(HttpContext context, Exception exception)
+   {
+      var code = HttpStatusCode.InternalServerError;
+
+      if (exception is UnauthorizedAccessException) code = HttpStatusCode.Unauthorized;
+      else if (exception is InvalidOperationException) code = HttpStatusCode.BadRequest;
+      else if (exception is ArgumentNullException) code = HttpStatusCode.BadRequest;
+      else if (exception is ArgumentException) code = HttpStatusCode.BadRequest;
+
+      var result = JsonConvert.SerializeObject(new { error = exception.Message, details = exception.ToString() });
+      context.Response.ContentType = "application/json";
+      context.Response.StatusCode = (int)code;
+
+      return context.Response.WriteAsync(result);
+   }
+}

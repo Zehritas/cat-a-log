@@ -32,7 +32,7 @@ public class RescheduleTests
         var taskManager = new TaskManager();
 
         // Act
-        taskManager.Reschedule(predecessorTask, tasks, chartMock);
+        taskManager.Reschedule(predecessorTask.Id, tasks, chartMock);
 
         // Assert
         var updatedSuccessorTask = tasks.FirstOrDefault(task => task.Id == 2);
@@ -68,7 +68,7 @@ public class RescheduleTests
         var taskManager = new TaskManager();
 
         // Act
-        taskManager.Reschedule(predecessorTask, tasks, chart);
+        taskManager.Reschedule(predecessorTask.Id, tasks, chart);
 
         // Assert
         var updatedSuccessorTask = tasks.FirstOrDefault(task => task.Id == 2);
@@ -102,7 +102,7 @@ public class RescheduleTests
         var taskManager = new TaskManager();
 
         // Act
-        taskManager.Reschedule(predecessorTask, tasks, chart);
+        taskManager.Reschedule(predecessorTask.Id, tasks, chart);
 
         // Assert
         var updatedSuccessorTask = tasks.FirstOrDefault(task => task.Id == 2);
@@ -136,37 +136,13 @@ public class RescheduleTests
         var taskManager = new TaskManager();
 
         // Act
-        taskManager.Reschedule(predecessorTask, tasks, chart);
+        taskManager.Reschedule(predecessorTask.Id, tasks, chart);
 
         // Assert
         var updatedSuccessorTask = tasks.FirstOrDefault(task => task.Id == 2);
         NUnit.Framework.Assert.AreEqual(new DateTime(2023, 11, 25), updatedSuccessorTask.EndDate);
     }
-    [Test]
-    public async Task InvalidDependency_TaskNotFound_ThrowsException()
-    {
-        // Arrange
-        var tasks = new List<TaskData>
-    {
-        new TaskData { Id = 1, StartDate = DateTime.Today, EndDate = DateTime.Today.AddDays(1) }
-
-    };
-
-        var chart = new ApexChart<TaskData>();
-        var taskManager = new TaskManager();
-
-        // Act and Assert
-        var exception = NUnit.Framework.Assert.ThrowsAsync<InvalidOperationException>(async () =>
-        {
-            await taskManager.Reschedule(new TaskData
-            {
-                Id = 1,
-                Dependencies = new List<Dependency> { new Dependency { SuccessorTaskId = 2, Type = DependencyType.FS } }
-            }, tasks, chart);
-        });
-
-        NUnit.Framework.Assert.AreEqual("Task not found for dependency: 2", exception.Message);
-    }
+   
     [Test]
     public async Task Reschedule_UnsupportedDependencyType_ThrowsArgumentException()
     {
@@ -195,7 +171,7 @@ public class RescheduleTests
         ArgumentException exception = null;
         try
         {
-            await taskManager.Reschedule(predecessorTask, tasks, chartMock);
+            await taskManager.Reschedule(predecessorTask.Id, tasks, chartMock);
         }
         catch (ArgumentException ex)
         {

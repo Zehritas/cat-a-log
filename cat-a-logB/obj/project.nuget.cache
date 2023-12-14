@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "iGrc2gzMKOVZBF7EP+A6gIUZbQcoHZ/h9wKEZEPYJLjM3i0HJ6HQRrqLmXsRcDbqW2fVGob6tc/7oZld/0CeNw==",
+  "dgSpecHash": "t/o4nzT7vZttZNXsfVaAWo+3PhgpcFk/kvFJq3ETNB8qKFkZtRw2LqvqfFwoF+CqmaX8QkFG67QIo9WqYWMdSQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\aldas\\OneDrive\\Stalinis kompiuteris\\PSI6\\cat-a-logB\\cat_a_logB.csproj",
   "expectedPackageFiles": [
@@ -9,6 +9,7 @@
     "C:\\Users\\aldas\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "C:\\Users\\aldas\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",
     "C:\\Users\\aldas\\.nuget\\packages\\blazor-apexcharts\\2.2.0\\blazor-apexcharts.2.2.0.nupkg.sha512",
+    "C:\\Users\\aldas\\.nuget\\packages\\castle.core\\5.1.1\\castle.core.5.1.1.nupkg.sha512",
     "C:\\Users\\aldas\\.nuget\\packages\\humanizer\\2.14.1\\humanizer.2.14.1.nupkg.sha512",
     "C:\\Users\\aldas\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\aldas\\.nuget\\packages\\humanizer.core.af\\2.14.1\\humanizer.core.af.2.14.1.nupkg.sha512",
@@ -159,6 +160,7 @@
     "C:\\Users\\aldas\\.nuget\\packages\\system.configuration.configurationmanager\\6.0.0\\system.configuration.configurationmanager.6.0.0.nupkg.sha512",
     "C:\\Users\\aldas\\.nuget\\packages\\system.data.datasetextensions\\4.5.0\\system.data.datasetextensions.4.5.0.nupkg.sha512",
     "C:\\Users\\aldas\\.nuget\\packages\\system.diagnostics.diagnosticsource\\5.0.0\\system.diagnostics.diagnosticsource.5.0.0.nupkg.sha512",
+    "C:\\Users\\aldas\\.nuget\\packages\\system.diagnostics.eventlog\\6.0.0\\system.diagnostics.eventlog.6.0.0.nupkg.sha512",
     "C:\\Users\\aldas\\.nuget\\packages\\system.drawing.common\\6.0.0\\system.drawing.common.6.0.0.nupkg.sha512",
     "C:\\Users\\aldas\\.nuget\\packages\\system.formats.asn1\\5.0.0\\system.formats.asn1.5.0.0.nupkg.sha512",
     "C:\\Users\\aldas\\.nuget\\packages\\system.globalization\\4.3.0\\system.globalization.4.3.0.nupkg.sha512",

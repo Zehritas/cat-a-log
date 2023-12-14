@@ -132,10 +132,10 @@ namespace cat_a_logTests
         {
             // Arrange
             var project = new List<TaskData>
-    {
-        new TaskData { Id = 1, Name = "Task 1", Dependencies = new List<Dependency>() },
-        new TaskData { Id = 2, Name = "Task 2", Dependencies = new List<Dependency>() }
-    };
+            {
+                new TaskData { Id = 1, Name = "Task 1", Dependencies = new List<Dependency>() },
+                new TaskData { Id = 2, Name = "Task 2", Dependencies = new List<Dependency>() }
+            };
 
             var chart = new ApexChart<TaskData>();
             var selectedData = new SelectedData<TaskData>
@@ -155,7 +155,7 @@ namespace cat_a_logTests
             var taskManager = new TaskManager();
 
             // Act
-            await taskManager.AddDependency(project, chart, selectedData, selectedDependencyType, selectedSuccessorTask);
+            taskManager.AddDependency(project, chart, selectedData, selectedDependencyType, selectedSuccessorTask);
 
             // Assert
             var predecessorTask = project.FirstOrDefault(task => task.Id == 1);
