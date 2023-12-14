@@ -101,14 +101,12 @@ namespace Cat_a_logAPI.Controllers
                 return NotFound();
             }
 
-            var dependencyToDelete = _dependencyService.GetDependency(Id);
-
             if(!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            _dependencyService.RemoveDependency(dependencyToDelete);
+            _dependencyService.RemoveDependency(Id);
 
             return NoContent();
         }

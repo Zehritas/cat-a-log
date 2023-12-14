@@ -109,14 +109,12 @@ namespace Cat_a_logAPI.Controllers
                 return NotFound();
             }
 
-            var teamToDelete = _teamService.GetTeam(id);
-
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (!_teamService.RemoveTeam(teamToDelete))
+            if (!_teamService.RemoveTeam(id))
             {
                 ModelState.AddModelError("", "something went wrong while removing team");
             }

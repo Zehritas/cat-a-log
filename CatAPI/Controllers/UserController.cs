@@ -110,14 +110,12 @@ namespace Cat_a_logAPI.Controllers
                 return NotFound();
             }
 
-            var userToDelete = _userService.GetUser(id);
-
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (!_userService.RemoveUser(userToDelete))
+            if (!_userService.RemoveUser(id))
             {
                 ModelState.AddModelError("", "something went wrong while removing user");
             }

@@ -6,7 +6,7 @@ namespace Cat_a_logAPI.Service.Interfaces
     {
         public bool AddTask(TaskData task);
 
-        public bool RemoveTask(TaskData task);
+        public bool RemoveTask(int id);
 
         public bool AddTasks(IEnumerable<TaskData> tasks);
 

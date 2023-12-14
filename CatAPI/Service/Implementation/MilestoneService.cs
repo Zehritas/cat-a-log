@@ -18,8 +18,9 @@ namespace Cat_a_logAPI.Service.Implementation
             return Save();
         }
 
-        public bool RemoveMilestone(ProjectMilestone milestone)
+        public bool RemoveMilestone(int id)
         {
+            ProjectMilestone milestone = _dbContext.ProjectMilestone.Find(id);
             _dbContext.ProjectMilestone.Remove(milestone);
             return Save();
         }

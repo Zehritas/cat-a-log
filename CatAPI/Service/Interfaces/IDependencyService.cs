@@ -6,7 +6,7 @@ namespace Cat_a_logAPI.Service.Interfaces
     {
         public bool AddDependency(Dependency dependency);
 
-        public void RemoveDependency(Dependency dependency);
+        public void RemoveDependency(int id);
 
         public bool AddDependencies(IEnumerable<Dependency> dependencies);
 

@@ -115,14 +115,12 @@ namespace Cat_a_logAPI.Controllers
                 return NotFound();
             }
 
-            var milestoneToDelete = _milestoneService.GetMilestone(id);
-
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (!_milestoneService.RemoveMilestone(milestoneToDelete))
+            if (!_milestoneService.RemoveMilestone(id))
             {
                 ModelState.AddModelError("", "something went wrong while removing milestone");
             }

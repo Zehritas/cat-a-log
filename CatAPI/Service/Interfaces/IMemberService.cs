@@ -8,7 +8,7 @@ namespace Cat_a_logAPI.Service.Interfaces
 
         public bool AddMembers(IEnumerable<Member> members);
 
-        public bool RemoveMember(Member member);
+        public bool RemoveMember(int userId, int teamId);
 
         public bool RemoveMembers(IEnumerable<Member> members);
 

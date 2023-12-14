@@ -6,7 +6,7 @@ namespace Cat_a_logAPI.Service.Interfaces
     {
         public bool AddTeam(ProjectTeam projectTeam);
 
-        public bool RemoveTeam(ProjectTeam projectTeam);
+        public bool RemoveTeam(int id);
 
         public bool AddTeams(IEnumerable<ProjectTeam> projectTeams);
 

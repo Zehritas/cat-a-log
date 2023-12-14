@@ -108,14 +108,12 @@ namespace Cat_a_logAPI.Controllers
                 return NotFound();
             }
 
-            var taskToDelete = _taskDataService.GetTask(id);
-
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (!_taskDataService.RemoveTask(taskToDelete))
+            if (!_taskDataService.RemoveTask(id))
             {
                 ModelState.AddModelError("", "something went wrong while removing task");
             }

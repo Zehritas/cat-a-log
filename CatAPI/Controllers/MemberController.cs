@@ -110,14 +110,12 @@ namespace Cat_a_logAPI.Controllers
                 return NotFound();
             }
 
-            var memberToDelete = _memberService.GetMember(userId, teamId);
-
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if(!_memberService.RemoveMember(memberToDelete))
+            if(!_memberService.RemoveMember(userId, teamId))
             {
                 ModelState.AddModelError("", "something went wrong while removing member");
             }

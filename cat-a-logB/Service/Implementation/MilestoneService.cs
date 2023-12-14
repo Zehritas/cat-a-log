@@ -5,11 +5,13 @@ namespace cat_a_logB.Service.Implementation
 {
     public class MilestoneService : IMilestoneService
     {
+        private readonly HttpClient _httpClient;
         private readonly cat_a_logBContext _dbContext;
 
-        public MilestoneService(cat_a_logBContext dbContext)
+        public MilestoneService(cat_a_logBContext dbContext, HttpClient httpClient)
         {
             _dbContext = dbContext;
+            _httpClient = httpClient;
         }
 
         public void AddMilestone(ProjectMilestone milestone)

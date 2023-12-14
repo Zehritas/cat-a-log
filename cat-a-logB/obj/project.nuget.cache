@@ -1,9 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "umdfNyY3FJ1AA9hROZGz6GeDqw1EXBsPWOYeGw0a5nDwzvMfiX+DPC3CP78u7J13uB4QFW3fiZqm8IdhcBNMdw==",
+  "dgSpecHash": "Wgynvyc9hsw0OlzC4UlAPNyR63Y1e+RgxaiMjA/JThoRM7fHNnXyFODEn0Bp5uQ+XXQ0ix8otzRnOaGEKDYunA==",
   "success": true,
   "projectFilePath": "C:\\Users\\aldas\\OneDrive\\Stalinis kompiuteris\\PSI6\\cat-a-logB\\cat-a-logB.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\aldas\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
+    "C:\\Users\\aldas\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",
     "C:\\Users\\aldas\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "C:\\Users\\aldas\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",
     "C:\\Users\\aldas\\.nuget\\packages\\blazor-apexcharts\\2.2.0\\blazor-apexcharts.2.2.0.nupkg.sha512",
@@ -83,7 +85,7 @@
     "C:\\Users\\aldas\\.nuget\\packages\\microsoft.codeanalysis.razor\\6.0.11\\microsoft.codeanalysis.razor.6.0.11.nupkg.sha512",
     "C:\\Users\\aldas\\.nuget\\packages\\microsoft.codeanalysis.scripting.common\\4.4.0\\microsoft.codeanalysis.scripting.common.4.4.0.nupkg.sha512",
     "C:\\Users\\aldas\\.nuget\\packages\\microsoft.codeanalysis.workspaces.common\\4.4.0\\microsoft.codeanalysis.workspaces.common.4.4.0.nupkg.sha512",
-    "C:\\Users\\aldas\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",
+    "C:\\Users\\aldas\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
     "C:\\Users\\aldas\\.nuget\\packages\\microsoft.data.sqlclient\\5.0.2\\microsoft.data.sqlclient.5.0.2.nupkg.sha512",
     "C:\\Users\\aldas\\.nuget\\packages\\microsoft.data.sqlclient.sni.runtime\\5.0.1\\microsoft.data.sqlclient.sni.runtime.5.0.1.nupkg.sha512",
     "C:\\Users\\aldas\\.nuget\\packages\\microsoft.diasymreader\\1.4.0\\microsoft.diasymreader.1.4.0.nupkg.sha512",

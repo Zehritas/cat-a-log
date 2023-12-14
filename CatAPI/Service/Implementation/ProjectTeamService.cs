@@ -35,8 +35,9 @@ namespace Cat_a_logAPI.Service.Implementation
             return Save();
         }
 
-        public bool RemoveTeam(ProjectTeam projectTeam)
+        public bool RemoveTeam(int id)
         {
+            ProjectTeam projectTeam = _dbContext.ProjectTeam.Find(id);
             List<TaskData> teamTasks = projectTeam.Tasks;
 
             for (int i = teamTasks.Count - 1; i >= 0; i--)

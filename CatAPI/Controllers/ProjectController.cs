@@ -110,14 +110,12 @@ namespace Cat_a_logAPI.Controllers
                 return NotFound();
             }
 
-            var projectToDelete = _projectService.GetProject(id);
-
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (!_projectService.RemoveProject(projectToDelete))
+            if (!_projectService.RemoveProject(id))
             {
                 ModelState.AddModelError("", "something went wrong while removing project");
             }

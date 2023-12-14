@@ -18,8 +18,9 @@ namespace Cat_a_logAPI.Service.Implementation
             return Save();
         }
 
-        public void RemoveDependency(Dependency dependency)
+        public void RemoveDependency(int id)
         {
+            Dependency dependency = _dbContext.Dependency.Find(id);
             _dbContext.Dependency.Remove(dependency);
             _dbContext.SaveChanges();
 
@@ -46,7 +47,7 @@ namespace Cat_a_logAPI.Service.Implementation
             {
                 if (taskId == dependency.SuccessorTaskId)
                 {
-                    RemoveDependency(dependency);
+                    RemoveDependency(dependency.Id);
                 }
             }
             return Save();

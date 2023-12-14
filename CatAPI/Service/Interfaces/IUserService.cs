@@ -8,7 +8,7 @@ namespace Cat_a_logAPI.Service.Interfaces
 
         public bool AddUsers(IEnumerable<User> users);
 
-        public bool RemoveUser(User user);
+        public bool RemoveUser(int id);
 
         public bool RemoveUsers(IEnumerable<User> users);
 

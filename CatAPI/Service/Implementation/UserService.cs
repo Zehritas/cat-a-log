@@ -24,8 +24,9 @@ namespace Cat_a_logAPI.Service.Implementation
             return Save();
         }
 
-        public bool RemoveUser(User user)
+        public bool RemoveUser(int id)
         {
+            User user = _dbContext.User.Find(id);
             _dbContext.User.Remove(user);
             return Save();
         }

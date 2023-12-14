@@ -39,8 +39,9 @@ namespace Cat_a_logAPI.Service.Implementation
             return _dbContext.Project.Any(p => p.Id == id);
         }
 
-        public bool RemoveProject(Project project)
+        public bool RemoveProject(int id)
         {
+            Project project = _dbContext.Project.Find(id);
             _dbContext.Project.Remove(project);
             return Save();
         }

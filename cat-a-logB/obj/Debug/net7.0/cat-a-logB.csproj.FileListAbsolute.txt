@@ -2176,3 +2176,5 @@ C:\Users\aldas\OneDrive\Stalinis kompiuteris\PSI6\cat-a-logB\obj\Debug\net7.0\re
 C:\Users\aldas\OneDrive\Stalinis kompiuteris\PSI6\cat-a-logB\obj\Debug\net7.0\cat-a-logB.pdb
 C:\Users\aldas\OneDrive\Stalinis kompiuteris\PSI6\cat-a-logB\obj\Debug\net7.0\cat-a-logB.genruntimeconfig.cache
 C:\Users\aldas\OneDrive\Stalinis kompiuteris\PSI6\cat-a-logB\obj\Debug\net7.0\ref\cat-a-logB.dll
+C:\Users\aldas\OneDrive\Stalinis kompiuteris\PSI6\cat-a-logB\bin\Debug\net7.0\AutoMapper.dll
+C:\Users\aldas\OneDrive\Stalinis kompiuteris\PSI6\cat-a-logB\bin\Debug\net7.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll

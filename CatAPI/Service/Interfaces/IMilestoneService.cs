@@ -6,7 +6,7 @@ namespace Cat_a_logAPI.Service.Interfaces
     {
         public bool AddMilestone(ProjectMilestone milestone);
 
-        public bool RemoveMilestone(ProjectMilestone milestone);
+        public bool RemoveMilestone(int id);
 
         public bool AddMilestones(IEnumerable<ProjectMilestone> milestones);
 

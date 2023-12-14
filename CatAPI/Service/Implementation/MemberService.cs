@@ -39,8 +39,9 @@ namespace Cat_a_logAPI.Service.Implementation
             return _dbContext.Member.Any(m => m.UserId == userId && m.TeamId == teamId);
         }
 
-        public bool RemoveMember(Member member)
+        public bool RemoveMember(int userId, int teamId)
         {
+            Member member = _dbContext.Member.Where(m => m.UserId == userId && m.TeamId == teamId).FirstOrDefault();
             _dbContext.Member.Remove(member);
             return Save();
         }

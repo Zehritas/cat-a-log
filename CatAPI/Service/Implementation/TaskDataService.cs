@@ -18,8 +18,9 @@ namespace Cat_a_logAPI.Service.Implementation
             return Save();
         }
 
-        public bool RemoveTask(TaskData taskToRemove)
+        public bool RemoveTask(int id)
         {
+            TaskData taskToRemove = _dbContext.TaskData.Find(id);
             IEnumerable<Dependency> dependenciesToRemove;
             IEnumerable<ProjectTeam> allTeams = _dbContext.ProjectTeam.ToList();
             foreach (ProjectTeam team in allTeams)

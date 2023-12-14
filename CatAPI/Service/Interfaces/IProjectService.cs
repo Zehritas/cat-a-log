@@ -8,7 +8,7 @@ namespace Cat_a_logAPI.Service.Interfaces
 
         public bool AddProjects(IEnumerable<Project> projects);
 
-        public bool RemoveProject(Project project);
+        public bool RemoveProject(int id);
 
         public bool RemoveProjects(IEnumerable<Project> projects);
 
