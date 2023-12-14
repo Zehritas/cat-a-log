@@ -23,7 +23,9 @@ namespace cat_a_logTests
             // Arrange
             var project = new List<TaskData>();
             var chart = new ApexChart<TaskData>();
-            var teams = new List<ProjectTeam> { /* Populate with existing teams */ };
+            var teams = new List<ProjectTeam> {   
+                new ProjectTeam { Name = "TeamA" },
+                new ProjectTeam { Name = "TeamB" }, };
             var selectedTeamName = "TeamA";
             var newTask = new TaskData
             {
@@ -36,12 +38,12 @@ namespace cat_a_logTests
             var taskManager = new TaskManager();
 
             // Act
-            await taskManager.AddTask(project, chart, newTask, teams, selectedTeamName);
+            taskManager.AddTask(project, chart, newTask, teams, selectedTeamName);
 
             // Assert
-            NUnit.Framework.Assert.IsEmpty(taskManager.errorMessage); // No error message for valid input
-            NUnit.Framework.Assert.IsTrue(project.Any(task => task.Name == "New Task")); // Task is added to the project
-                                                                         // Assert chart update: Check if chart was updated correctly
+            NUnit.Framework.Assert.IsEmpty(taskManager.errorMessage); 
+            NUnit.Framework.Assert.IsTrue(project.Any(task => task.Name == "New Task")); 
+                                                                        
         }
 
         [Test]
