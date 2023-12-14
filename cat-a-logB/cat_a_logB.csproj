@@ -8,6 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Include="obj\Debug\net7.0\scopedcss\bundle\cat-a-logB.styles.css" />
+    <Content Include="obj\Debug\net7.0\scopedcss\bundle\cat_a_logB.styles.css" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="Pages\Counter.razor" />
     <None Include="Pages\CreateNewTask.razor" />
     <None Include="Pages\EditTaskCommentsModal.razor" />
