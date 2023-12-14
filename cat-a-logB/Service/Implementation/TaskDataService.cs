@@ -163,5 +163,13 @@ namespace cat_a_logB.Service.Implementation
         {
             return _dbContext.TaskData.Any(t => t.Id == id);
         }
+
+        public string GetTeamName(int id)
+        {
+            var task = _dbContext.TaskData.Find(id);
+            var team = _dbContext.ProjectTeam.Find(task.TeamId);
+
+            return team.Name;
+        }
     }
 }

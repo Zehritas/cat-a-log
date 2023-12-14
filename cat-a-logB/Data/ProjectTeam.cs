@@ -71,10 +71,10 @@ namespace cat_a_logB.Data
         {
             TeamMembers = allMembers.Where(member => member.TeamId == Id).ToList();
         }
-        public static void GetTasksForTeam(List<TaskData> allTasks, ProjectTeam team)
-        {
-            team.Tasks = allTasks.Where(task => task.Team.Name == team.Name).ToList();
-        }
+        //public static void GetTasksForTeam(List<TaskData> allTasks, ProjectTeam team)
+        //{
+        //    team.Tasks = allTasks.Where(task => task.Team.Name == team.Name).ToList();
+        //}
 
     }
 }

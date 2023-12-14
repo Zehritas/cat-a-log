@@ -31,5 +31,7 @@ namespace cat_a_logB.Service.Interfaces
         public bool UpdateTask(TaskData task);
 
         public bool TaskExists(int id);
+
+        public string GetTeamName(int id);
     }
 }

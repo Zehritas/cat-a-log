@@ -19,5 +19,7 @@ namespace cat_a_logB.Service.Interfaces
         public bool UpdateTeam(ProjectTeam team);
 
         public bool TeamExists(int id);
+
+        public List<TaskData> GetTasksForTeam(int id);
     }
 }

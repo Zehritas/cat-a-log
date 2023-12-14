@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using ApexCharts;
+using AutoMapper;
 using cat_a_logB.Data;
 using cat_a_logB.Dto;
 using cat_a_logB.Service.Interfaces;
@@ -137,5 +138,13 @@ namespace cat_a_logB.Service.Implementation
         {
             return _dbContext.ProjectTeam.Any(t => t.Id == id);
         }
+
+        public List<TaskData> GetTasksForTeam(int id)
+        {
+            var teamTasks = _dbContext.TaskData.Where(t => t.TeamId == id).ToList();
+
+            return teamTasks;
+        }
+
     }
 }

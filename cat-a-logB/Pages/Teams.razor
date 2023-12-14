@@ -239,7 +239,7 @@ else
         if (selectedTeam != team)
         {
             selectedTeam = team;
-            ProjectTeam.GetTasksForTeam(tasks, team);
+            team.Tasks = ProjectTeamService.GetTasksForTeam(team.Id);
         }
         else
         {

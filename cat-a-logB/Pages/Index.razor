@@ -108,7 +108,7 @@
                         <h4>@point.X</h4>
                         <span>Deadline: @point.Items.First().EndDate.ToShortDateString()</span>
                         <br>
-                        <span>Team: @point.Items.First().Team.Name</span>
+                        <span>Team:@TaskDataService.GetTeamName(point.Items.First().Id)</span>
                         <br>
                         <span>@CalculationData.CompareUserProgress(point.Items.First())</span>
                         <br>
@@ -132,10 +132,10 @@
             <ChildContent>
                 @foreach (var team in teams)
                 {
-                    <ApexRangeSeries TItem="TaskData" Items="project.Where(task => task.Team == team)" Name="@team.Name"
+                    <ApexRangeSeries TItem="TaskData" Items="project.Where(task => task.TeamId == team.Id)" Name="@team.Name"
                         XValue="@(e => e.Name)" YMinValue="@(e => e.StartDate.ToUnixTimeMilliseconds())"
                         YMaxValue="@(e => e.EndDate.ToUnixTimeMilliseconds())" PointColor="e => e.PointColor"
-                        OrderByDescending="e => e.Items.First().Team.Name" />
+                        OrderByDescending="e => e.Items.First().TeamId" />
                 }
 
             </ChildContent>
@@ -192,7 +192,7 @@
             <li class="list-group-item">Task Name: @selectedData.DataPoint.Items.First().Name</li>
             <li class="list-group-item">Start Date: @selectedData.DataPoint.Items.First().StartDate.ToShortDateString()</li>
             <li class="list-group-item">End Date: @selectedData.DataPoint.Items.First().EndDate.ToShortDateString()</li>
-            <li class="list-group-item">Team: @selectedData.DataPoint.Items.First().Team.Name</li>
+            <li class="list-group-item">Team: @TaskDataService.GetTeamName(selectedData.DataPoint.Items.First().Id)</li>
             <li class="list-group-item">Progress: @selectedData.DataPoint.Items.First().Progress%</li>
             <li class="list-group-item">Task Time Progress: @selectedData.DataPoint.Items.First().AutoProgress%</li>
             <li class="list-group-item">User Progress Difference: @CalculationData.CompareUserProgress(selectedData.DataPoint.Items.First())
