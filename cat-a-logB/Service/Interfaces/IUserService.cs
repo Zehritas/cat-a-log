@@ -6,15 +6,15 @@ namespace cat_a_logB.Service.Interfaces
     {
         public bool AddUser(User user);
 
-        public bool AddUsers(IEnumerable<User> users);
+        public bool AddUsers(List<User> users);
 
-        public bool RemoveUser(User user);
+        public bool RemoveUser(int id);
 
-        public bool RemoveUsers(IEnumerable<User> users);
+        public bool RemoveUsers(List<User> users);
 
         public User GetUser(int Id);
 
-        public IEnumerable<User> GetUsers();
+        public List<User> GetUsers();
 
         public bool UpdateUser(User user);
 

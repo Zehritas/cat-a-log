@@ -1,27 +1,46 @@
-﻿using cat_a_logB.Data;
+﻿using AutoMapper;
+using cat_a_logB.Data;
+using cat_a_logB.Dto;
 using cat_a_logB.Service.Interfaces;
+using Newtonsoft.Json;
+using System.Text;
 
 namespace cat_a_logB.Service.Implementation
 {
     public class ProjectTeamService : IProjectTeamService
     {
         private readonly cat_a_logBContext _dbContext;
+        private readonly HttpClient _httpClient;
+        private readonly IMapper _mapper;
 
-        public ProjectTeamService(cat_a_logBContext dbContext)
+
+
+        public ProjectTeamService(cat_a_logBContext dbContext, IHttpClientFactory httpClientFactory, IMapper mapper)
         {
+            _httpClient = httpClientFactory.CreateClient("ApiClient");
             _dbContext = dbContext;
+            _mapper = mapper;
         }
 
-        public void AddTeam(ProjectTeam projectTeam)
+        public bool AddTeam(ProjectTeam projectTeam)
         {
-            _dbContext.ProjectTeam.Add(projectTeam);
-            _dbContext.SaveChanges();
+            var teamDto = _mapper.Map<TeamDto>(projectTeam);
+            string data = JsonConvert.SerializeObject(teamDto);
+            StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = _httpClient.PostAsync(_httpClient.BaseAddress + "/Team", content).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+            return false;
         }
 
-        public void RemoveTask(TaskData taskToRemove)
+        public bool RemoveTask(TaskData taskToRemove)
         {
-            List<Dependency> dependenciesToRemove;
-            List<ProjectTeam> allTeams = _dbContext.ProjectTeam.ToList();
+            IEnumerable<Data.Dependency> dependenciesToRemove;
+            IEnumerable<ProjectTeam> allTeams = _dbContext.ProjectTeam.ToList();
             foreach (ProjectTeam team in allTeams)
             {
                 foreach (TaskData task in team.Tasks)
@@ -32,43 +51,91 @@ namespace cat_a_logB.Service.Implementation
             }
 
             _dbContext.TaskData.Remove(taskToRemove);
-            _dbContext.SaveChanges();
+            return Save();
         }
 
-        public void RemoveTeam(ProjectTeam projectTeam)
+        public bool RemoveTeam(int id)
         {
-            List<TaskData> teamTasks = projectTeam.Tasks;
+            HttpResponseMessage response = _httpClient.DeleteAsync(_httpClient.BaseAddress + "/Team/" + id).Result;
 
-            for (int i = teamTasks.Count - 1; i >= 0; i--)
+            if (response.IsSuccessStatusCode)
             {
-                RemoveTask(teamTasks.ElementAt(i));
+                return true;
             }
 
-            _dbContext.ProjectTeam.Remove(projectTeam);
-            _dbContext.SaveChanges();
+            return false;
         }
 
-        public void AddTeams(List<ProjectTeam> projectTeams)
+        public bool AddTeams(List<ProjectTeam> projectTeams)
         {
             foreach (ProjectTeam projectTeam in projectTeams)
             {
                 _dbContext.ProjectTeam.Add(projectTeam);
             }
-            _dbContext.SaveChanges();
+            return Save();
         }
 
-        public void RemoveTeams(List<ProjectTeam> projectTeams)
+        public bool RemoveTeams(List<ProjectTeam> projectTeams)
         {
             foreach (ProjectTeam projectTeam in projectTeams)
             {
                 _dbContext.ProjectTeam.Remove(projectTeam);
             }
-            _dbContext.SaveChanges();
+            return Save();
         }
 
-        public List<ProjectTeam> GetAllTeams()
+        public ProjectTeam? GetTeam(int Id)
         {
-            return _dbContext.ProjectTeam.ToList();
+            ProjectTeam? team = null;
+            HttpResponseMessage response = _httpClient.GetAsync(_httpClient.BaseAddress + "/Team/" + Id).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                string data = response.Content.ReadAsStringAsync().Result;
+                team = JsonConvert.DeserializeObject<ProjectTeam>(data);
+            }
+
+            return team;
+        }
+
+        public List<ProjectTeam>? GetTeams()
+        {
+            List<ProjectTeam>? teams = null;
+            HttpResponseMessage response = _httpClient.GetAsync(_httpClient.BaseAddress + "/Team").Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                string data = response.Content.ReadAsStringAsync().Result;
+                teams = JsonConvert.DeserializeObject<List<ProjectTeam>>(data);
+            }
+
+            return teams;
+        }
+
+        public bool Save()
+        {
+            var saved = _dbContext.SaveChanges();
+            return saved > 0 ? true : false;
+        }
+
+        public bool UpdateTeam(ProjectTeam team)
+        {
+            var teamDto = _mapper.Map<TeamDto>(team);
+            string data = JsonConvert.SerializeObject(teamDto);
+            StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = _httpClient.PutAsync(_httpClient.BaseAddress + "/Team", content).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public bool TeamExists(int id)
+        {
+            return _dbContext.ProjectTeam.Any(t => t.Id == id);
         }
     }
 }

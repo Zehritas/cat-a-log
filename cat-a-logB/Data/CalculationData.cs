@@ -52,7 +52,7 @@ namespace cat_a_logB.Data
 
         public int CalculateAdditionalPeople(TaskData task, ProjectTeam team)
         {
-            double progressPerPerson = task.Progress / team.Members.Count;
+            double progressPerPerson = task.Progress / team.TeamMembers.Count;
             double progressWithoutOriginalPeople = (100 / task.AutoProgress) * task.Progress;
             double remainingTime = 100 - task.AutoProgress;
 

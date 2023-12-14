@@ -4,14 +4,20 @@ namespace cat_a_logB.Service.Interfaces
 {
     public interface IProjectTeamService
     {
-        public void AddTeam(ProjectTeam projectTeam);
+        public bool AddTeam(ProjectTeam projectTeam);
 
-        public void RemoveTeam(ProjectTeam projectTeam);
+        public bool RemoveTeam(int id);
 
-        public void AddTeams(List<ProjectTeam> projectTeams);
+        public bool AddTeams(List<ProjectTeam> projectTeams);
 
-        public void RemoveTeams(List<ProjectTeam> projectTeams);
+        public bool RemoveTeams(List<ProjectTeam> projectTeams);
 
-        public List<ProjectTeam> GetAllTeams();
+        public ProjectTeam GetTeam(int Id);
+
+        public List<ProjectTeam> GetTeams();
+
+        public bool UpdateTeam(ProjectTeam team);
+
+        public bool TeamExists(int id);
     }
 }

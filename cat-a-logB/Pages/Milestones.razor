@@ -181,14 +181,14 @@
 
     protected override void OnInitialized()
     {
-        milestones = MilestoneService.GetAllMilestones();
-        tasks = TaskDataService.GetAllTasks();
+        milestones = MilestoneService.GetMilestones();
+        tasks = TaskDataService.GetTasks();
     }
 
     private async Task RefreshData()
     {
-        milestones = MilestoneService.GetAllMilestones();
-        tasks = tasks = TaskDataService.GetAllTasks();
+        milestones = MilestoneService.GetMilestones();
+        tasks = tasks = TaskDataService.GetTasks();
 
         StateHasChanged();
     }

@@ -14,7 +14,7 @@ var connectionString = builder.Configuration.GetConnectionString("cat_a_logBCont
 
 builder.Services.AddHttpClient("ApiClient", client =>
 {
-    client.BaseAddress = new Uri("http://localhost:44325/api");
+    client.BaseAddress = new Uri("https://localhost:7106/api");
     // Other configuration settings...
 });
 

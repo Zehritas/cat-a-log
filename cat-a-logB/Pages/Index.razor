@@ -291,7 +291,7 @@ else if (selectedData != null)
     private List<object> boxedValues = new List<object>();
     private ApexChart<ProjectMilestone> MileChart;
     private List<ProjectMilestone> milestones;
-    private IEnumerable<Member> members;
+    private List<Member> members;
     private string title = "Milestone List";
     private List<double> lineData;
     private ApexChartOptions<ProjectMilestone> options1 { get; set; } = new();
@@ -305,14 +305,14 @@ else if (selectedData != null)
 
     protected override async Task OnInitializedAsync()
     {
-        project = TaskDataService.GetAllTasks();
-        teams = ProjectTeamService.GetAllTeams();
-        milestones = MilestoneService.GetAllMilestones();
+        project = TaskDataService.GetTasks();
+        teams = ProjectTeamService.GetTeams();
+        milestones = MilestoneService.GetMilestones();
         members = MemberService.GetMembers();
-        // foreach (var team in teams)
-        // {
-        //     team.LoadTeamMembers(members);
-        // }
+        foreach (var team in teams)
+        {
+            team.LoadTeamMembers(members);
+        }
 
         sortedTasks = project;
         var colors = teams.Select(team => team.Color).ToList();
@@ -362,9 +362,9 @@ else if (selectedData != null)
 
     private async Task RefreshData()
     {
-        project = TaskDataService.GetAllTasks();
-        teams = ProjectTeamService.GetAllTeams();
-        milestones = MilestoneService.GetAllMilestones();
+        project = TaskDataService.GetTasks();
+        teams = ProjectTeamService.GetTeams();
+        milestones = MilestoneService.GetMilestones();
 
         StateHasChanged();
     }

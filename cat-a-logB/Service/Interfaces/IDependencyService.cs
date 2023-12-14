@@ -4,16 +4,20 @@ namespace cat_a_logB.Service.Interfaces
 {
     public interface IDependencyService
     {
-        public void AddDependency(Dependency dependency);
+        public bool AddDependency(Dependency dependency);
 
-        public void RemoveDependency(Dependency dependency);
+        public bool RemoveDependency(int id);
 
-        public void AddDependencies(List<Dependency> dependencies);
+        public bool AddDependencies(List<Dependency> dependencies);
 
-        public void RemoveDependencies(List<Dependency> dependencies, int taskId);
+        public bool RemoveDependencies(List<Dependency> dependencies, int taskId);
 
-        //public Dependency GetDependency(int id);
+        public Dependency GetDependency(int id);
 
         public List<Dependency> GetDependencies();
+
+        public bool UpdateDependency(Dependency dependency);
+
+        public bool DependencyExists(int id);
     }
 }

@@ -1,50 +1,92 @@
-﻿using cat_a_logB.Data;
+﻿using AutoMapper;
+using cat_a_logB.Data;
+using cat_a_logB.Dto;
 using cat_a_logB.Service.Interfaces;
+using Newtonsoft.Json;
+using System.Text;
 
 namespace cat_a_logB.Service.Implementation
 {
     public class UserService : IUserService
     {
         private readonly cat_a_logBContext _dbContext;
+        private readonly HttpClient _httpClient;
+        private readonly IMapper _mapper;
 
-        public UserService(cat_a_logBContext dbContext)
+
+
+        public UserService(cat_a_logBContext dbContext, IHttpClientFactory httpClientFactory, IMapper mapper)
         {
+            _httpClient = httpClientFactory.CreateClient("ApiClient");
             _dbContext = dbContext;
+            _mapper = mapper;
         }
 
         public bool AddUser(User user) 
         {
-            _dbContext.User.Add(user);
-            return Save();
+            var userDto = _mapper.Map<UserDto>(user);
+            string data = JsonConvert.SerializeObject(userDto);
+            StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = _httpClient.PostAsync(_httpClient.BaseAddress + "/User", content).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+            return false;
         }
 
-        public bool AddUsers(IEnumerable<User> users) 
+        public bool AddUsers(List<User> users) 
         {
             _dbContext.User.AddRange(users);
             return Save();
         }
 
-        public bool RemoveUser(User user)
+        public bool RemoveUser(int id)
         {
-            _dbContext.User.Remove(user);
-            return Save();
+            HttpResponseMessage response = _httpClient.DeleteAsync(_httpClient.BaseAddress + "/User/" + id).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+
+            return false;
         }
 
-        public bool RemoveUsers(IEnumerable<User> users)
+        public bool RemoveUsers(List<User> users)
         {
             _dbContext.User.RemoveRange(users);
             return Save();
         }
 
-        public User GetUser(int id)
+        public User? GetUser(int id)
         {
-            User user = _dbContext.User.Find(id);
+            User? user = null;
+            HttpResponseMessage response = _httpClient.GetAsync(_httpClient.BaseAddress + "/User/" + id).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                string data = response.Content.ReadAsStringAsync().Result;
+                user = JsonConvert.DeserializeObject<User>(data);
+            }
+
             return user;
         }
 
-        public IEnumerable<User> GetUsers()
+        public List<User>? GetUsers()
         {
-            return _dbContext.User.ToList();
+            List<User>? users = null;
+            HttpResponseMessage response = _httpClient.GetAsync(_httpClient.BaseAddress + "/User").Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                string data = response.Content.ReadAsStringAsync().Result;
+                users = JsonConvert.DeserializeObject<List<User>>(data);
+            }
+
+            return users;
         }
 
         public bool Save()
@@ -55,9 +97,17 @@ namespace cat_a_logB.Service.Implementation
 
         public bool UpdateUser(User user)
         {
-            _dbContext.User.Update(user);
+            var userDto = _mapper.Map<UserDto>(user);
+            string data = JsonConvert.SerializeObject(userDto);
+            StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
 
-            return Save();
+            HttpResponseMessage response = _httpClient.PutAsync(_httpClient.BaseAddress + "/User", content).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+            return false;
         }
 
         public bool UserExists(int id)

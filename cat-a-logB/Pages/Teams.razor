@@ -195,8 +195,8 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        teams = ProjectTeamService.GetAllTeams();
-        tasks = TaskDataService.GetAllTasks();
+        teams = ProjectTeamService.GetTeams();
+        tasks = TaskDataService.GetTasks();
     }
 
     private async Task RefreshData()
@@ -219,7 +219,7 @@ else
     private async void RemoveTeam(ProjectTeam team)
     {
         // Remove the team
-        ProjectTeamService.RemoveTeam(team);
+        ProjectTeamService.RemoveTeam(team.Id);
        
         if (selectedTeam != null && selectedTeam.Id == team.Id)
         {

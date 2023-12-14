@@ -1,61 +1,98 @@
-﻿using cat_a_logB.Data;
+﻿using AutoMapper;
+using cat_a_logB.Data;
+using cat_a_logB.Dto;
 using cat_a_logB.Service.Interfaces;
+using Newtonsoft.Json;
+using System.Text;
 
 namespace cat_a_logB.Service.Implementation
 {
     public class TaskDataService : ITaskDataService
     {
         private readonly cat_a_logBContext _dbContext;
+        private readonly HttpClient _httpClient;
+        private readonly IMapper _mapper;
 
-        public TaskDataService(cat_a_logBContext dbContext)
+
+
+        public TaskDataService(cat_a_logBContext dbContext, IHttpClientFactory httpClientFactory, IMapper mapper)
         {
+            _httpClient = httpClientFactory.CreateClient("ApiClient");
             _dbContext = dbContext;
+            _mapper = mapper;
         }
 
-        public void AddTask(TaskData task)
+        public bool AddTask(TaskData task)
         {
-            _dbContext.TaskData.Add(task);
-            _dbContext.SaveChanges();
-        }
+            var taskDto = _mapper.Map<TaskDto>(task);
+            string data = JsonConvert.SerializeObject(taskDto);
+            StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
 
-        public void RemoveTask(TaskData taskToRemove)
-        {
-            List<Dependency> dependenciesToRemove;
-            List<ProjectTeam> allTeams = _dbContext.ProjectTeam.ToList();
-            foreach (ProjectTeam team in allTeams)
+            HttpResponseMessage response = _httpClient.PostAsync(_httpClient.BaseAddress + "/TaskData", content).Result;
+
+            if (response.IsSuccessStatusCode)
             {
-                foreach (TaskData task in team.Tasks)
-                {
-                    dependenciesToRemove = _dbContext.Dependency.Where(d => d.SuccessorTaskId == taskToRemove.Id).ToList();
-                    _dbContext.RemoveRange(dependenciesToRemove);
-                }
+                return true;
+            }
+            return false;
+        }
+
+        public bool RemoveTask(int id)
+        {
+            HttpResponseMessage response = _httpClient.DeleteAsync(_httpClient.BaseAddress + "/TaskData/" + id).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
             }
 
-            _dbContext.TaskData.Remove(taskToRemove);
-            _dbContext.SaveChanges();
+            return false;
         }
 
-        public void AddTasks(List<TaskData> tasks)
+        public bool AddTasks(List<TaskData> tasks)
         {
             foreach (TaskData task in tasks)
             {
                 _dbContext.TaskData.Add(task);
             }
-            _dbContext.SaveChanges();
+            return Save();
         }
 
-        public void RemoveTasks(List<TaskData> tasks)
+        public bool RemoveTasks(List <TaskData> tasks)
         {
             foreach (TaskData task in tasks)
             {
                 _dbContext.TaskData.Remove(task);
             }
-            _dbContext.SaveChanges();
+            return Save();
         }
 
-        public List<TaskData> GetAllTasks()
+        public List<TaskData>? GetTasks()
         {
-            return _dbContext.TaskData.ToList();
+            List<TaskData>? tasks = null;
+            HttpResponseMessage response = _httpClient.GetAsync(_httpClient.BaseAddress + "/TaskData").Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                string data = response.Content.ReadAsStringAsync().Result;
+                tasks = JsonConvert.DeserializeObject<List<TaskData>>(data);
+            }
+
+            return tasks;
+        }
+
+        public TaskData? GetTask(int Id)
+        {
+            TaskData? task = null;
+            HttpResponseMessage response = _httpClient.GetAsync(_httpClient.BaseAddress + "/TaskData/" + Id).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                string data = response.Content.ReadAsStringAsync().Result;
+                task = JsonConvert.DeserializeObject<TaskData>(data);
+            }
+
+            return task;
         }
 
         public void SyncColorWithTeam(TaskData task)
@@ -101,12 +138,30 @@ namespace cat_a_logB.Service.Implementation
             _dbContext.SaveChanges();
         }
 
-        public TaskData UpdateTask(TaskData task)
+        public bool Save()
         {
-            TaskData updatedTask = _dbContext.TaskData.Find(task.Id);
-
-            return updatedTask;
+            var saved = _dbContext.SaveChanges();
+            return saved > 0 ? true : false;
         }
 
+        public bool UpdateTask(TaskData task)
+        {
+            var taskDto = _mapper.Map<TaskDto>(task);
+            string data = JsonConvert.SerializeObject(taskDto);
+            StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = _httpClient.PutAsync(_httpClient.BaseAddress + "/TaskData", content).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public bool TaskExists(int id)
+        {
+            return _dbContext.TaskData.Any(t => t.Id == id);
+        }
     }
 }

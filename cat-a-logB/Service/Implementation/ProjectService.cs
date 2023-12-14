@@ -1,37 +1,73 @@
-﻿using cat_a_logB.Data;
+﻿using AutoMapper;
+using cat_a_logB.Data;
+using cat_a_logB.Dto;
 using cat_a_logB.Service.Interfaces;
+using Newtonsoft.Json;
+using System.Text;
 
 namespace cat_a_logB.Service.Implementation
 {
     public class ProjectService : IProjectService
     {
         private readonly cat_a_logBContext _dbContext;
+        private readonly HttpClient _httpClient;
+        private readonly IMapper _mapper;
 
-        public ProjectService(cat_a_logBContext dbContext)
+
+        public ProjectService(cat_a_logBContext dbContext, IHttpClientFactory httpClientFactory, IMapper mapper)
         {
+            _httpClient = httpClientFactory.CreateClient("ApiClient");
             _dbContext = dbContext;
+            _mapper = mapper;
         }
 
         public bool AddProject(Project project)
         {
-            _dbContext.Project.Add(project);
-            return Save();
+            var projectDto = _mapper.Map<ProjectDto>(project);
+            string data = JsonConvert.SerializeObject(projectDto);
+            StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = _httpClient.PostAsync(_httpClient.BaseAddress + "/Project", content).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+            return false;
         }
 
-        public bool AddProjects(IEnumerable<Project> projects)
+        public bool AddProjects(List<Project> projects)
         {
             _dbContext.Project.AddRange(projects);
             return Save();
         }
 
-        public Project GetProject(int Id)
+        public Project? GetProject(int Id)
         {
-            return _dbContext.Project.Find(Id);
+            Project? project = null;
+            HttpResponseMessage response = _httpClient.GetAsync(_httpClient.BaseAddress + "/Project/" + Id).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                string data = response.Content.ReadAsStringAsync().Result;
+                project = JsonConvert.DeserializeObject<Project>(data);
+            }
+
+            return project;
         }
 
-        public IEnumerable<Project> GetProjects()
+        public List<Project>? GetProjects()
         {
-            return _dbContext.Project.ToList();
+            List<Project>? projects = null;
+            HttpResponseMessage response = _httpClient.GetAsync(_httpClient.BaseAddress + "/Project").Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                string data = response.Content.ReadAsStringAsync().Result;
+                projects = JsonConvert.DeserializeObject<List<Project>>(data);
+            }
+
+            return projects;
         }
 
         public bool ProjectExists(int id)
@@ -39,13 +75,19 @@ namespace cat_a_logB.Service.Implementation
             return _dbContext.Project.Any(p => p.Id == id);
         }
 
-        public bool RemoveProject(Project project)
+        public bool RemoveProject(int id)
         {
-            _dbContext.Project.Remove(project);
-            return Save();
+            HttpResponseMessage response = _httpClient.DeleteAsync(_httpClient.BaseAddress + "/Projet/" + id).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+
+            return false;
         }
 
-        public bool RemoveProjects(IEnumerable<Project> projects)
+        public bool RemoveProjects(List<Project> projects)
         {
             _dbContext.Project.RemoveRange(projects);
             return Save();
@@ -57,9 +99,19 @@ namespace cat_a_logB.Service.Implementation
             return saved > 0 ? true : false;
         }
 
-        public void UpdateProject(Project project)
+        public bool UpdateProject(Project project)
         {
-            _dbContext.Project.Update(project);
+            var projectDto = _mapper.Map<Project>(project);
+            string data = JsonConvert.SerializeObject(projectDto);
+            StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = _httpClient.PutAsync(_httpClient.BaseAddress + "/Project", content).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

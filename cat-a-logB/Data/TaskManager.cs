@@ -25,7 +25,7 @@ namespace cat_a_logB.Data
 
         public TaskManager() { }
 
-        public List<TaskData> project;
+        public IEnumerable<TaskData> project;
         public ApexChart<TaskData> chart;
         public SelectedData<TaskData> selectedData;
         public EventCallback OnClose;
@@ -366,9 +366,9 @@ namespace cat_a_logB.Data
 
         public async Task RefreshData()
         {
-            project = taskDataService.GetAllTasks();
-            teams = projectTeamService.GetAllTeams();
-            milestones = milestoneService.GetAllMilestones();
+            project = taskDataService.GetTasks();
+            teams = projectTeamService.GetTeams();
+            milestones = milestoneService.GetMilestones();
 
         }
         public async Task AddDependency(List<TaskData> project, ApexChart<TaskData> chart, SelectedData<TaskData> selectedData, DependencyType selectedDependencyType, int selectedSuccessorTask)
@@ -495,7 +495,7 @@ namespace cat_a_logB.Data
 
                 if (taskToRemove != null)
                 {
-                    taskDataService.RemoveTask(taskToRemove);
+                    taskDataService.RemoveTask(taskToRemove.Id);
                     project.Remove(taskToRemove);
                 }
             }

@@ -4,16 +4,22 @@ namespace cat_a_logB.Service.Interfaces
 {
     public interface IMilestoneService
     {
-        public void AddMilestone(ProjectMilestone milestone);
+        public bool AddMilestone(ProjectMilestone milestone);
 
-        public void RemoveMilestone(ProjectMilestone milestone);
+        public bool RemoveMilestone(int id);
 
-        public void AddMilestones(List<ProjectMilestone> milestones);
+        public bool AddMilestones(List<ProjectMilestone> milestones);
 
-        public void RemoveMilestones(List<ProjectMilestone> milestones);
+        public bool RemoveMilestones(List<ProjectMilestone> milestones);
 
-        public List<ProjectMilestone> GetAllMilestones();
+        public ProjectMilestone GetMilestone(int Id);
+
+        public List<ProjectMilestone> GetMilestones();
 
         public void ChangeMilestoneColor(int id, string newColor);
+
+        public bool UpdateMilestone(ProjectMilestone milestone);
+
+        public bool MilestoneExists(int id);
     }
 }

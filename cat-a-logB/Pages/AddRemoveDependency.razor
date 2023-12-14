@@ -89,7 +89,7 @@
 
     async void DeleteDependency(List<Dependency> dependencies, Dependency dependency)
     {
-        DependencyService.RemoveDependency(dependency);
+        DependencyService.RemoveDependency(dependency.Id);
         await RefreshData();
     }
     
