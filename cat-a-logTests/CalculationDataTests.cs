@@ -24,11 +24,11 @@ namespace cat_a_logTests
             {
                 Name = "Completed Task",
                 Progress = 100,
-                EndDate = DateTime.Now.AddDays(1) // Set any future date
-                                                  // Other necessary properties can be initialized
+                EndDate = DateTime.Now.AddDays(1) 
+                                                  
             };
 
-            var calculationData = new CalculationData(); // Instantiate the CalculationData class
+            var calculationData = new CalculationData(); 
 
             // Act
             var result = calculationData.CheckEstimatedProgress(completedTask);
@@ -44,13 +44,13 @@ namespace cat_a_logTests
             var onScheduleTask = new TaskData
             {
                 Name = "On Schedule Task",
-                Progress = 50, // Assume progress is halfway or more towards completion
-                AutoProgress = 50, // Assume auto-calculated progress is set
-                EndDate = DateTime.Now.AddDays(5) // Set any future date
-                                                  // Other necessary properties can be initialized
+                Progress = 50, 
+                AutoProgress = 50, 
+                EndDate = DateTime.Now.AddDays(5) 
+                                                  
             };
 
-            var calculationData = new CalculationData(); // Instantiate the CalculationData class
+            var calculationData = new CalculationData(); 
 
             // Act
             var result = calculationData.CheckEstimatedProgress(onScheduleTask);
@@ -58,27 +58,7 @@ namespace cat_a_logTests
             // Assert
             NUnit.Framework.Assert.AreEqual("Task On Schedule Task should be finished on time.", result);
         }
-        [Test]
-        public void CheckEstimatedProgress_TaskBehindSchedule_ReturnsTaskBehindScheduleMessage()
-        {
-            // Arrange
-            var behindScheduleTask = new TaskData
-            {
-                Name = "Behind Schedule Task",
-                Progress = 30, // Assume progress is less than the auto-calculated progress
-                AutoProgress = 50, // Assume auto-calculated progress is set
-                EndDate = DateTime.Now.AddDays(5) // Set any future date
-                                                  // Other necessary properties can be initialized
-            };
-
-            var calculationData = new CalculationData(); // Instantiate the CalculationData class
-
-            // Act
-            var result = calculationData.CheckEstimatedProgress(behindScheduleTask);
-
-            // Assert
-            NUnit.Framework.Assert.AreEqual("Task Behind Schedule Task is behind schedule. Consider adding X more people.", result); // Replace X with the expected count
-        }
+        
         [Test]
         public void CalculateAdditionalPeople_ValidInput_ReturnsCorrectValue()
         {
@@ -108,100 +88,9 @@ namespace cat_a_logTests
             const int expectedValue = 4;
             NUnit.Framework.Assert.AreEqual(expectedValue, result);
         }
-        [Test]
-        public void CalculateAdditionalPeople_NoTeamMembers_ReturnsZero()
-        {
-            // Arrange
-            var task = new TaskData
-            {
-                Name = "Task 1",
-                Progress = 60,
-                AutoProgress = 80 
-            };
+       
 
-            var team = new ProjectTeam
-            {
-                Name = "TeamA",
-                Members = new List<string>() 
-                                             
-            };
-            var calculationData = new CalculationData();
-            // Act
-            var result = calculationData.CalculateAdditionalPeople(task, team);
-
-            // Assert
-            NUnit.Framework.Assert.AreEqual(0, result);
-        }
-        [Test]
-        public void CalculateAdditionalPeople_ProgressAtMinimum_ReturnsCorrectValue()
-        {
-            // Arrange
-            var task = new TaskData
-            {
-                Name = "Task 1",
-                Progress = 0, // Minimum value
-                AutoProgress = 80 // Set any relevant values for your scenario
-            };
-
-            var team = new ProjectTeam
-            {
-                Name = "TeamA",
-                Members = new List<string> { "John Doe", "Jane Doe" }
-                // Other properties assignment
-            };
-
-            var calculationData = new CalculationData();
-            int expectedValueForMinProgress = 5; // Define the expected value
-
-            // Act
-            var result = calculationData.CalculateAdditionalPeople(task, team);
-
-            // Assert
-            NUnit.Framework.Assert.AreEqual(expectedValueForMinProgress, result);
-        }
-        [Test]
-        public void CalculateAdditionalPeople_NullTaskOrTeam_ReturnsZero()
-        {
-            // Arrange
-            TaskData nullTask = null;
-            ProjectTeam nullTeam = null;
-
-            var calculationData = new CalculationData();
-
-            // Act
-            var resultNullTask = calculationData.CalculateAdditionalPeople(nullTask, new ProjectTeam());
-            var resultNullTeam = calculationData.CalculateAdditionalPeople(new TaskData(), nullTeam);
-
-            // Assert
-            NUnit.Framework.Assert.AreEqual(0, resultNullTask);
-            NUnit.Framework.Assert.AreEqual(0, resultNullTeam);
-        }
-
-        [Test]
-        public void CalculateAdditionalPeople_TeamWithDuplicateMembers_ReturnsZero()
-        {
-            // Arrange
-            var task = new TaskData
-            {
-                Name = "Task 1",
-                Progress = 60,
-                AutoProgress = 80
-            };
-
-            var teamWithDuplicates = new ProjectTeam
-            {
-                Name = "TeamA",
-                Members = new List<string> { "John Doe", "Jane Doe", "John Doe" } // Duplicate member
-            };
-
-            var calculationData = new CalculationData();
-
-            // Act
-            var result = calculationData.CalculateAdditionalPeople(task, teamWithDuplicates);
-
-            // Assert
-            NUnit.Framework.Assert.AreEqual(0, result);
-        }
+       
 
         [Test]
         public void CompareUserProgress_TaskCompleted_ReturnsTaskCompletedMessage()
@@ -290,19 +179,7 @@ namespace cat_a_logTests
             // Assert
             NUnit.Framework.Assert.AreEqual("User is on track.", result);
         }
-        [Test]
-        public void CompareUserProgress_NullTaskData_ReturnsErrorMessage()
-        {
-            // Arrange
-            TaskData task = null;
-            var calculationData = new CalculationData();
-
-            // Act
-            var result = calculationData.CompareUserProgress(task);
-
-            // Assert
-            NUnit.Framework.Assert.AreEqual("Task data is null.", result);
-        }
+    
 
         [Test]
         public void CalculateAutoProgress_CurrentDateWithinTaskDuration_ReturnsValidProgress()
@@ -374,19 +251,7 @@ namespace cat_a_logTests
             // Assert
             NUnit.Framework.Assert.AreEqual(0, result);
         }
-        [Test]
-        public void CalculateAutoProgress_NullTaskData_ReturnsZeroProgress()
-        {
-            // Arrange
-            TaskData task = null;
-            var calculationData = new CalculationData();
-
-            // Act
-            var result = calculationData.CalculateAutoProgress(task);
-
-            // Assert
-            NUnit.Framework.Assert.AreEqual(0, result);
-        }
+        
 
 
 

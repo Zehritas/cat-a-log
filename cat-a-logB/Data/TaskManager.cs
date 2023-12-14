@@ -57,8 +57,9 @@ namespace cat_a_logB.Data
                 TaskData taskToUpdate = project.FirstOrDefault(task => task.Id == selectedTaskId);
                 if (taskToUpdate != null)
                 {
+                    taskToUpdate.Comments = editedComments;
                     taskDataService.ChangeTaskComment(taskToUpdate.Id, editedComments);
-                    //taskToUpdate.Comments = editedComments;
+                    
                 }
 
 
@@ -89,8 +90,8 @@ namespace cat_a_logB.Data
                             TaskCompletionStatus completionStatus = milestone.GetTaskCompletionStatus();
                             if (completionStatus == TaskCompletionStatus.Completed)
                             {
+                                milestone.Color = "green";
                                 milestoneService.ChangeMilestoneColor(milestone.Id, "green");
-                                //milestone.Color = "green";
                                 await mileChart.RenderAsync();
                             }
                         }
@@ -123,10 +124,10 @@ namespace cat_a_logB.Data
                 TaskData taskToUpdate = project.FirstOrDefault(task => task.Id == selectedTaskId);
                 if (taskToUpdate != null)
                 {
-                    taskDataService.ChangeTaskStartDate(taskToUpdate.Id, newStartDate);
-                    taskDataService.ChangeTaskEndDate(taskToUpdate.Id, newEndDate);
                     taskToUpdate.StartDate = newStartDate;
                     taskToUpdate.EndDate = newEndDate;
+                    taskDataService.ChangeTaskStartDate(taskToUpdate.Id, newStartDate);
+                    taskDataService.ChangeTaskEndDate(taskToUpdate.Id, newEndDate);
                     await Reschedule(taskToUpdate.Id, project, chart);
                 }
             }
@@ -166,8 +167,9 @@ namespace cat_a_logB.Data
                 TaskData taskToUpdate = project.FirstOrDefault(task => task.Id == selectedTaskId);
                 if (taskToUpdate != null)
                 {
+                    taskToUpdate.Name = newTaskName;
                     taskDataService.ChangeTaskName(taskToUpdate.Id, newTaskName);
-                    //taskToUpdate.Name = newTaskName;
+                    
                 }
             }
             else
@@ -200,11 +202,13 @@ namespace cat_a_logB.Data
                         case DependencyType.FS:
                             if (predecessorTask.EndDate > successorTask.StartDate)
                             {
+                                successorTask.StartDate = predecessorTask.EndDate;
+                                successorTask.EndDate = successorTask.StartDate.AddDays(successorTaskLength);
+
                                 taskDataService.ChangeTaskStartDate(successorTask.Id, predecessorTask.EndDate);
                                 taskDataService.UpdateTask(successorTask);
                                 taskDataService.ChangeTaskEndDate(successorTask.Id, successorTask.StartDate.AddDays(successorTaskLength));
-                                //successorTask.StartDate = predecessorTask.EndDate;
-                                //successorTask.EndDate = successorTask.StartDate.AddDays(successorTaskLength);
+                                
 
                                 taskDataService.UpdateTask(successorTask);
                                 await Reschedule(successorTask.Id, tasks, chart);
@@ -216,10 +220,12 @@ namespace cat_a_logB.Data
                         case DependencyType.SF:
                             if (predecessorTask.EndDate < successorTask.StartDate)
                             {
+                                successorTask.StartDate = predecessorTask.EndDate;
+                                successorTask.EndDate = successorTask.StartDate.AddDays(successorTaskLength);
+
                                 taskDataService.ChangeTaskStartDate(successorTask.Id, predecessorTask.EndDate);
                                 taskDataService.ChangeTaskEndDate(successorTask.Id, successorTask.StartDate.AddDays(successorTaskLength));
-                                //successorTask.StartDate = predecessorTask.EndDate;
-                                //successorTask.EndDate = successorTask.StartDate.AddDays(successorTaskLength);
+                                
                                 taskDataService.UpdateTask(successorTask);
                                 await Reschedule(successorTask.Id, tasks, chart);
                                 await chart.UpdateSeriesAsync();
@@ -230,10 +236,12 @@ namespace cat_a_logB.Data
                         case DependencyType.SS:
                             if (predecessorTask.StartDate > successorTask.StartDate)
                             {
+                                successorTask.StartDate = predecessorTask.StartDate;
+                                successorTask.EndDate = successorTask.StartDate.AddDays(successorTaskLength);
+
                                 taskDataService.ChangeTaskStartDate(successorTask.Id, predecessorTask.StartDate);
                                 taskDataService.ChangeTaskEndDate(successorTask.Id, successorTask.StartDate.AddDays(successorTaskLength));
-                                //successorTask.StartDate = predecessorTask.StartDate;
-                                //successorTask.EndDate = successorTask.StartDate.AddDays(successorTaskLength);
+                                
 
                                 taskDataService.UpdateTask(successorTask);
                                 await Reschedule(successorTask.Id, tasks, chart);
@@ -245,10 +253,12 @@ namespace cat_a_logB.Data
                         case DependencyType.FF:
                             if (predecessorTask.EndDate > successorTask.EndDate)
                             {
+                                successorTask.EndDate = predecessorTask.EndDate;
+                                successorTask.StartDate = successorTask.EndDate.AddDays(-successorTaskLength);
+
                                 taskDataService.ChangeTaskStartDate(successorTask.Id, successorTask.EndDate.AddDays(-successorTaskLength));
                                 taskDataService.ChangeTaskEndDate(successorTask.Id, predecessorTask.EndDate);
-                                //successorTask.EndDate = predecessorTask.EndDate;
-                                //successorTask.StartDate = successorTask.EndDate.AddDays(-successorTaskLength);
+                                
 
                                 taskDataService.UpdateTask(successorTask);
                                 await Reschedule(successorTask.Id, tasks, chart);
@@ -410,8 +420,9 @@ namespace cat_a_logB.Data
                         Type = dependencyType
                     };
 
-                    dependencyService.AddDependency(newDependency);
                     predecessorTask.Dependencies.Add(newDependency);
+                    dependencyService.AddDependency(newDependency);
+                    
 
                     List<TaskData> sortedTasks = SortTasksByDependencies<TaskData, Dependency>(project);
                     await Reschedule(predecessorTask.Id, sortedTasks, chart);
@@ -465,11 +476,12 @@ namespace cat_a_logB.Data
                         Progress = 0,
                         Comments = newTask.Comments
                     };
+                    project.Add(newTaskData);
                     taskDataService.SyncColorWithTeam(newTaskData);
                     newTaskData.AutoProgress = (double)CalculationDataTask.CalculateAutoProgress(newTaskData);
 
                     taskDataService.AddTask(newTaskData);
-                    project.Add(newTaskData);
+                    
 
                     await RefreshData();
                     await chart.UpdateSeriesAsync();
@@ -495,8 +507,9 @@ namespace cat_a_logB.Data
 
                 if (taskToRemove != null)
                 {
-                    taskDataService.RemoveTask(taskToRemove);
                     project.Remove(taskToRemove);
+                    taskDataService.RemoveTask(taskToRemove);
+                    
                 }
             }
             await RefreshData();
