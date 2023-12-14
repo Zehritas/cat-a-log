@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Lenovo\\Desktop\\cat-a-log\\cat-a-logB\\cat-a-logB.csproj": {}
+    "C:\\Users\\Marijonas\\source\\repos\\cat-a-log\\cat-a-logB\\cat-a-logB.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Lenovo\\Desktop\\cat-a-log\\cat-a-logB\\cat-a-logB.csproj": {
+    "C:\\Users\\Marijonas\\source\\repos\\cat-a-log\\cat-a-logB\\cat-a-logB.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Lenovo\\Desktop\\cat-a-log\\cat-a-logB\\cat-a-logB.csproj",
+        "projectUniqueName": "C:\\Users\\Marijonas\\source\\repos\\cat-a-log\\cat-a-logB\\cat-a-logB.csproj",
         "projectName": "cat-a-logB",
-        "projectPath": "C:\\Users\\Lenovo\\Desktop\\cat-a-log\\cat-a-logB\\cat-a-logB.csproj",
-        "packagesPath": "C:\\Users\\Lenovo\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Lenovo\\Desktop\\cat-a-log\\cat-a-logB\\obj\\",
+        "projectPath": "C:\\Users\\Marijonas\\source\\repos\\cat-a-log\\cat-a-logB\\cat-a-logB.csproj",
+        "packagesPath": "C:\\Users\\Marijonas\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Marijonas\\source\\repos\\cat-a-log\\cat-a-logB\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Lenovo\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Marijonas\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -48,6 +48,10 @@
             "Blazor-ApexCharts": {
               "target": "Package",
               "version": "[2.0.0, )"
+            },
+            "Castle.Core": {
+              "target": "Package",
+              "version": "[5.1.1, )"
             },
             "Microsoft.ASPNetCore.Diagnostics.EntityFrameworkCore": {
               "target": "Package",
@@ -103,7 +107,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
         }
       }
     }

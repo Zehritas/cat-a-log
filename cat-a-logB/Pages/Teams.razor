@@ -180,7 +180,6 @@ else
 
 
 
-
 @code {
     public List<ProjectTeam> teams;
     private List<TaskData> tasks;
@@ -208,7 +207,7 @@ else
 
     private async Task AddTeam()
     {
-       TeamManager.AddTeam(teams, newTeam);
+        TeamManager.AddTeam(teams, newTeam);
         StateHasChanged();
         ToggleCreateForm();
         await RefreshData();
@@ -218,7 +217,7 @@ else
     {
         // Remove the team
         ProjectTeamService.RemoveTeam(team);
-       
+
         if (selectedTeam != null && selectedTeam.Id == team.Id)
         {
             selectedTeam = null;

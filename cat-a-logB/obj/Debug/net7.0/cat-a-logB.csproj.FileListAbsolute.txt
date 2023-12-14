@@ -1918,3 +1918,4 @@ C:\Users\HP\Source\Repos\cat-a-log\cat-a-logB\bin\Debug\net7.0\nunit.engine.core
 C:\Users\HP\Source\Repos\cat-a-log\cat-a-logB\bin\Debug\net7.0\testcentric.engine.metadata.dll
 C:\Users\HP\Source\Repos\cat-a-log\cat-a-logB\bin\Debug\net7.0\nunit.framework.dll
 C:\Users\HP\Source\Repos\cat-a-log\cat-a-logB\obj\Debug\net7.0\cat-a-logB.sourcelink.json
+C:\Users\Marijonas\source\repos\cat-a-log\cat-a-logB\bin\Debug\net7.0\Castle.Core.dll
