@@ -1,4 +1,5 @@
 using ApexCharts;
+using Castle.DynamicProxy;
 using cat_a_logB.Areas.Identity;
 using cat_a_logB.Data;
 using cat_a_logB.Service;
@@ -23,7 +24,18 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 builder.Services.AddScoped<IDependencyService, DependencyService>();
 builder.Services.AddScoped<IMilestoneService, MilestoneService>();
 builder.Services.AddScoped<IProjectTeamService, ProjectTeamService>();
-builder.Services.AddScoped<ITaskDataService, TaskDataService>();
+var proxyGenerator = new ProxyGenerator();
+var logFilePath = "Data/cat_a_log.log";
+builder.Services.AddScoped<TaskDataService>();
+builder.Services.AddScoped<ITaskDataService>(provider =>
+{
+    var taskDataService = provider.GetRequiredService<TaskDataService>();
+    var interceptor = new LoggingInterceptor(logFilePath); // Replace YourInterceptor with the actual interceptor class
+
+
+    return proxyGenerator.CreateInterfaceProxyWithTarget<ITaskDataService>(taskDataService, interceptor);
+});
+
 
 
 
@@ -52,6 +64,9 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+//Middleware
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseStaticFiles();
 

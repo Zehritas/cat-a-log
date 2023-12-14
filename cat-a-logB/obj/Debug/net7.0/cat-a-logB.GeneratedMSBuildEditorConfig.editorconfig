@@ -9,139 +9,137 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = cat_a_logB
 build_property.RootNamespace = cat_a_logB
-build_property.ProjectDir = C:\Users\HP\source\repos\cat-a-log\cat-a-logB\
-build_property.EnableComHosting = 
-build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.ProjectDir = C:\Users\Marijonas\source\repos\cat-a-log\cat-a-logB\
 build_property.RazorLangVersion = 7.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\HP\source\repos\cat-a-log\cat-a-logB
+build_property.MSBuildProjectDirectory = C:\Users\Marijonas\source\repos\cat-a-log\cat-a-logB
 build_property._RazorSourceGeneratorDebug = 
 
-[C:/Users/HP/source/repos/cat-a-log/cat-a-logB/App.razor]
+[C:/Users/Marijonas/source/repos/cat-a-log/cat-a-logB/App.razor]
 build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/HP/source/repos/cat-a-log/cat-a-logB/MessageDisplay.razor]
+[C:/Users/Marijonas/source/repos/cat-a-log/cat-a-logB/MessageDisplay.razor]
 build_metadata.AdditionalFiles.TargetPath = TWVzc2FnZURpc3BsYXkucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/HP/source/repos/cat-a-log/cat-a-logB/Pages/AddRemoveDependency.razor]
+[C:/Users/Marijonas/source/repos/cat-a-log/cat-a-logB/Pages/AddRemoveDependency.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRkUmVtb3ZlRGVwZW5kZW5jeS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/HP/source/repos/cat-a-log/cat-a-logB/Pages/Counter.razor]
+[C:/Users/Marijonas/source/repos/cat-a-log/cat-a-logB/Pages/Counter.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ291bnRlci5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/HP/source/repos/cat-a-log/cat-a-logB/Pages/CreateNewTask.razor]
+[C:/Users/Marijonas/source/repos/cat-a-log/cat-a-logB/Pages/CreateNewTask.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ3JlYXRlTmV3VGFzay5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/HP/source/repos/cat-a-log/cat-a-logB/Pages/DeleteTask.razor]
+[C:/Users/Marijonas/source/repos/cat-a-log/cat-a-logB/Pages/DeleteTask.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRGVsZXRlVGFzay5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/HP/source/repos/cat-a-log/cat-a-logB/Pages/EditTaskCommentsModal.razor]
+[C:/Users/Marijonas/source/repos/cat-a-log/cat-a-logB/Pages/EditTaskCommentsModal.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRWRpdFRhc2tDb21tZW50c01vZGFsLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/HP/source/repos/cat-a-log/cat-a-logB/Pages/EditTaskDependenciesModal.razor]
+[C:/Users/Marijonas/source/repos/cat-a-log/cat-a-logB/Pages/EditTaskDependenciesModal.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRWRpdFRhc2tEZXBlbmRlbmNpZXNNb2RhbC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/HP/source/repos/cat-a-log/cat-a-logB/Pages/EditTaskNameInput.razor]
+[C:/Users/Marijonas/source/repos/cat-a-log/cat-a-logB/Pages/EditTaskNameInput.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRWRpdFRhc2tOYW1lSW5wdXQucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/HP/source/repos/cat-a-log/cat-a-logB/Pages/EditTaskProgressInput.razor]
+[C:/Users/Marijonas/source/repos/cat-a-log/cat-a-logB/Pages/EditTaskProgressInput.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRWRpdFRhc2tQcm9ncmVzc0lucHV0LnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/HP/source/repos/cat-a-log/cat-a-logB/Pages/EditTaskTimeInput.razor]
+[C:/Users/Marijonas/source/repos/cat-a-log/cat-a-logB/Pages/EditTaskTimeInput.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRWRpdFRhc2tUaW1lSW5wdXQucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/HP/source/repos/cat-a-log/cat-a-logB/Pages/FetchData.razor]
+[C:/Users/Marijonas/source/repos/cat-a-log/cat-a-logB/Pages/FetchData.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRmV0Y2hEYXRhLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/HP/source/repos/cat-a-log/cat-a-logB/Pages/Index.razor]
+[C:/Users/Marijonas/source/repos/cat-a-log/cat-a-logB/Pages/Index.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXgucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/HP/source/repos/cat-a-log/cat-a-logB/Pages/Milestones.razor]
+[C:/Users/Marijonas/source/repos/cat-a-log/cat-a-logB/Pages/Milestones.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWlsZXN0b25lcy5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/HP/source/repos/cat-a-log/cat-a-logB/Pages/Teams.razor]
+[C:/Users/Marijonas/source/repos/cat-a-log/cat-a-logB/Pages/Teams.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVGVhbXMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/HP/source/repos/cat-a-log/cat-a-logB/Shared/LoginDisplay.razor]
+[C:/Users/Marijonas/source/repos/cat-a-log/cat-a-logB/Shared/LoginDisplay.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXExvZ2luRGlzcGxheS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/HP/source/repos/cat-a-log/cat-a-logB/Shared/SurveyPrompt.razor]
+[C:/Users/Marijonas/source/repos/cat-a-log/cat-a-logB/Shared/SurveyPrompt.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXFN1cnZleVByb21wdC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/HP/source/repos/cat-a-log/cat-a-logB/_Imports.razor]
+[C:/Users/Marijonas/source/repos/cat-a-log/cat-a-logB/_Imports.razor]
 build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/HP/source/repos/cat-a-log/cat-a-logB/Shared/MainLayout.razor]
+[C:/Users/Marijonas/source/repos/cat-a-log/cat-a-logB/Shared/MainLayout.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXE1haW5MYXlvdXQucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = b-5ykqw7yj8n
 
-[C:/Users/HP/source/repos/cat-a-log/cat-a-logB/Shared/NavMenu.razor]
+[C:/Users/Marijonas/source/repos/cat-a-log/cat-a-logB/Shared/NavMenu.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXE5hdk1lbnUucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = b-lyzq9p2k7a
 
-[C:/Users/HP/source/repos/cat-a-log/cat-a-logB/Areas/Identity/Pages/Account/Login.cshtml]
+[C:/Users/Marijonas/source/repos/cat-a-log/cat-a-logB/Areas/Identity/Pages/Account/Login.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxMb2dpbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/HP/source/repos/cat-a-log/cat-a-logB/Areas/Identity/Pages/Account/Logout.cshtml]
+[C:/Users/Marijonas/source/repos/cat-a-log/cat-a-logB/Areas/Identity/Pages/Account/Logout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxMb2dvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/HP/source/repos/cat-a-log/cat-a-logB/Areas/Identity/Pages/Account/Register.cshtml]
+[C:/Users/Marijonas/source/repos/cat-a-log/cat-a-logB/Areas/Identity/Pages/Account/Register.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxSZWdpc3Rlci5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/HP/source/repos/cat-a-log/cat-a-logB/Areas/Identity/Pages/Account/_ViewImports.cshtml]
+[C:/Users/Marijonas/source/repos/cat-a-log/cat-a-logB/Areas/Identity/Pages/Account/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxfVmlld0ltcG9ydHMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/HP/source/repos/cat-a-log/cat-a-logB/Areas/Identity/Pages/_ViewImports.cshtml]
+[C:/Users/Marijonas/source/repos/cat-a-log/cat-a-logB/Areas/Identity/Pages/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/HP/source/repos/cat-a-log/cat-a-logB/Areas/Identity/Pages/_ViewStart.cshtml]
+[C:/Users/Marijonas/source/repos/cat-a-log/cat-a-logB/Areas/Identity/Pages/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/HP/source/repos/cat-a-log/cat-a-logB/Pages/Error.cshtml]
+[C:/Users/Marijonas/source/repos/cat-a-log/cat-a-logB/Pages/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXJyb3IuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/HP/source/repos/cat-a-log/cat-a-logB/Pages/Shared/_Layout.cshtml]
+[C:/Users/Marijonas/source/repos/cat-a-log/cat-a-logB/Pages/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/HP/source/repos/cat-a-log/cat-a-logB/Pages/Shared/_LoginPartial.cshtml]
+[C:/Users/Marijonas/source/repos/cat-a-log/cat-a-logB/Pages/Shared/_LoginPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9Mb2dpblBhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/HP/source/repos/cat-a-log/cat-a-logB/Pages/Shared/_ValidationScriptsPartial.cshtml]
+[C:/Users/Marijonas/source/repos/cat-a-log/cat-a-logB/Pages/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/HP/source/repos/cat-a-log/cat-a-logB/Pages/_Host.cshtml]
+[C:/Users/Marijonas/source/repos/cat-a-log/cat-a-logB/Pages/_Host.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX0hvc3QuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/HP/source/repos/cat-a-log/cat-a-logB/Pages/_ViewImports.cshtml]
+[C:/Users/Marijonas/source/repos/cat-a-log/cat-a-logB/Pages/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
