@@ -1,18 +1,24 @@
 @using cat_a_logB.Data
 @inject cat_a_logB.Data.TaskManager TaskManager
 @inject cat_a_logB.Pages.SampleData SampleData
-<form>
-    <div class="form-group">
-        <label for="progressInput">Select Progress:</label>
-        <select class="form-control" id="progressInput" @bind="newProgress">
-            @foreach (var progressOption in progressOptions)
-            {
-                <option value="@progressOption">@progressOption%</option>
-            }
-        </select>
-    </div>
-    <button type="button" class="btn btn-success" @onclick="() => UpdateProgress(newProgress)">Update Progress</button>
-</form>
+<div>
+    <br />
+    <form class="row">
+        <div class="form-group col-md-8">
+            <label for="progressInput">Select Progress:</label>
+            <select class="form-control" id="progressInput" @bind="newProgress">
+                @foreach (var progressOption in progressOptions)
+                {
+                    <option value="@progressOption">@progressOption%</option>
+                }
+            </select>
+        </div>
+        <div class="form-group col-md-4 d-flex align-items-end">
+            <button type="button" class="edit-button" @onclick="() => UpdateProgress(newProgress)">Update Progress</button>
+        </div>
+    </form>
+    <br />
+</div>
 
 @code {
     [Parameter] public SelectedData<TaskData> selectedData { get; set; }

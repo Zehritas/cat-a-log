@@ -19,9 +19,10 @@
 @* <button type="button" class="btn btn-primary" @onclick=ShowMilestones>Show Milestones</button> *@
 
 <DemoContainer>
-    <ApexChart @ref=MileChart TItem="ProjectMilestone" Title="@title" Height="120" Options=options1 Debug
-        OnClick=HandleMilestoneClick>
 
+    <div class="container" style="max-width: 800px;">
+    <h2 class="mb-4 modern-heading">Project Milestones</h2>
+    <ApexChart @ref=MileChart TItem="ProjectMilestone" Width="800" Height="120" Options=options1 Debug OnClick=HandleMilestoneClick>
 
         <ApexPointTooltip>
             <div class="m-2" style="width: 300px; max-height: 100px; font-size: 12px;">
@@ -72,12 +73,10 @@
         </ChildContent>
 
     </ApexChart>
-
+    </div>
 </DemoContainer>
 
-
-
-
+<br/><br/>
 
 <DemoContainer>
 
@@ -89,10 +88,25 @@
     }
     else
     {
+        <div class="container" style="max-width: 2000px; margin-left:50px;">
+    <div class="row">
+        <div class="col-lg-6 justify-content-center">
+                    <style>
+                        .list-group-item {
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            font-size: 20px;
+                        }
 
-        <ApexChart OnClick=OnClick @ref=chart TItem="TaskData" Title="Project Gantt chart" Options="options"
+                        .list-group-item button {
+                            margin-left: 30px;
+                            margin-right: 10px;
+                        }
+                    </style>
+            <h3 class="mb-4 modern-heading">Gantt Chart</h3>
+        <ApexChart OnClick=OnClick @ref=chart TItem="TaskData" Options="options"
             XAxisType="XAxisType.Datetime">
-
 
             <ApexPointTooltip>
 
@@ -139,40 +153,79 @@
 
         </ApexChart>
     }
-
+                </div>
+                <div class="col-lg-1">
+                </div>
+                <div class="col-lg-5 d-flex align-items-center">
+                    @if (selectedData != null && selectedData.DataPoint != null)
+                    {
+                        <div class="mt-4">
+                            <h3 class="mb-4 modern-heading">Task Information</h3>
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    Task Name: @selectedData.DataPoint.Items.First().Name
+                                    <button type="button" class="primary-button" @onclick="ToggleEditTaskName">Edit Task Name</button>
+                                </li>
+                                @if (showEditTaskNameInput)
+                                {
+                                    <EditTaskNameInput selectedData="selectedData" project="project" chart="chart" OnClose="ToggleEditTaskName" />
+                                }
+                                <li class="list-group-item">
+                                    Start Date: @selectedData.DataPoint.Items.First().StartDate.ToShortDateString()<br />
+                                    End Date: @selectedData.DataPoint.Items.First().EndDate.ToShortDateString()
+                                    <button type="button" class="primary-button" @onclick="ToggleEditTaskTime">Edit Task Time</button>
+                                </li>
+                                @if (showEditTaskTimeInput)
+                                {
+                                    <EditTaskTimeInput selectedData="selectedData" project="project" chart="chart" OnClose="ToggleEditTaskTime" />
+                                }
+                                <li class="list-group-item">
+                                    Team: @selectedData.DataPoint.Items.First().Team.Name
+                                </li>
+                                <li class="list-group-item">
+                                    Progress: @selectedData.DataPoint.Items.First().Progress%
+                                    <button type="button" class="primary-button" @onclick="ToggleEditTaskProgress">Update Progress</button>
+                                </li>
+                                @if (showEditTaskProgressInput)
+                                {
+                                    <EditTaskProgressInput selectedData="selectedData" project="project" chart="chart" mileChart="MileChart"
+                                                           milestones="milestones" OnClose="ToggleEditTaskProgress" />
+                                }
+                                <li class="list-group-item">
+                                    Task Time Progress: @selectedData.DataPoint.Items.First().AutoProgress.ToString("N2")%
+                                </li>
+                                <li class="list-group-item">
+                                    Manage Dependecies
+                                    <button type="button" class="primary-button" @onclick="ToggleEditTaskDependencies">Dependencies</button>
+                                </li>
+                                <li class="list-group-item">
+                                    Manage Comments
+                                    <button type="button" class="primary-button" @onclick="ToggleEditTaskComments">Comments</button>
+                                </li>
+                            </ul>
+                            <br />
+                            <div class="d-flex justify-content-center align-items-center mb-sm-3">
+                                <button type="button" class="remove-button" @onclick="RemoveTask">Remove Task</button>
+                                <div class="ml-2"></div> <!-- Add some margin here -->
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="border-light" style="border: 2px solid #3498db; padding: 20px; background-color: #ecf0f1; color: #2c3e50; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                            <h3 style="font-size: 24px; margin-bottom: 15px;">Explore Tasks</h3>
+                            <p style="font-size: 16px; line-height: 1.5em; color: #555;">
+                                Click on a task in the Gantt chart to see detailed information about it. <br /> Gain insights into task names, start and end dates, progress, and more! <br /> Or click on the button below and add a new task!
+                            </p>
+                            <br>
+                            <button type="button" class="primary-button" @onclick="ToggleAddNewTask">Add a New Task</button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
 </DemoContainer>
-
-
-
-@if (selectedData != null && selectedData.DataPoint != null)
-{
-    <div class="alert alert-info">
-        <h3>Edit:@selectedData.DataPoint.Items.First().Name</h3>
-    </div>
-
-    <form>
-        <!-- Buttons for editing tasks -->
-
-        <button type="button" class="btn btn-primary" @onclick="RemoveTask">Remove Task</button>
-        <button type="button" class="btn btn-primary" @onclick="ToggleEditTaskName">Edit Task Name</button>
-        <button type="button" class="btn btn-primary" @onclick="ToggleEditTaskTime">Edit Task Time</button>
-        <button type="button" class="btn btn-primary" @onclick="ToggleEditTaskComments">Comments</button>
-        <button type="button" class="btn btn-primary" @onclick="ToggleEditTaskProgress">Update Progress</button>
-        <button type="button" class="btn btn-primary" @onclick="ToggleEditTaskDependencies">Add Dependency</button>
-    </form>
-    @if (showEditTaskNameInput)
-    {
-        <EditTaskNameInput selectedData="selectedData" project="project" chart="chart" OnClose="ToggleEditTaskName" />
-    }
-    @if (showEditTaskTimeInput)
-    {
-        <EditTaskTimeInput selectedData="selectedData" project="project" chart="chart" OnClose="ToggleEditTaskTime" />
-    }
-    @if (showEditTaskProgressInput)
-    {
-        <EditTaskProgressInput selectedData="selectedData" project="project" chart="chart" mileChart="MileChart"
-            milestones="milestones" OnClose="ToggleEditTaskProgress" />
-    }
     @if (showEditTaskCommentsModal)
     {
         <EditTaskCommentsModal selectedData="selectedData" project="project" chart="chart" OnClose="ToggleEditTaskComments" />
@@ -182,85 +235,6 @@
     {
         <AddRemoveDependency selectedData="selectedData" project="project" chart="chart" OnClose="ToggleEditTaskDependencies" />
     }
-    <div class="mt-4">
-        <h4>Task Information:</h4>
-        <ul class="list-group">
-            <li class="list-group-item">Task Name: @selectedData.DataPoint.Items.First().Name</li>
-            <li class="list-group-item">Start Date: @selectedData.DataPoint.Items.First().StartDate.ToShortDateString()</li>
-            <li class="list-group-item">End Date: @selectedData.DataPoint.Items.First().EndDate.ToShortDateString()</li>
-            <li class="list-group-item">Team: @selectedData.DataPoint.Items.First().Team.Name</li>
-            <li class="list-group-item">Progress: @selectedData.DataPoint.Items.First().Progress%</li>
-            <li class="list-group-item">Task Time Progress: @selectedData.DataPoint.Items.First().AutoProgress%</li>
-            <li class="list-group-item">User Progress Difference: @CalculationData.CompareUserProgress(selectedData.DataPoint.Items.First())
-            </li>
-            <div class="mt-4">
-                <h4>Dependencies:</h4>
-                <ul class="list-group">
-                    @foreach (var dependency in selectedData.DataPoint.Items.First().Dependencies)
-                    {
-                        <li class="list-group-item">
-                            Task: @TaskDataService.GetTaskName(dependency.SuccessorTaskId),
-                            Type: @dependency.Type
-                        </li>
-                    }
-                </ul>
-            </div>
-        </ul>
-    </div>
-
-}
-else if (selectedData != null)
-{
-    <div class="alert alert-info">
-        <h3>You clicked the chart but not a data point</h3>
-    </div>
-}
-
-<h3> Add a new task: </h3>
-
-<form>
-    <div class="form-group">
-        <label for="taskName">Task Name:</label>
-        <input class="form-control" type="text" id="taskName" @bind="newTask.Name" />
-    </div>
-
-    <div class="form-group">
-        <label for="startDate">Start Date:</label>
-        <input class="form-control" type="date" id="startDate" @bind="newTask.StartDate" />
-    </div>
-
-    <div class="form-group">
-        <label for="endDate">End Date:</label>
-        <input class="form-control" type="date" id="endDate" @bind="newTask.EndDate" />
-    </div>
-
-    <div class="form-group">
-        <label for="comments">Comments:</label>
-        <input class="form-control" id="comments" @bind="newTask.Comments">
-    </div>
-
-    <div class="form-group">
-        <label for="taskTeam">Task Team:</label>
-        <select class="form-control" id="taskTeam" @bind="selectedTeamName">
-            <option value="">-</option>
-            @foreach (var team in teams)
-            {
-                <option value="@team.Name">@team.Name</option>
-            }
-        </select>
-
-    </div>
-
-    <br>
-    <button class="btn btn-primary" type="button" @onclick="AddTask">Add Task</button>
-</form>
-
-
-@if (!string.IsNullOrWhiteSpace(errorMessage))
-{
-    <div class="alert alert-danger mt-2">@errorMessage</div>
-}
-
 
 @code {
     private string errorMessage = "";
@@ -281,6 +255,7 @@ else if (selectedData != null)
     private bool showEditTaskProgressInput = false;
     private bool showEditTaskCommentsModal = false;
     private bool showEditTaskDependenciesModal = false;
+    private bool showAddNewTaskModal = false;
     private DependencyType selectedDependencyType = DependencyType.FS; //default is FS
     private string selectedSuccessorTaskName;
     private int selectedSuccessorTask = 0;
@@ -422,9 +397,9 @@ else if (selectedData != null)
         showEditTaskCommentsModal = !showEditTaskCommentsModal;
     }
 
-    private void ToggleCreateNewTask()
+    private void ToggleAddNewTask()
     {
-        showCreateNewTask = !showCreateNewTask;
+        showAddNewTaskModal = !showAddNewTaskModal;
     }
     #endregion
 

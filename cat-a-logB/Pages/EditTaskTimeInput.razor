@@ -2,20 +2,22 @@
 @using cat_a_logB.Data;
 @inject cat_a_logB.Pages.SampleData SampleData
 @inject cat_a_logB.Data.TaskManager TaskManager
-<form>
-    <div class="form-group">
-        <label for="newTaskStartTime">Start Date:</label>
-        <input type="date" class="form-control" id="newTaskStartTime" @bind="newTaskStartTime" />
-    </div>
-    <div class="form-group">
-        <label for="newTaskEndTime">End Date:</label>
-        <input type="date" class="form-control" id="newTaskEndTime" @bind="newTaskEndTime" />
-    </div>
-    <br>
-    <button type="button" class="btn btn-success" @onclick="UpdateTaskTime">Update Task Time</button>
-</form>
+<div>
+    <br />
+    <form class="row">
+        <div class="form-group col-md-8">
+            Start Date:
+            <input type="date" class="form-control" id="newTaskStartTime" placeholder="New Start Date" @bind="newTaskStartTime" />
+            End Date:
+            <input type="date" class="form-control" id="newTaskEndTime" placeholder="New End Date" @bind="newTaskEndTime" />
+            <br />
+            <button type="button" class="edit-button" @onclick="UpdateTaskTime">Update Task Time</button>
+        </div>
+    </form>
+    <br />
+</div>
 
-@if (TaskManager.newTaskStartTime >= TaskManager.newTaskEndTime)
+@if (TaskManager.newTaskStartTime >= TaskManager.newTaskEndTime && TaskManager.errorMessage != null)
 {
     <div class="alert alert-danger" role="alert">@TaskManager.errorMessage</div>
 }
