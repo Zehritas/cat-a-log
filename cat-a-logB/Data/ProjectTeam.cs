@@ -30,21 +30,21 @@ namespace cat_a_logB.Data
         private List<String> members;
 
         [NotMapped]
-        public List<String> Members
-        {
-            get { return members; }
-            set
-            {
-                if (value != null && value.Distinct().Count() == value.Count)
-                {
-                    members = value;
-                }
-                else
-                {
-                    throw new ArgumentException("Members list must be non-null and contain unique names.");
-                }
-            }
-        }
+        public List<String> Members {  get ; set; }
+        //{
+        //    get { return members; }
+        //    set
+        //    {
+        //        if (value != null && value.Distinct().Count() == value.Count)
+        //        {
+        //            members = value;
+        //        }
+        //        else
+        //        {
+        //            throw new ArgumentException("Members list must be non-null and contain unique names.");
+        //        }
+        //    }
+        //}
 
         public ProjectTeam(string color, string name, List<String> members)
         {
@@ -63,18 +63,17 @@ namespace cat_a_logB.Data
         public ProjectTeam()
         {
         }
-        public void LoadTeamTasks(List<TaskData> allTasks)
-        {
-            Tasks = allTasks.Where(task => task.Team.Name == Name).ToList();
-        }
+        
         public void LoadTeamMembers(List<Member> allMembers)
+
         {
             TeamMembers = allMembers.Where(member => member.TeamId == Id).ToList();
         }
-        public static void GetTasksForTeam(List<TaskData> allTasks, ProjectTeam team)
-        {
-            team.Tasks = allTasks.Where(task => task.Team.Name == team.Name).ToList();
-        }
+
+        //public static void GetTasksForTeam(List<TaskData> allTasks, ProjectTeam team)
+        //{
+        //    team.Tasks = allTasks.Where(task => task.Team.Name == team.Name).ToList();
+        //}
 
     }
 }

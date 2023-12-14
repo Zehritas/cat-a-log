@@ -4,14 +4,17 @@
 @using ApexCharts;
 @using Microsoft.AspNetCore.Components;
 @using Service;
+@using cat_a_logB.Service.Interfaces;
+
 @inject cat_a_logB.Pages.SampleData SampleData
 @inject cat_a_logB.Data.TaskManager TaskManager
 @inject cat_a_logB.Data.CalculationData CalculationData
 @inject cat_a_logB.Data.MilestoneManager MilestoneManager
-@inject Service.ITaskDataService TaskDataService
-@inject Service.IDependencyService DependencyService
-@inject Service.IMilestoneService MilestoneService
-@inject Service.IProjectTeamService ProjectTeamService
+@inject Service.Interfaces.ITaskDataService TaskDataService
+@inject Service.Interfaces.IDependencyService DependencyService
+@inject Service.Interfaces.IMilestoneService MilestoneService
+@inject Service.Interfaces.IProjectTeamService ProjectTeamService
+@inject Service.Interfaces.IMemberService MemberService
 
 
 <PageTitle>Gantt Chart | Cat-a-log</PageTitle>
@@ -118,7 +121,7 @@
                         <h4>@point.X</h4>
                         <span>Deadline: @point.Items.First().EndDate.ToShortDateString()</span>
                         <br>
-                        <span>Team: @point.Items.First().Team.Name</span>
+                        <span>Team:@TaskDataService.GetTeamName(point.Items.First().Id)</span>
                         <br>
                         <span>@CalculationData.CompareUserProgress(point.Items.First())</span>
                         <br>
@@ -142,10 +145,10 @@
             <ChildContent>
                 @foreach (var team in teams)
                 {
-                    <ApexRangeSeries TItem="TaskData" Items="project.Where(task => task.Team == team)" Name="@team.Name"
+                    <ApexRangeSeries TItem="TaskData" Items="project.Where(task => task.TeamId == team.Id)" Name="@team.Name"
                         XValue="@(e => e.Name)" YMinValue="@(e => e.StartDate.ToUnixTimeMilliseconds())"
                         YMaxValue="@(e => e.EndDate.ToUnixTimeMilliseconds())" PointColor="e => e.PointColor"
-                        OrderByDescending="e => e.Items.First().Team.Name" />
+                        OrderByDescending="e => e.Items.First().TeamId" />
                 }
 
             </ChildContent>
@@ -298,6 +301,7 @@
         <AddRemoveDependency selectedData="selectedData" project="project" chart="chart" OnClose="ToggleEditTaskDependencies" />
     }
 
+
 @code {
     private string errorMessage = "";
     private ApexChart<TaskData> chart;
@@ -338,10 +342,11 @@
 
     protected override async Task OnInitializedAsync()
     {
-        project = TaskDataService.GetAllTasks();
-        teams = ProjectTeamService.GetAllTeams();
-        milestones = MilestoneService.GetAllMilestones();
-        members = ProjectTeamService.GetAllMembers();
+        project = TaskDataService.GetTasks();
+        teams = ProjectTeamService.GetTeams();
+        milestones = MilestoneService.GetMilestones();
+        members = MemberService.GetMembers();
+
         foreach (var team in teams)
         {
             team.LoadTeamMembers(members);
@@ -395,9 +400,9 @@
 
     private async Task RefreshData()
     {
-        project = TaskDataService.GetAllTasks();
-        teams = ProjectTeamService.GetAllTeams();
-        milestones = MilestoneService.GetAllMilestones();
+        project = TaskDataService.GetTasks();
+        teams = ProjectTeamService.GetTeams();
+        milestones = MilestoneService.GetMilestones();
 
         StateHasChanged();
     }
@@ -420,6 +425,7 @@
     private async Task AddTask()
     {
         await TaskManager.AddTask(project, chart, newTask, teams, selectedTeamName);
+
         ToggleEditAddNewTask();
     }
 
@@ -459,6 +465,7 @@
     {
         showEditTaskCommentsModal = !showEditTaskCommentsModal;
     }
+
 
     private void ToggleEditAddNewTask()
     {
