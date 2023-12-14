@@ -49,8 +49,6 @@ namespace cat_a_logB.Data
         {
             teams = projectTeamService.GetTeams();
             tasks = taskDataService.GetTasks();
-
-
         }
     }
 

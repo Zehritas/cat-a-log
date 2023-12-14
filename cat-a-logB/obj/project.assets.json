@@ -8620,9 +8620,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\aldas\\OneDrive\\Stalinis kompiuteris\\PSI6\\cat-a-logB\\cat-a-logB.csproj",
-      "projectName": "cat-a-logB",
-      "projectPath": "C:\\Users\\aldas\\OneDrive\\Stalinis kompiuteris\\PSI6\\cat-a-logB\\cat-a-logB.csproj",
+      "projectUniqueName": "C:\\Users\\aldas\\OneDrive\\Stalinis kompiuteris\\PSI6\\cat-a-logB\\cat_a_logB.csproj",
+      "projectName": "cat_a_logB",
+      "projectPath": "C:\\Users\\aldas\\OneDrive\\Stalinis kompiuteris\\PSI6\\cat-a-logB\\cat_a_logB.csproj",
       "packagesPath": "C:\\Users\\aldas\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\aldas\\OneDrive\\Stalinis kompiuteris\\PSI6\\cat-a-logB\\obj\\",
       "projectStyle": "PackageReference",

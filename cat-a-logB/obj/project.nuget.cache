@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "Wgynvyc9hsw0OlzC4UlAPNyR63Y1e+RgxaiMjA/JThoRM7fHNnXyFODEn0Bp5uQ+XXQ0ix8otzRnOaGEKDYunA==",
+  "dgSpecHash": "iGrc2gzMKOVZBF7EP+A6gIUZbQcoHZ/h9wKEZEPYJLjM3i0HJ6HQRrqLmXsRcDbqW2fVGob6tc/7oZld/0CeNw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\aldas\\OneDrive\\Stalinis kompiuteris\\PSI6\\cat-a-logB\\cat-a-logB.csproj",
+  "projectFilePath": "C:\\Users\\aldas\\OneDrive\\Stalinis kompiuteris\\PSI6\\cat-a-logB\\cat_a_logB.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\aldas\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
     "C:\\Users\\aldas\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",

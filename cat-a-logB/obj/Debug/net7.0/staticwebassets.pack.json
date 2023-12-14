@@ -1,8 +1,8 @@
 {
   "Files": [
     {
-      "Id": "C:\\Users\\aldas\\OneDrive\\Stalinis kompiuteris\\PSI6\\cat-a-logB\\obj\\Debug\\net7.0\\scopedcss\\projectbundle\\cat-a-logB.bundle.scp.css",
-      "PackagePath": "staticwebassets\\cat-a-logB.bundle.scp.css"
+      "Id": "C:\\Users\\aldas\\OneDrive\\Stalinis kompiuteris\\PSI6\\cat-a-logB\\obj\\Debug\\net7.0\\scopedcss\\projectbundle\\cat_a_logB.bundle.scp.css",
+      "PackagePath": "staticwebassets\\cat_a_logB.bundle.scp.css"
     },
     {
       "Id": "C:\\Users\\aldas\\OneDrive\\Stalinis kompiuteris\\PSI6\\cat-a-logB\\wwwroot\\css\\bootstrap\\bootstrap.min.css",
@@ -57,19 +57,19 @@
       "PackagePath": "staticwebassets\\favicon.png"
     },
     {
-      "Id": "obj\\Debug\\net7.0\\staticwebassets\\msbuild.build.cat-a-logB.props",
-      "PackagePath": "build\\cat-a-logB.props"
+      "Id": "obj\\Debug\\net7.0\\staticwebassets\\msbuild.build.cat_a_logB.props",
+      "PackagePath": "build\\cat_a_logB.props"
     },
     {
-      "Id": "obj\\Debug\\net7.0\\staticwebassets\\msbuild.buildMultiTargeting.cat-a-logB.props",
-      "PackagePath": "buildMultiTargeting\\cat-a-logB.props"
+      "Id": "obj\\Debug\\net7.0\\staticwebassets\\msbuild.buildMultiTargeting.cat_a_logB.props",
+      "PackagePath": "buildMultiTargeting\\cat_a_logB.props"
     },
     {
-      "Id": "obj\\Debug\\net7.0\\staticwebassets\\msbuild.buildTransitive.cat-a-logB.props",
-      "PackagePath": "buildTransitive\\cat-a-logB.props"
+      "Id": "obj\\Debug\\net7.0\\staticwebassets\\msbuild.buildTransitive.cat_a_logB.props",
+      "PackagePath": "buildTransitive\\cat_a_logB.props"
     },
     {
-      "Id": "obj\\Debug\\net7.0\\staticwebassets\\msbuild.cat-a-logB.Microsoft.AspNetCore.StaticWebAssets.props",
+      "Id": "obj\\Debug\\net7.0\\staticwebassets\\msbuild.cat_a_logB.Microsoft.AspNetCore.StaticWebAssets.props",
       "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
     }
   ],

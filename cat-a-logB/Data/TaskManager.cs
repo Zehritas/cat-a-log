@@ -266,9 +266,9 @@ namespace cat_a_logB.Data
             }
         }
 
-        public List<T> SortTasksByDependencies<T, U>(List<T> tasks)
-        where T : TaskData
-        where U : Dependency
+       public List<T> SortTasksByDependencies<T, U>(List<T> tasks)
+       where T : TaskData
+       where U : Dependency
         {
             var graph = new Dictionary<int, List<int>>();
             var inDegree = new Dictionary<int, int>();
@@ -371,6 +371,7 @@ namespace cat_a_logB.Data
             milestones = milestoneService.GetMilestones();
 
         }
+
         public async Task AddDependency(List<TaskData> project, ApexChart<TaskData> chart, SelectedData<TaskData> selectedData, DependencyType selectedDependencyType, int selectedSuccessorTask)
         {
             if (selectedData != null && selectedData.DataPoint != null &&
@@ -435,6 +436,7 @@ namespace cat_a_logB.Data
             try
             {
                 if (!newTask.Name.IsTaskNameValid())
+
                 {
                     errorMessage = "Task name is required.";
                     return;

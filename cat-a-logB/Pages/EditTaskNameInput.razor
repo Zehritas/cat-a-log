@@ -1,14 +1,16 @@
 @using cat_a_logB.Data
 @inject cat_a_logB.Data.TaskManager TaskManager
 <div>
-    <form>
-        <div class="form-group">
-            <label for="newTaskName">New Task Name:</label>
-            <input type="text" class="form-control" id="newTaskName" @bind="newTaskName" />
+    <br />
+    <form class="row">
+        <div class="form-group col-lg-8">
+            <input type="text" class="form-control" id="newTaskName" placeholder="New Task Name" @bind="newTaskName" />
         </div>
-        <br>
-        <button type="button" class="btn btn-success" @onclick="UpdateTaskName">Update Task Name</button>
+        <div class="form-group col-lg-4">
+            <button type="button" class="edit-button" @onclick="UpdateTaskName">Update</button>
+        </div>
     </form>
+    <br />
 </div>
 
 @if (!string.IsNullOrWhiteSpace(TaskManager.errorMessage) || !string.IsNullOrWhiteSpace(TaskManager.errorMessage))
