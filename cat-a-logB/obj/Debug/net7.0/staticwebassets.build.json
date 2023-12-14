@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "N1N15tkhI6dsaJe5XH1K9F8xxmP2A1tZkkfHrmmQIFo=",
+  "Hash": "s5qO6ZH00/CxQ5u3UCzMTfrlRzqxNK807Nb9Vqye558=",
   "Source": "cat-a-logB",
   "BasePath": "_content/cat-a-logB",
   "Mode": "Default",
@@ -10,7 +10,7 @@
     {
       "Name": "cat-a-logB\\wwwroot",
       "Source": "cat-a-logB",
-      "ContentRoot": "C:\\Users\\HP\\Source\\Repos\\cat-a-log\\cat-a-logB\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\HP\\source\\repos\\cat-a-log\\cat-a-logB\\wwwroot\\",
       "BasePath": "_content/cat-a-logB",
       "Pattern": "**"
     }
@@ -1214,10 +1214,10 @@
       "OriginalItemSpec": "C:\\Users\\HP\\.nuget\\packages\\microsoft.aspnetcore.identity.ui\\7.0.10\\staticwebassets\\V5\\lib\\jquery-validation-unobtrusive\\LICENSE.txt"
     },
     {
-      "Identity": "C:\\Users\\HP\\Source\\Repos\\cat-a-log\\cat-a-logB\\obj\\Debug\\net7.0\\scopedcss\\bundle\\cat-a-logB.styles.css",
+      "Identity": "C:\\Users\\HP\\source\\repos\\cat-a-log\\cat-a-logB\\obj\\Debug\\net7.0\\scopedcss\\bundle\\cat-a-logB.styles.css",
       "SourceId": "cat-a-logB",
       "SourceType": "Computed",
-      "ContentRoot": "C:\\Users\\HP\\Source\\Repos\\cat-a-log\\cat-a-logB\\obj\\Debug\\net7.0\\scopedcss\\bundle\\",
+      "ContentRoot": "C:\\Users\\HP\\source\\repos\\cat-a-log\\cat-a-logB\\obj\\Debug\\net7.0\\scopedcss\\bundle\\",
       "BasePath": "_content/cat-a-logB",
       "RelativePath": "cat-a-logB.styles.css",
       "AssetKind": "All",
@@ -1230,13 +1230,13 @@
       "AssetTraitValue": "ApplicationBundle",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\HP\\Source\\Repos\\cat-a-log\\cat-a-logB\\obj\\Debug\\net7.0\\scopedcss\\bundle\\cat-a-logB.styles.css"
+      "OriginalItemSpec": "C:\\Users\\HP\\source\\repos\\cat-a-log\\cat-a-logB\\obj\\Debug\\net7.0\\scopedcss\\bundle\\cat-a-logB.styles.css"
     },
     {
-      "Identity": "C:\\Users\\HP\\Source\\Repos\\cat-a-log\\cat-a-logB\\obj\\Debug\\net7.0\\scopedcss\\projectbundle\\cat-a-logB.bundle.scp.css",
+      "Identity": "C:\\Users\\HP\\source\\repos\\cat-a-log\\cat-a-logB\\obj\\Debug\\net7.0\\scopedcss\\projectbundle\\cat-a-logB.bundle.scp.css",
       "SourceId": "cat-a-logB",
       "SourceType": "Computed",
-      "ContentRoot": "C:\\Users\\HP\\Source\\Repos\\cat-a-log\\cat-a-logB\\obj\\Debug\\net7.0\\scopedcss\\projectbundle\\",
+      "ContentRoot": "C:\\Users\\HP\\source\\repos\\cat-a-log\\cat-a-logB\\obj\\Debug\\net7.0\\scopedcss\\projectbundle\\",
       "BasePath": "_content/cat-a-logB",
       "RelativePath": "cat-a-logB.bundle.scp.css",
       "AssetKind": "All",
@@ -1249,13 +1249,13 @@
       "AssetTraitValue": "ProjectBundle",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\HP\\Source\\Repos\\cat-a-log\\cat-a-logB\\obj\\Debug\\net7.0\\scopedcss\\projectbundle\\cat-a-logB.bundle.scp.css"
+      "OriginalItemSpec": "C:\\Users\\HP\\source\\repos\\cat-a-log\\cat-a-logB\\obj\\Debug\\net7.0\\scopedcss\\projectbundle\\cat-a-logB.bundle.scp.css"
     },
     {
-      "Identity": "C:\\Users\\HP\\Source\\Repos\\cat-a-log\\cat-a-logB\\wwwroot\\css\\bootstrap\\bootstrap.min.css",
+      "Identity": "C:\\Users\\HP\\source\\repos\\cat-a-log\\cat-a-logB\\wwwroot\\css\\bootstrap\\bootstrap.min.css",
       "SourceId": "cat-a-logB",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\HP\\Source\\Repos\\cat-a-log\\cat-a-logB\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\HP\\source\\repos\\cat-a-log\\cat-a-logB\\wwwroot\\",
       "BasePath": "_content/cat-a-logB",
       "RelativePath": "css/bootstrap/bootstrap.min.css",
       "AssetKind": "All",
@@ -1271,10 +1271,10 @@
       "OriginalItemSpec": "wwwroot\\css\\bootstrap\\bootstrap.min.css"
     },
     {
-      "Identity": "C:\\Users\\HP\\Source\\Repos\\cat-a-log\\cat-a-logB\\wwwroot\\css\\bootstrap\\bootstrap.min.css.map",
+      "Identity": "C:\\Users\\HP\\source\\repos\\cat-a-log\\cat-a-logB\\wwwroot\\css\\bootstrap\\bootstrap.min.css.map",
       "SourceId": "cat-a-logB",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\HP\\Source\\Repos\\cat-a-log\\cat-a-logB\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\HP\\source\\repos\\cat-a-log\\cat-a-logB\\wwwroot\\",
       "BasePath": "_content/cat-a-logB",
       "RelativePath": "css/bootstrap/bootstrap.min.css.map",
       "AssetKind": "All",
@@ -1290,10 +1290,10 @@
       "OriginalItemSpec": "wwwroot\\css\\bootstrap\\bootstrap.min.css.map"
     },
     {
-      "Identity": "C:\\Users\\HP\\Source\\Repos\\cat-a-log\\cat-a-logB\\wwwroot\\css\\open-iconic\\font\\css\\open-iconic-bootstrap.min.css",
+      "Identity": "C:\\Users\\HP\\source\\repos\\cat-a-log\\cat-a-logB\\wwwroot\\css\\open-iconic\\font\\css\\open-iconic-bootstrap.min.css",
       "SourceId": "cat-a-logB",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\HP\\Source\\Repos\\cat-a-log\\cat-a-logB\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\HP\\source\\repos\\cat-a-log\\cat-a-logB\\wwwroot\\",
       "BasePath": "_content/cat-a-logB",
       "RelativePath": "css/open-iconic/font/css/open-iconic-bootstrap.min.css",
       "AssetKind": "All",
@@ -1309,10 +1309,10 @@
       "OriginalItemSpec": "wwwroot\\css\\open-iconic\\font\\css\\open-iconic-bootstrap.min.css"
     },
     {
-      "Identity": "C:\\Users\\HP\\Source\\Repos\\cat-a-log\\cat-a-logB\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.eot",
+      "Identity": "C:\\Users\\HP\\source\\repos\\cat-a-log\\cat-a-logB\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.eot",
       "SourceId": "cat-a-logB",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\HP\\Source\\Repos\\cat-a-log\\cat-a-logB\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\HP\\source\\repos\\cat-a-log\\cat-a-logB\\wwwroot\\",
       "BasePath": "_content/cat-a-logB",
       "RelativePath": "css/open-iconic/font/fonts/open-iconic.eot",
       "AssetKind": "All",
@@ -1328,10 +1328,10 @@
       "OriginalItemSpec": "wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.eot"
     },
     {
-      "Identity": "C:\\Users\\HP\\Source\\Repos\\cat-a-log\\cat-a-logB\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.otf",
+      "Identity": "C:\\Users\\HP\\source\\repos\\cat-a-log\\cat-a-logB\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.otf",
       "SourceId": "cat-a-logB",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\HP\\Source\\Repos\\cat-a-log\\cat-a-logB\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\HP\\source\\repos\\cat-a-log\\cat-a-logB\\wwwroot\\",
       "BasePath": "_content/cat-a-logB",
       "RelativePath": "css/open-iconic/font/fonts/open-iconic.otf",
       "AssetKind": "All",
@@ -1347,10 +1347,10 @@
       "OriginalItemSpec": "wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.otf"
     },
     {
-      "Identity": "C:\\Users\\HP\\Source\\Repos\\cat-a-log\\cat-a-logB\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.svg",
+      "Identity": "C:\\Users\\HP\\source\\repos\\cat-a-log\\cat-a-logB\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.svg",
       "SourceId": "cat-a-logB",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\HP\\Source\\Repos\\cat-a-log\\cat-a-logB\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\HP\\source\\repos\\cat-a-log\\cat-a-logB\\wwwroot\\",
       "BasePath": "_content/cat-a-logB",
       "RelativePath": "css/open-iconic/font/fonts/open-iconic.svg",
       "AssetKind": "All",
@@ -1366,10 +1366,10 @@
       "OriginalItemSpec": "wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.svg"
     },
     {
-      "Identity": "C:\\Users\\HP\\Source\\Repos\\cat-a-log\\cat-a-logB\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.ttf",
+      "Identity": "C:\\Users\\HP\\source\\repos\\cat-a-log\\cat-a-logB\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.ttf",
       "SourceId": "cat-a-logB",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\HP\\Source\\Repos\\cat-a-log\\cat-a-logB\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\HP\\source\\repos\\cat-a-log\\cat-a-logB\\wwwroot\\",
       "BasePath": "_content/cat-a-logB",
       "RelativePath": "css/open-iconic/font/fonts/open-iconic.ttf",
       "AssetKind": "All",
@@ -1385,10 +1385,10 @@
       "OriginalItemSpec": "wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.ttf"
     },
     {
-      "Identity": "C:\\Users\\HP\\Source\\Repos\\cat-a-log\\cat-a-logB\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.woff",
+      "Identity": "C:\\Users\\HP\\source\\repos\\cat-a-log\\cat-a-logB\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.woff",
       "SourceId": "cat-a-logB",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\HP\\Source\\Repos\\cat-a-log\\cat-a-logB\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\HP\\source\\repos\\cat-a-log\\cat-a-logB\\wwwroot\\",
       "BasePath": "_content/cat-a-logB",
       "RelativePath": "css/open-iconic/font/fonts/open-iconic.woff",
       "AssetKind": "All",
@@ -1404,10 +1404,10 @@
       "OriginalItemSpec": "wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.woff"
     },
     {
-      "Identity": "C:\\Users\\HP\\Source\\Repos\\cat-a-log\\cat-a-logB\\wwwroot\\css\\open-iconic\\FONT-LICENSE",
+      "Identity": "C:\\Users\\HP\\source\\repos\\cat-a-log\\cat-a-logB\\wwwroot\\css\\open-iconic\\FONT-LICENSE",
       "SourceId": "cat-a-logB",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\HP\\Source\\Repos\\cat-a-log\\cat-a-logB\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\HP\\source\\repos\\cat-a-log\\cat-a-logB\\wwwroot\\",
       "BasePath": "_content/cat-a-logB",
       "RelativePath": "css/open-iconic/FONT-LICENSE",
       "AssetKind": "All",
@@ -1423,10 +1423,10 @@
       "OriginalItemSpec": "wwwroot\\css\\open-iconic\\FONT-LICENSE"
     },
     {
-      "Identity": "C:\\Users\\HP\\Source\\Repos\\cat-a-log\\cat-a-logB\\wwwroot\\css\\open-iconic\\ICON-LICENSE",
+      "Identity": "C:\\Users\\HP\\source\\repos\\cat-a-log\\cat-a-logB\\wwwroot\\css\\open-iconic\\ICON-LICENSE",
       "SourceId": "cat-a-logB",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\HP\\Source\\Repos\\cat-a-log\\cat-a-logB\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\HP\\source\\repos\\cat-a-log\\cat-a-logB\\wwwroot\\",
       "BasePath": "_content/cat-a-logB",
       "RelativePath": "css/open-iconic/ICON-LICENSE",
       "AssetKind": "All",
@@ -1442,10 +1442,10 @@
       "OriginalItemSpec": "wwwroot\\css\\open-iconic\\ICON-LICENSE"
     },
     {
-      "Identity": "C:\\Users\\HP\\Source\\Repos\\cat-a-log\\cat-a-logB\\wwwroot\\css\\open-iconic\\README.md",
+      "Identity": "C:\\Users\\HP\\source\\repos\\cat-a-log\\cat-a-logB\\wwwroot\\css\\open-iconic\\README.md",
       "SourceId": "cat-a-logB",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\HP\\Source\\Repos\\cat-a-log\\cat-a-logB\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\HP\\source\\repos\\cat-a-log\\cat-a-logB\\wwwroot\\",
       "BasePath": "_content/cat-a-logB",
       "RelativePath": "css/open-iconic/README.md",
       "AssetKind": "All",
@@ -1461,10 +1461,10 @@
       "OriginalItemSpec": "wwwroot\\css\\open-iconic\\README.md"
     },
     {
-      "Identity": "C:\\Users\\HP\\Source\\Repos\\cat-a-log\\cat-a-logB\\wwwroot\\css\\site.css",
+      "Identity": "C:\\Users\\HP\\source\\repos\\cat-a-log\\cat-a-logB\\wwwroot\\css\\site.css",
       "SourceId": "cat-a-logB",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\HP\\Source\\Repos\\cat-a-log\\cat-a-logB\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\HP\\source\\repos\\cat-a-log\\cat-a-logB\\wwwroot\\",
       "BasePath": "_content/cat-a-logB",
       "RelativePath": "css/site.css",
       "AssetKind": "All",
@@ -1480,10 +1480,10 @@
       "OriginalItemSpec": "wwwroot\\css\\site.css"
     },
     {
-      "Identity": "C:\\Users\\HP\\Source\\Repos\\cat-a-log\\cat-a-logB\\wwwroot\\favicon.png",
+      "Identity": "C:\\Users\\HP\\source\\repos\\cat-a-log\\cat-a-logB\\wwwroot\\favicon.png",
       "SourceId": "cat-a-logB",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\HP\\Source\\Repos\\cat-a-log\\cat-a-logB\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\HP\\source\\repos\\cat-a-log\\cat-a-logB\\wwwroot\\",
       "BasePath": "_content/cat-a-logB",
       "RelativePath": "favicon.png",
       "AssetKind": "All",

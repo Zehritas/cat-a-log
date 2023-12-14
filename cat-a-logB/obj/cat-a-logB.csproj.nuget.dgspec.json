@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\HP\\Source\\Repos\\cat-a-log\\cat-a-logB\\cat-a-logB.csproj": {}
+    "C:\\Users\\HP\\source\\repos\\cat-a-log\\cat-a-logB\\cat-a-logB.csproj": {}
   },
   "projects": {
-    "C:\\Users\\HP\\Source\\Repos\\cat-a-log\\cat-a-logB\\cat-a-logB.csproj": {
+    "C:\\Users\\HP\\source\\repos\\cat-a-log\\cat-a-logB\\cat-a-logB.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\HP\\Source\\Repos\\cat-a-log\\cat-a-logB\\cat-a-logB.csproj",
+        "projectUniqueName": "C:\\Users\\HP\\source\\repos\\cat-a-log\\cat-a-logB\\cat-a-logB.csproj",
         "projectName": "cat-a-logB",
-        "projectPath": "C:\\Users\\HP\\Source\\Repos\\cat-a-log\\cat-a-logB\\cat-a-logB.csproj",
+        "projectPath": "C:\\Users\\HP\\source\\repos\\cat-a-log\\cat-a-logB\\cat-a-logB.csproj",
         "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\HP\\Source\\Repos\\cat-a-log\\cat-a-logB\\obj\\",
+        "outputPath": "C:\\Users\\HP\\source\\repos\\cat-a-log\\cat-a-logB\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

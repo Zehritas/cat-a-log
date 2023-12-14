@@ -152,7 +152,7 @@
 
 
         </ApexChart>
-    }
+    
                 </div>
                 <div class="col-lg-1">
                 </div>
@@ -218,7 +218,7 @@
                                 Click on a task in the Gantt chart to see detailed information about it. <br /> Gain insights into task names, start and end dates, progress, and more! <br /> Or click on the button below and add a new task!
                             </p>
                             <br>
-                            <button type="button" class="primary-button" @onclick="ToggleAddNewTask">Add a New Task</button>
+                            <button type="button" class="primary-button" @onclick="ToggleEditAddNewTask">Add a New Task</button>
                         </div>
                     }
                 </div>
@@ -226,6 +226,68 @@
         </div>
     }
 </DemoContainer>
+
+@if (showAddNewTaskModal)
+{
+    <div class="modal fade show" style="display: block;" tabindex="-1" role="dialog" id="addNewTaskModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">New Task</h5>
+                    <button type="button" class="close" @onclick="ToggleEditAddNewTask">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="taskName">Task Name:</label>
+                            <input class="form-control" type="text" id="taskName" @bind="newTask.Name" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="startDate">Start Date:</label>
+                            <input class="form-control" type="date" id="startDate" @bind="newTask.StartDate" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="endDate">End Date:</label>
+                            <input class="form-control" type="date" id="endDate" @bind="newTask.EndDate" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="comments">Comments:</label>
+                            <input class="form-control" id="comments" @bind="newTask.Comments">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="taskTeam">Task Team:</label>
+                            <select class="form-control" id="taskTeam" @bind="selectedTeamName">
+                                <option value="">-</option>
+                                @foreach (var team in teams)
+                                {
+                                    <option value="@team.Name">@team.Name</option>
+                                }
+                            </select>
+                        </div>
+                    </form>
+
+                    @if (!string.IsNullOrWhiteSpace(errorMessage))
+                    {
+                        <div class="alert alert-danger mt-2">@errorMessage</div>
+                    }
+
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" @onclick="ToggleEditAddNewTask">Close</button>
+                    <button class="edit-button" @onclick="AddTask">Add Task</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-backdrop fade show"></div>
+    <div class="modal-backdrop fade show"></div>
+}
     @if (showEditTaskCommentsModal)
     {
         <EditTaskCommentsModal selectedData="selectedData" project="project" chart="chart" OnClose="ToggleEditTaskComments" />
@@ -358,6 +420,7 @@
     private async Task AddTask()
     {
         await TaskManager.AddTask(project, chart, newTask, teams, selectedTeamName);
+        ToggleEditAddNewTask();
     }
 
     private async Task RemoveTask()
@@ -397,7 +460,7 @@
         showEditTaskCommentsModal = !showEditTaskCommentsModal;
     }
 
-    private void ToggleAddNewTask()
+    private void ToggleEditAddNewTask()
     {
         showAddNewTaskModal = !showAddNewTaskModal;
     }

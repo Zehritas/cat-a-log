@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "fIXfCPuWJNekBHs6lB8sffnpWL94OssNiSkBJX6fUmBm4aDq/ai5URdFNnCJcRb8KTr9u57T5p8XwfP+TzvCZA==",
+  "dgSpecHash": "bW56DvaJ8QMnalGMNuEY2x9eQz0XwLfpo40gzDh2vyqi4goN518EYnc+Gb6AJ1jYs5WTVLpumkNIoIywjDpT/g==",
   "success": true,
-  "projectFilePath": "C:\\Users\\HP\\Source\\Repos\\cat-a-log\\cat-a-logB\\cat-a-logB.csproj",
+  "projectFilePath": "C:\\Users\\HP\\source\\repos\\cat-a-log\\cat-a-logB\\cat-a-logB.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\HP\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "C:\\Users\\HP\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",
