@@ -26,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\cat-a-logB\cat-a-logB.csproj" />
+    <ProjectReference Include="..\cat-a-logB\cat_a_logB.csproj" />
   </ItemGroup>
 
 </Project>

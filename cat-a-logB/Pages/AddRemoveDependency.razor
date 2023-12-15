@@ -1,11 +1,12 @@
 @using cat_a_logB.Data
 @using Service;
-@inject Service.ITaskDataService TaskDataService
+@inject Service.Interfaces.ITaskDataService TaskDataService
 @inject cat_a_logB.Data.TaskManager TaskManager
-@inject Service.ITaskDataService TaskDataService
-@inject Service.IDependencyService DependencyService
-@inject Service.IMilestoneService MilestoneService
-@inject Service.IProjectTeamService ProjectTeamService
+@inject Service.Interfaces.ITaskDataService TaskDataService
+@inject Service.Interfaces.IDependencyService DependencyService
+@inject Service.Interfaces.IMilestoneService MilestoneService
+@inject Service.Interfaces.IProjectTeamService ProjectTeamService
+
 
 
 <div class="modal fade show" style="display: block;" tabindex="-1" role="dialog" id="addDependenciesModal">
@@ -17,15 +18,15 @@
             <div class="modal-body">
                 <h5>Current Dependencies:</h5>
                 <div>
-                    @foreach (var dependency in selectedData.DataPoint.Items.First().Dependencies)
+                    @foreach (var dependency in TaskDataService.GetDependencies(selectedData.DataPoint.Items.First().Id))
                     {
                         <div>
                             <span>
-                                @selectedData.DataPoint.Items.First().Name -> @dependency.SuccessorTask.Name|
+                                @selectedData.DataPoint.Items.First().Name -> @TaskDataService.GetTask(dependency.SuccessorTaskId).Name|
                                 @dependency.Type
                             </span>
                             <button type="button" class="btn btn-link"
-                                    @onclick="() => DeleteDependency(selectedData.DataPoint.Items.First().Dependencies, dependency)">
+                                    @onclick="() => DeleteDependency(dependency)">
                                 Remove
                             </button>
                         </div>
@@ -87,9 +88,9 @@
 
 
 
-    async void DeleteDependency(List<Dependency> dependencies, Dependency dependency)
+    async void DeleteDependency(Dependency dependency)
     {
-        DependencyService.RemoveDependency(dependency);
+        DependencyService.RemoveDependency(dependency.Id);
         await RefreshData();
     }
     

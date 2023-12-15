@@ -1,5 +1,6 @@
 ﻿using ApexCharts;
-using cat_a_logB.Service;
+using cat_a_logB.Service.Implementation;
+using cat_a_logB.Service.Interfaces;
 using Microsoft.AspNetCore.Components;
 using static cat_a_logB.Data.ProjectMilestone;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -25,7 +26,7 @@ namespace cat_a_logB.Data
 
         public TaskManager() { }
 
-        public List<TaskData> project;
+        public IEnumerable<TaskData> project;
         public ApexChart<TaskData> chart;
         public SelectedData<TaskData> selectedData;
         public EventCallback OnClose;
@@ -47,7 +48,7 @@ namespace cat_a_logB.Data
 
         public DependencyType selectedDependencyType { get; private set; }
 
-        public int selectedSuccessorTask {  get; private set; }
+        public int selectedSuccessorTask { get; private set; }
 
         public async Task EditComments(List<TaskData> project, ApexChart<TaskData> chart, SelectedData<TaskData> selectedData, EventCallback OnClose, string editedComments)
         {
@@ -98,7 +99,8 @@ namespace cat_a_logB.Data
                     }
                     else
                     {
-                        taskToUpdate.PointColor = taskToUpdate.Team.Color;
+                        taskDataService.SyncColorWithTeam(taskToUpdate);
+                        //taskToUpdate.PointColor =  taskToUpdate.Team.Color;
                     }
                 }
             }
@@ -375,12 +377,13 @@ namespace cat_a_logB.Data
         }
 
         public async Task RefreshData()
-    {
-        project = taskDataService.GetAllTasks();
-        teams = projectTeamService.GetAllTeams();
-        milestones = milestoneService.GetAllMilestones();
+        {
+            project = taskDataService.GetTasks();
+            teams = projectTeamService.GetTeams();
+            milestones = milestoneService.GetMilestones();
 
-    }
+        }
+
         public async Task AddDependency(List<TaskData> project, ApexChart<TaskData> chart, SelectedData<TaskData> selectedData, DependencyType selectedDependencyType, int selectedSuccessorTask)
         {
             if (selectedData != null && selectedData.DataPoint != null &&
@@ -445,7 +448,8 @@ namespace cat_a_logB.Data
         {
             try
             {
-               if (!newTask.Name.IsTaskNameValid())
+                if (!newTask.Name.IsTaskNameValid())
+
                 {
                     errorMessage = "Task name is required.";
                     return;
@@ -507,9 +511,9 @@ namespace cat_a_logB.Data
 
                 if (taskToRemove != null)
                 {
+                    taskDataService.RemoveTask(taskToRemove.Id);
                     project.Remove(taskToRemove);
-                    taskDataService.RemoveTask(taskToRemove);
-                    
+                    taskDataService.RemoveTask(taskToRemove.Id);
                 }
             }
             await RefreshData();

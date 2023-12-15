@@ -1,6 +1,7 @@
 ﻿using ApexCharts;
 using cat_a_logB.Pages;
 using cat_a_logB.Service;
+using cat_a_logB.Service.Interfaces;
 using Microsoft.AspNetCore.Components;
 
 namespace cat_a_logB.Data
@@ -46,10 +47,8 @@ namespace cat_a_logB.Data
 
         public async Task RefreshData(List<ProjectTeam> teams, List<TaskData> tasks)
         {
-            teams = projectTeamService.GetAllTeams();
-            tasks = tasks = taskDataService.GetAllTasks();
-
-
+            teams = projectTeamService.GetTeams();
+            tasks = taskDataService.GetTasks();
         }
     }
 
