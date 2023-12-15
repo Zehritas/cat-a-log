@@ -13,7 +13,8 @@
     public delegate List<TaskData> SortTasksByDependenciesDelegate(List<TaskData> tasks);
     [Parameter] public SortTasksByDependenciesDelegate SortTasksByDependencies { get; set; }
 
-    private async Task RemoveTask()
+    private async Task 
+    ()
     {
         if (selectedData != null && selectedData.DataPoint != null &&
         selectedData.DataPoint.Items.First().Id is int selectedTaskId)

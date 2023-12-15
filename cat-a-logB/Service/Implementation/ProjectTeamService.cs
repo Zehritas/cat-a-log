@@ -40,11 +40,11 @@ namespace cat_a_logB.Service.Implementation
 
         public bool RemoveTask(TaskData taskToRemove)
         {
-            IEnumerable<Data.Dependency> dependenciesToRemove;
-            IEnumerable<ProjectTeam> allTeams = _dbContext.ProjectTeam.ToList();
+            List<Data.Dependency> dependenciesToRemove;
+            List<ProjectTeam> allTeams = _dbContext.ProjectTeam.ToList();
             foreach (ProjectTeam team in allTeams)
             {
-                foreach (TaskData task in team.Tasks)
+                foreach (TaskData task in _dbContext.TaskData.Where(t => t.TeamId == team.Id).ToList()) 
                 {
                     dependenciesToRemove = _dbContext.Dependency.Where(d => d.SuccessorTaskId == taskToRemove.Id).ToList();
                     _dbContext.RemoveRange(dependenciesToRemove);

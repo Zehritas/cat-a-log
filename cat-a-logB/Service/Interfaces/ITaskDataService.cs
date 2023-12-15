@@ -33,5 +33,7 @@ namespace cat_a_logB.Service.Interfaces
         public bool TaskExists(int id);
 
         public string GetTeamName(int id);
+
+        public List<Dependency> GetDependencies(int id);
     }
 }

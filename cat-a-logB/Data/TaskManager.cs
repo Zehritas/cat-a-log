@@ -1,4 +1,5 @@
 ﻿using ApexCharts;
+using cat_a_logB.Service.Implementation;
 using cat_a_logB.Service.Interfaces;
 using Microsoft.AspNetCore.Components;
 using static cat_a_logB.Data.ProjectMilestone;
@@ -98,7 +99,8 @@ namespace cat_a_logB.Data
                     }
                     else
                     {
-                        taskToUpdate.PointColor = taskToUpdate.Team.Color;
+                        taskDataService.SyncColorWithTeam(taskToUpdate);
+                        //taskToUpdate.PointColor =  taskToUpdate.Team.Color;
                     }
                 }
             }

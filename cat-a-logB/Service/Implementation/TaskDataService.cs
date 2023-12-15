@@ -171,5 +171,11 @@ namespace cat_a_logB.Service.Implementation
 
             return team.Name;
         }
+
+        public List<Dependency> GetDependencies(int id)
+        {
+            return _dbContext.Dependency.Where(d => d.SuccessorTaskId == id || d.PredecessorTaskId == id).ToList();
+        }
+
     }
 }

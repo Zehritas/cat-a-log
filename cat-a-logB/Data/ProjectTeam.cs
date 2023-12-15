@@ -4,7 +4,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace cat_a_logB.Data
 {
-
     public class ProjectTeam
     {
         [Key]
@@ -25,9 +24,6 @@ namespace cat_a_logB.Data
         public List<TaskData> Tasks { get; set; } = new List<TaskData>();
 
         public List<Member> TeamMembers { get; set; } = new List<Member>();
-
-        [NotMapped]
-        private List<String> members;
 
         [NotMapped]
         public List<String> Members {  get ; set; }
@@ -69,11 +65,5 @@ namespace cat_a_logB.Data
         {
             TeamMembers = allMembers.Where(member => member.TeamId == Id).ToList();
         }
-
-        //public static void GetTasksForTeam(List<TaskData> allTasks, ProjectTeam team)
-        //{
-        //    team.Tasks = allTasks.Where(task => task.Team.Name == team.Name).ToList();
-        //}
-
     }
 }

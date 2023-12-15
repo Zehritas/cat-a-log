@@ -126,7 +126,7 @@
 
     @if (selectedMilestone != null)
     {
-        @if (selectedMilestone.Tasks != null && selectedMilestone.Tasks.Any())
+        @if (MilestoneService.GetTasks(selectedMilestone.Id) != null && MilestoneService.GetTasks(selectedMilestone.Id).Any())
         {
             <style>
                 .list-group-item:hover {
@@ -136,7 +136,7 @@
             </style>
             <h4 class="mb-4 font-weight-bold text-center">Tasks for milestone @selectedMilestone.Name</h4>
             <div class="list-group">
-                @foreach (var task in selectedMilestone.Tasks)
+                @foreach (var task in MilestoneService.GetTasks(selectedMilestone.Id))
                 {
                     <div class="list-group-item">
                         <div class="d-flex w-100 justify-content-between">

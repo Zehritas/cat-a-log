@@ -24,7 +24,7 @@ namespace Cat_a_logAPI.Service.Implementation
             IEnumerable<ProjectTeam> allTeams = _dbContext.ProjectTeam.ToList();
             foreach (ProjectTeam team in allTeams)
             {
-                foreach (TaskData task in team.Tasks)
+                foreach (TaskData task in _dbContext.TaskData.Where(t => t.TeamId == team.Id).ToList())
                 {
                     dependenciesToRemove = _dbContext.Dependency.Where(d => d.SuccessorTaskId == taskToRemove.Id).ToList();
                     _dbContext.RemoveRange(dependenciesToRemove);
@@ -38,7 +38,7 @@ namespace Cat_a_logAPI.Service.Implementation
         public bool RemoveTeam(int id)
         {
             ProjectTeam projectTeam = _dbContext.ProjectTeam.Find(id);
-            List<TaskData> teamTasks = projectTeam.Tasks;
+            List<TaskData> teamTasks = _dbContext.TaskData.Where(t => t.TeamId == projectTeam.Id).ToList();
 
             for (int i = teamTasks.Count - 1; i >= 0; i--)
             {

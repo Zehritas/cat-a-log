@@ -21,11 +21,11 @@ namespace Cat_a_logAPI.Service.Implementation
         public bool RemoveTask(int id)
         {
             TaskData taskToRemove = _dbContext.TaskData.Find(id);
-            IEnumerable<Dependency> dependenciesToRemove;
-            IEnumerable<ProjectTeam> allTeams = _dbContext.ProjectTeam.ToList();
+            List<Dependency> dependenciesToRemove;
+            List<ProjectTeam> allTeams = _dbContext.ProjectTeam.ToList();
             foreach (ProjectTeam team in allTeams)
             {
-                foreach (TaskData task in team.Tasks)
+                foreach (TaskData task in _dbContext.TaskData.Where(t => t.TeamId == team.Id).ToList())
                 {
                     dependenciesToRemove = _dbContext.Dependency.Where(d => d.SuccessorTaskId == taskToRemove.Id).ToList();
                     _dbContext.RemoveRange(dependenciesToRemove);
