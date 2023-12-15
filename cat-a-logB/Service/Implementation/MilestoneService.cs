@@ -126,5 +126,11 @@ namespace cat_a_logB.Service.Implementation
         {
             return _dbContext.ProjectMilestone.Any(m => m.Id == id);
         }
+
+        public List<TaskData> GetTasks(int id)
+        {
+            return _dbContext.TaskData.Where(t => t.MilestoneId == id).ToList();
+        }
+
     }
 }

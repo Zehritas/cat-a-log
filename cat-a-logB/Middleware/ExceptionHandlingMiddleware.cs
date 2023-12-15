@@ -14,20 +14,20 @@ public class ExceptionHandlingMiddleware
       _next = next;
    }
 
-   public async Task Invoke(HttpContext context)
-   {
-      try
-      {
-         await _next(context);
-      }
-      catch (Exception ex)
-      {
-         Console.WriteLine("\nCaught one!!!\n");
-         await HandleExceptionAsync(context, ex);
-      }
-   }
+    public async Task Invoke(HttpContext context)
+    {
+        try
+        {
+            await _next(context);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("\nCaught one!!!\n");
+            //await HandleExceptionAsync(context, ex);
+        }
+    }
 
-   private static Task HandleExceptionAsync(HttpContext context, Exception exception)
+    private static Task HandleExceptionAsync(HttpContext context, Exception exception)
    {
       var code = HttpStatusCode.InternalServerError;
 

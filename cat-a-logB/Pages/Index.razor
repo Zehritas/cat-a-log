@@ -39,7 +39,7 @@
                         <h4>@milestone.Name</h4>
                         <span>Tasks:</span>
                         <ul>
-                            @foreach (var task in milestone.Tasks)
+                            @foreach (var task in MilestoneService.GetTasks(milestone.Id))
                             {
                                 <li>
                                     <span style="margin-right: 8px;">@task.Name</span>
@@ -183,7 +183,7 @@
                                     <EditTaskTimeInput selectedData="selectedData" project="project" chart="chart" OnClose="ToggleEditTaskTime" />
                                 }
                                 <li class="list-group-item">
-                                    Team: @selectedData.DataPoint.Items.First().Team.Name
+                                    Team: @TaskDataService.GetTeamName( selectedData.DataPoint.Items.First().Id)
                                 </li>
                                 <li class="list-group-item">
                                     Progress: @selectedData.DataPoint.Items.First().Progress%

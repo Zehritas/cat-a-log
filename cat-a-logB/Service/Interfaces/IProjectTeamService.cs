@@ -21,5 +21,7 @@ namespace cat_a_logB.Service.Interfaces
         public bool TeamExists(int id);
 
         public List<TaskData> GetTasksForTeam(int id);
+
+        public List<Member> GetTeamMembers(int id);
     }
 }

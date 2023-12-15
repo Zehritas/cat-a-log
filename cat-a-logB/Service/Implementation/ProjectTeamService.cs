@@ -146,5 +146,13 @@ namespace cat_a_logB.Service.Implementation
             return teamTasks;
         }
 
+        public List<Member> GetTeamMembers(int id)
+        {
+            var teamMembers = _dbContext.Member.Where(m => m.TeamId == id).ToList();
+
+            return teamMembers;
+        }
+
+
     }
 }

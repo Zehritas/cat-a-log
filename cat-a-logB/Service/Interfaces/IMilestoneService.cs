@@ -21,5 +21,7 @@ namespace cat_a_logB.Service.Interfaces
         public bool UpdateMilestone(ProjectMilestone milestone);
 
         public bool MilestoneExists(int id);
+
+        public List<TaskData> GetTasks(int id);
     }
 }

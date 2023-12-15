@@ -130,12 +130,12 @@
     <div class="container" style="max-width: 700px;">
         <div class="row">
             <div class="col-12 mb-4">
-                @if (selectedTeam.TeamMembers != null && selectedTeam.TeamMembers.Any())
+                @if (selectedTeam.TeamMembers != null && ProjectTeamService.GetTeamMembers(selectedTeam.Id).Any())
                 {
                     <h4 class="mb-4 font-weight-bold text-center">Team Members for @selectedTeam.Name</h4>
 
                     <ul>
-                        @foreach (var member in selectedTeam.TeamMembers)
+                        @foreach (var member in ProjectTeamService.GetTeamMembers(selectedTeam.Id))
                         {
                             <li>@member.Name</li>
                         }
