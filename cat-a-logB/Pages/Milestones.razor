@@ -1,10 +1,12 @@
 ﻿@page "/Milestones"
 @using cat_a_logB.Data
+@using cat_a_logB.Service.Interfaces;
+
 @inject cat_a_logB.Pages.SampleData SampleData
 @inject cat_a_logB.Data.MilestoneManager MilestoneManager
 @inject cat_a_logB.Data.TeamManager TeamManager
-@inject Service.ITaskDataService TaskDataService
-@inject Service.IMilestoneService MilestoneService
+@inject Service.Interfaces.ITaskDataService TaskDataService
+@inject Service.Interfaces.IMilestoneService MilestoneService
 
 <PageTitle>Milestones | Cat-a-log</PageTitle>
 
@@ -124,7 +126,7 @@
 
     @if (selectedMilestone != null)
     {
-        @if (selectedMilestone.Tasks != null && selectedMilestone.Tasks.Any())
+        @if (MilestoneService.GetTasks(selectedMilestone.Id) != null && MilestoneService.GetTasks(selectedMilestone.Id).Any())
         {
             <style>
                 .list-group-item:hover {
@@ -134,7 +136,7 @@
             </style>
             <h4 class="mb-4 font-weight-bold text-center">Tasks for milestone @selectedMilestone.Name</h4>
             <div class="list-group">
-                @foreach (var task in selectedMilestone.Tasks)
+                @foreach (var task in MilestoneService.GetTasks(selectedMilestone.Id))
                 {
                     <div class="list-group-item">
                         <div class="d-flex w-100 justify-content-between">
@@ -179,14 +181,14 @@
 
     protected override void OnInitialized()
     {
-        milestones = MilestoneService.GetAllMilestones();
-        tasks = TaskDataService.GetAllTasks();
+        milestones = MilestoneService.GetMilestones();
+        tasks = TaskDataService.GetTasks();
     }
 
     private async Task RefreshData()
     {
-        milestones = MilestoneService.GetAllMilestones();
-        tasks = tasks = TaskDataService.GetAllTasks();
+        milestones = MilestoneService.GetMilestones();
+        tasks = tasks = TaskDataService.GetTasks();
 
         StateHasChanged();
     }

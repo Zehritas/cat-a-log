@@ -1,3 +1,15 @@
+<<<<<<< HEAD
+C:\Users\aldas\OneDrive\Stalinis kompiuteris\PSI6\cat-a-logB\obj\Debug\net7.0\cat-a-logB.csproj.AssemblyReference.cache
+C:\Users\aldas\OneDrive\Stalinis kompiuteris\PSI6\cat-a-logB\obj\Debug\net7.0\cat-a-logB.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\aldas\OneDrive\Stalinis kompiuteris\PSI6\cat-a-logB\obj\Debug\net7.0\cat-a-logB.AssemblyInfoInputs.cache
+C:\Users\aldas\OneDrive\Stalinis kompiuteris\PSI6\cat-a-logB\obj\Debug\net7.0\cat-a-logB.AssemblyInfo.cs
+C:\Users\aldas\OneDrive\Stalinis kompiuteris\PSI6\cat-a-logB\obj\Debug\net7.0\cat-a-logB.csproj.CoreCompileInputs.cache
+C:\Users\aldas\OneDrive\Stalinis kompiuteris\PSI6\cat-a-logB\obj\Debug\net7.0\cat-a-logB.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\aldas\OneDrive\Stalinis kompiuteris\PSI6\cat-a-logB\obj\Debug\net7.0\cat-a-logB.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\aldas\OneDrive\Stalinis kompiuteris\PSI6\cat-a-logB\obj\Debug\net7.0\cat-a-logB.RazorAssemblyInfo.cache
+C:\Users\aldas\OneDrive\Stalinis kompiuteris\PSI6\cat-a-logB\obj\Debug\net7.0\cat-a-logB.RazorAssemblyInfo.cs
+C:\Users\aldas\OneDrive\Stalinis kompiuteris\PSI6\cat-a-logB\obj\Debug\net7.0\cat-a-logB.sourcelink.json
+=======
 C:\Users\Lenovo\Desktop\cat-a-logB\cat-a-logB\bin\Debug\net7.0\appsettings.Development.json
 C:\Users\Lenovo\Desktop\cat-a-logB\cat-a-logB\bin\Debug\net7.0\appsettings.json
 C:\Users\Lenovo\Desktop\cat-a-logB\cat-a-logB\bin\Debug\net7.0\cat-a-logB.staticwebassets.runtime.json
@@ -1919,3 +1931,4 @@ C:\Users\HP\Source\Repos\cat-a-log\cat-a-logB\bin\Debug\net7.0\testcentric.engin
 C:\Users\HP\Source\Repos\cat-a-log\cat-a-logB\bin\Debug\net7.0\nunit.framework.dll
 C:\Users\HP\Source\Repos\cat-a-log\cat-a-logB\obj\Debug\net7.0\cat-a-logB.sourcelink.json
 C:\Users\Marijonas\source\repos\cat-a-log\cat-a-logB\bin\Debug\net7.0\Castle.Core.dll
+>>>>>>> 73628e0f1c1e359cbf87a7e16fbef9fe48d1efba
