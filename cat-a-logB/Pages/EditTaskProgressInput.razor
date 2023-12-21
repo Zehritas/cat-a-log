@@ -7,7 +7,7 @@
         <div class="form-group col-md-8">
             <label for="progressInput">Select Progress:</label>
             <select class="form-control" id="progressInput" @bind="newProgress">
-                @foreach (var progressOption in progressOptions)
+                @foreach (int progressOption in progressOptions)
                 {
                     <option value="@progressOption">@progressOption%</option>
                 }

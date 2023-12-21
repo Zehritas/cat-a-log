@@ -21,11 +21,11 @@ namespace cat_a_logTests
         {
 
             var project = new List<TaskData>
-    {
-        new TaskData { Id = 1, Name = "Task 1" },
-        new TaskData { Id = 2, Name = "Task 2" },
+        {
+            new TaskData { Id = 1, Name = "Task 1" },
+            new TaskData { Id = 2, Name = "Task 2" },
 
-    };
+        };
 
             var chart = new ApexChart<TaskData>();
             var selectedData = new SelectedData<TaskData>
@@ -45,8 +45,8 @@ namespace cat_a_logTests
             taskManager.RemoveTask(selectedData, project, chart);
 
             // Assert
-            NUnit.Framework.Assert.IsFalse(project.Any(task => task.Id == 1)); // Task with ID 1 should be removed
-                                                               // Add assertions to check chart updates after task removal
+            NUnit.Framework.Assert.IsFalse(project.Any(task => task.Id == 1)); 
+                                                           
         }
         [Test]
         public async Task RemoveTask_NullSelectedData_NoTaskRemoved()

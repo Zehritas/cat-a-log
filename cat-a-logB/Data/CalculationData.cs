@@ -43,7 +43,7 @@ namespace cat_a_logB.Data
                 }
                 else
                 {
-                    var team = task.Team;
+                    ProjectTeam team = task.Team;
                     int additionalPeopleNeeded = CalculateAdditionalPeople(task, team);
                     return "Task " + task.Name + " is behind schedule. Consider adding " + additionalPeopleNeeded + " more people.";
                 }
@@ -84,7 +84,7 @@ namespace cat_a_logB.Data
         }
         public double CalculateAutoProgress(TaskData task)
         {
-            var now = DateTime.Now;
+            DateTime now = DateTime.Now;
             double totalDays = (task.EndDate - task.StartDate).TotalDays;
             double dayProgress;
 

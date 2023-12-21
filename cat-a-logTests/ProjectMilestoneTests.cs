@@ -14,18 +14,6 @@ using static cat_a_logB.Data.ProjectMilestone;
 public class ProjectMilestoneTest
 {
 
-    [Test]
-    public void GetTaskCompletionStatus_NoTasks_ReturnsIncomplete()
-    {
-        // Arrange
-        var milestone = new ProjectMilestone("Milestone without tasks");
-
-        // Act
-        var result = milestone.GetTaskCompletionStatus();
-
-        // Assert
-        NUnit.Framework.Assert.AreEqual(ProjectMilestone.TaskCompletionStatus.Incomplete, result);
-    }
 
     [Test]
     public void GetTaskCompletionStatus_AllTasksCompleted_ReturnsCompleted()

@@ -10,6 +10,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "cat_a_logB", "cat-a-logB\ca
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cat_a_logAPI", "CatAPI\Cat_a_logAPI.csproj", "{CF34D928-5337-4F40-B9E4-04CF9CF28C0D}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "cat-a-logTests (2)", "cat-a-logTests\cat-a-logTests (2).csproj", "{ED1278D6-5895-4134-B5F3-E6101F5559BF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,6 +26,10 @@ Global
 		{CF34D928-5337-4F40-B9E4-04CF9CF28C0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CF34D928-5337-4F40-B9E4-04CF9CF28C0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CF34D928-5337-4F40-B9E4-04CF9CF28C0D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED1278D6-5895-4134-B5F3-E6101F5559BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED1278D6-5895-4134-B5F3-E6101F5559BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED1278D6-5895-4134-B5F3-E6101F5559BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED1278D6-5895-4134-B5F3-E6101F5559BF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

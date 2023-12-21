@@ -41,7 +41,7 @@
             @if (milestones != null && milestones.Any())
             {
                 <div class="list-group">
-                    @foreach (var milestone in milestones)
+                    @foreach (ProjectMilestone milestone in milestones)
                     {
                         <div class="list-group-item d-flex justify-content-between align-items-center">
                             <style>
@@ -96,7 +96,7 @@
                             <div class="form-group">
                                 <label>Select tasks:</label>
                                 <div class="row">
-                                    @foreach (var task in tasks)
+                                    @foreach (TaskData task in tasks)
                                     {
                                         <div class="col-md-4">
                                             <label class="checkbox-inline">
@@ -136,7 +136,7 @@
             </style>
             <h4 class="mb-4 font-weight-bold text-center">Tasks for milestone @selectedMilestone.Name</h4>
             <div class="list-group">
-                @foreach (var task in MilestoneService.GetTasks(selectedMilestone.Id))
+                @foreach (TaskData task in MilestoneService.GetTasks(selectedMilestone.Id))
                 {
                     <div class="list-group-item">
                         <div class="d-flex w-100 justify-content-between">
