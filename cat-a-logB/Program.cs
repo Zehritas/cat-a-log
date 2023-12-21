@@ -15,7 +15,7 @@ var connectionString = builder.Configuration.GetConnectionString("cat_a_logBCont
 
 builder.Services.AddHttpClient("ApiClient", client =>
 {
-    client.BaseAddress = new Uri("https://cat-a-logb20231112200531.azurewebsites.net/api");
+    client.BaseAddress = new Uri("https://cat-a-logb-api.azurewebsites.net/api");
     // Other configuration settings...
 });
 
