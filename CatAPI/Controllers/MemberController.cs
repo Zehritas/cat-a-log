@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using Cat_a_logAPI.Data;
-using Cat_a_logAPI.Dto;
-using Cat_a_logAPI.Service.Interfaces;
+using CatAPI.Data;
+using CatAPI.Dto;
+using CatAPI.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Cat_a_logAPI.Controllers
+namespace CatAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -27,7 +27,7 @@ namespace Cat_a_logAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var members = _mapper.Map<List<MemberDto>>(_memberService.GetMembers());
+            List<MemberDto> members = _mapper.Map<List<MemberDto>>(_memberService.GetMembers());
 
             return Ok(members);
         }
@@ -45,7 +45,7 @@ namespace Cat_a_logAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var member = _mapper.Map<MemberDto>(_memberService.GetMember(userId, teamId));
+            MemberDto member = _mapper.Map<MemberDto>(_memberService.GetMember(userId, teamId));
 
             return Ok(member);
         }
@@ -63,7 +63,7 @@ namespace Cat_a_logAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var memberMap = _mapper.Map<Member>(memberToUpdate);
+            Member memberMap = _mapper.Map<Member>(memberToUpdate);
             _memberService.UpdateMember(memberMap);
 
             return NoContent();
@@ -77,7 +77,7 @@ namespace Cat_a_logAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var member = _memberService.GetMembers()
+            Member member = _memberService.GetMembers()
                 .Where(m => m.Name == memberToCreate.Name).FirstOrDefault();
 
             if (member != null)
@@ -91,7 +91,7 @@ namespace Cat_a_logAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var memberMap = _mapper.Map<Member>(memberToCreate);
+            Member memberMap = _mapper.Map<Member>(memberToCreate);
 
             if (!_memberService.AddMember(memberMap))
             {

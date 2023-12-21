@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
-namespace Cat_a_logAPI.Data
+namespace CatAPI.Data
 {
     public class Dependency
     {

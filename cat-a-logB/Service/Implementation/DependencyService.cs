@@ -22,7 +22,7 @@ namespace cat_a_logB.Service.Implementation
 
         public bool AddDependency(Dependency dependency)
         {
-            var dependencyDto = _mapper.Map<DependencyDto>(dependency);
+            DependencyDto dependencyDto = _mapper.Map<DependencyDto>(dependency);
             string data = JsonConvert.SerializeObject(dependencyDto);
             StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
 
@@ -104,7 +104,7 @@ namespace cat_a_logB.Service.Implementation
 
         public bool UpdateDependency(Dependency dependency)
         {
-            var dependencyDto = _mapper.Map<DependencyDto>(dependency);
+            DependencyDto dependencyDto = _mapper.Map<DependencyDto>(dependency);
             string data = JsonConvert.SerializeObject(dependencyDto);
             StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
 

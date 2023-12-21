@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using Cat_a_logAPI.Data;
-using Cat_a_logAPI.Dto;
-using Cat_a_logAPI.Service.Interfaces;
+using CatAPI.Data;
+using CatAPI.Dto;
+using CatAPI.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Cat_a_logAPI.Controllers
+namespace CatAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -27,7 +27,7 @@ namespace Cat_a_logAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var teams = _teamService.GetTeams();
+            List<TeamDto> teams = _mapper.Map<List<TeamDto>>(_teamService.GetTeams());
             return Ok(teams);
         }
 
@@ -44,7 +44,7 @@ namespace Cat_a_logAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var team = _mapper.Map<TeamDto>(_teamService.GetTeam(Id));
+            TeamDto team = _mapper.Map<TeamDto>(_teamService.GetTeam(Id));
 
             return Ok(team);
         }
@@ -62,7 +62,7 @@ namespace Cat_a_logAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var teamMap = _mapper.Map<ProjectTeam>(teamToUpdate);
+            ProjectTeam teamMap = _mapper.Map<ProjectTeam>(teamToUpdate);
             _teamService.UpdateTeam(teamMap);
 
             return NoContent();
@@ -76,7 +76,7 @@ namespace Cat_a_logAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var team = _teamService.GetTeams()
+            ProjectTeam team = _teamService.GetTeams()
                .Where(t => t.Name == teamToCreate.Name).FirstOrDefault();
 
             if (team != null)
@@ -90,7 +90,7 @@ namespace Cat_a_logAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var teamMap = _mapper.Map<ProjectTeam>(teamToCreate);
+            ProjectTeam teamMap = _mapper.Map<ProjectTeam>(teamToCreate);
 
             if (!_teamService.AddTeam(teamMap))
             {

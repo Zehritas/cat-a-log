@@ -1,8 +1,8 @@
-using Cat_a_logAPI.Data;
+using CatAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
-using Cat_a_logAPI.Service.Interfaces;
-using Cat_a_logAPI.Service.Implementation;
+using CatAPI.Service.Interfaces;
+using CatAPI.Service.Implementation;
 using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);

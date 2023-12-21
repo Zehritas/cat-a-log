@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 //using Microsoft.EntityFrameworkCore.DbContext;
 
-namespace Cat_a_logAPI.Data
+namespace CatAPI.Data
 {
     public class Cat_a_logBContext : IdentityDbContext<IdentityUser>
     {

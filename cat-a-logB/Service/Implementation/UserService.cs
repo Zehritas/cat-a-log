@@ -24,7 +24,7 @@ namespace cat_a_logB.Service.Implementation
 
         public bool AddUser(User user) 
         {
-            var userDto = _mapper.Map<UserDto>(user);
+            UserDto userDto = _mapper.Map<UserDto>(user);
             string data = JsonConvert.SerializeObject(userDto);
             StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
 
@@ -97,7 +97,7 @@ namespace cat_a_logB.Service.Implementation
 
         public bool UpdateUser(User user)
         {
-            var userDto = _mapper.Map<UserDto>(user);
+            UserDto userDto = _mapper.Map<UserDto>(user);
             string data = JsonConvert.SerializeObject(userDto);
             StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
 

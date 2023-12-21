@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Cat_a_logAPI.Data;
+using CatAPI.Data;
 
 #nullable disable
 
-namespace Cat_a_logAPI.Migrations
+namespace CatAPI.Migrations
 {
     [DbContext(typeof(Cat_a_logBContext))]
     [Migration("20231123220503_changedTaskDataFieldToDouble")]

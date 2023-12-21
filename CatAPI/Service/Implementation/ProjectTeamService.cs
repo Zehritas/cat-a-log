@@ -1,7 +1,7 @@
-﻿using Cat_a_logAPI.Data;
-using Cat_a_logAPI.Service.Interfaces;
+﻿using CatAPI.Data;
+using CatAPI.Service.Interfaces;
 
-namespace Cat_a_logAPI.Service.Implementation
+namespace CatAPI.Service.Implementation
 {
     public class ProjectTeamService : IProjectTeamService
     {

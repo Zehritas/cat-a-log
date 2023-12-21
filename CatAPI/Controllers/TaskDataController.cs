@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using Cat_a_logAPI.Data;
-using Cat_a_logAPI.Dto;
-using Cat_a_logAPI.Service.Interfaces;
+using CatAPI.Data;
+using CatAPI.Dto;
+using CatAPI.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Cat_a_logAPI.Controllers
+namespace CatAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -26,7 +26,7 @@ namespace Cat_a_logAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var tasks = _mapper.Map<List<TaskDto>>(_taskDataService.GetTasks());
+            List<TaskDto> tasks = _mapper.Map<List<TaskDto>>(_taskDataService.GetTasks());
 
             return Ok(tasks);
         }
@@ -43,7 +43,7 @@ namespace Cat_a_logAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var task = _mapper.Map<TaskDto>(_taskDataService.GetTask(Id));
+            TaskDto task = _mapper.Map<TaskDto>(_taskDataService.GetTask(Id));
 
             return Ok(task);
         }
@@ -61,7 +61,7 @@ namespace Cat_a_logAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var taskMap = _mapper.Map<TaskData>(taskToUpdate);
+            TaskData taskMap = _mapper.Map<TaskData>(taskToUpdate);
             _taskDataService.UpdateTask(taskMap);
 
             return NoContent();
@@ -75,7 +75,7 @@ namespace Cat_a_logAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var task = _taskDataService.GetTasks()
+            TaskData task = _taskDataService.GetTasks()
                .Where(t => t.Name == taskToCreate.Name).FirstOrDefault();
 
             if (task != null)
@@ -89,7 +89,7 @@ namespace Cat_a_logAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var taskMap = _mapper.Map<TaskData>(taskToCreate);
+            TaskData taskMap = _mapper.Map<TaskData>(taskToCreate);
 
             if (!_taskDataService.AddTask(taskMap))
             {

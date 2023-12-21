@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using Cat_a_logAPI.Data;
-using Cat_a_logAPI.Dto;
+using CatAPI.Data;
+using CatAPI.Dto;
 
-namespace Cat_a_logAPI.Helper
+namespace CatAPI.Helper
 {
     public class MappingProfiles : Profile
     {

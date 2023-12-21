@@ -23,7 +23,7 @@ namespace cat_a_logB.Service.Implementation
 
         public bool AddProject(Project project)
         {
-            var projectDto = _mapper.Map<ProjectDto>(project);
+            ProjectDto projectDto = _mapper.Map<ProjectDto>(project);
             string data = JsonConvert.SerializeObject(projectDto);
             StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
 
@@ -101,7 +101,7 @@ namespace cat_a_logB.Service.Implementation
 
         public bool UpdateProject(Project project)
         {
-            var projectDto = _mapper.Map<Project>(project);
+            ProjectDto projectDto = _mapper.Map<ProjectDto>(project);
             string data = JsonConvert.SerializeObject(projectDto);
             StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
 
