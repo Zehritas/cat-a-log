@@ -11,7 +11,16 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-var connectionString = builder.Configuration.GetConnectionString("cat_a_logBContextConnection") ?? throw new InvalidOperationException("Connection string 'cat_a_logBContextConnection' not found.");
+var catBPath = Path.Combine(Directory.GetCurrentDirectory(), "..", "cat-a-logB");
+
+// Load a separate configuration for the specific connection string
+var connectionStringBuilder = new ConfigurationBuilder()
+    .SetBasePath(catBPath)
+    .AddJsonFile("appsettings.json")
+    .Build();
+
+var connectionString = connectionStringBuilder.GetConnectionString("cat_a_logBContextConnection")
+                        ?? throw new InvalidOperationException("Connection string 'cat_a_logBContextConnection' not found.");
 
 builder.Services.AddDbContext<Cat_a_logBContext>(options => options.UseSqlServer(connectionString));
 
