@@ -18,7 +18,7 @@
             <div class="modal-body">
                 <h5>Current Dependencies:</h5>
                 <div>
-                    @foreach (var dependency in TaskDataService.GetDependencies(selectedData.DataPoint.Items.First().Id))
+                    @foreach (Dependency dependency in TaskDataService.GetDependencies(selectedData.DataPoint.Items.First().Id))
                     {
                         <div>
                             <span>
@@ -39,7 +39,7 @@
                         <label for="selectedSuccessorTask">Select Task:</label>
                         <select class="form-control" id="selectedSuccessorTask" @bind="selectedSuccessorTask">
                             <option value="0">-</option>
-                            @foreach (var task in project)
+                            @foreach (TaskData task in project)
                             {
                                 if (task.Id != selectedData.DataPoint.Items.First().Id)
                                 {
@@ -51,7 +51,7 @@
                     <div class="form-group">
                         <label for="dependencyType">Select Dependency Type:</label>
                         <select class="form-control" id="dependencyType" @bind="selectedDependencyType">
-                            @foreach (var dependencyType in Enum.GetValues(typeof(DependencyType)))
+                            @foreach (DependencyType dependencyType in Enum.GetValues(typeof(DependencyType)))
                             {
                                 <option value="@dependencyType">@dependencyType</option>
                             }

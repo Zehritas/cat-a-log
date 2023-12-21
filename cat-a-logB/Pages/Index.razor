@@ -31,15 +31,15 @@
             <div class="m-2" style="width: 300px; max-height: 100px; font-size: 12px;">
                 @if (context != null)
                 {
-                    var dataPoint = (ApexCharts.DataPoint<ProjectMilestone>)context.DataPoint;
+                    DataPoint<ProjectMilestone> dataPoint = (ApexCharts.DataPoint<ProjectMilestone>)context.DataPoint;
 
-                    var milestone = dataPoint.Items.FirstOrDefault();
+                    ProjectMilestone milestone = dataPoint.Items.FirstOrDefault();
                     if (milestone != null)
                     {
                         <h4>@milestone.Name</h4>
                         <span>Tasks:</span>
                         <ul>
-                            @foreach (var task in MilestoneService.GetTasks(milestone.Id))
+                            @foreach (TaskData task in MilestoneService.GetTasks(milestone.Id))
                             {
                                 <li>
                                     <span style="margin-right: 8px;">@task.Name</span>
@@ -115,8 +115,8 @@
 
                 <div class="m-3">
                     @{
-                        var point = (ListPoint<TaskData>)context.DataPoint;
-                        var task = point.Items.First();
+                        ListPoint<TaskData> point = (ListPoint<TaskData>)context.DataPoint;
+                        TaskData task = point.Items.First();
 
                         <h4>@point.X</h4>
                         <span>Deadline: @point.Items.First().EndDate.ToShortDateString()</span>
@@ -143,7 +143,7 @@
             </ApexPointTooltip>
 
             <ChildContent>
-                @foreach (var team in teams)
+                @foreach (ProjectTeam team in teams)
                 {
                     <ApexRangeSeries TItem="TaskData" Items="project.Where(task => task.TeamId == team.Id)" Name="@team.Name"
                         XValue="@(e => e.Name)" YMinValue="@(e => e.StartDate.ToUnixTimeMilliseconds())"
@@ -267,7 +267,7 @@
                             <label for="taskTeam">Task Team:</label>
                             <select class="form-control" id="taskTeam" @bind="selectedTeamName">
                                 <option value="">-</option>
-                                @foreach (var team in teams)
+                                @foreach (ProjectTeam team in teams)
                                 {
                                     <option value="@team.Name">@team.Name</option>
                                 }
@@ -347,13 +347,13 @@
         milestones = MilestoneService.GetMilestones();
         members = MemberService.GetMembers();
 
-        foreach (var team in teams)
+        foreach (ProjectTeam team in teams)
         {
             team.LoadTeamMembers(members);
         }
 
         sortedTasks = project;
-        var colors = teams.Select(team => team.Color).ToList();
+        List<string> colors = teams.Select(team => team.Color).ToList();
         lineData = milestones.Select(_ => 100.0).ToList();
 
         options1.Yaxis = new List<YAxis>();

@@ -29,7 +29,7 @@
         <label for="taskTeam">Task Team:</label>
         <select class="form-control" id="taskTeam" @bind="selectedTeamName">
             <option value="">-</option>
-            @foreach (var team in teams)
+            @foreach (ProjectTeam team in teams)
             {
                 <option value="@team.Name">@team.Name</option>
             }
@@ -74,11 +74,11 @@
             }
 
             errorMessage = "";
-            var selectedTeam = teams.FirstOrDefault(t => t.Name == selectedTeamName);
+            ProjectTeam selectedTeam = teams.FirstOrDefault(t => t.Name == selectedTeamName);
 
             if (selectedTeam != null)
             {
-                var newTaskData = new TaskData()
+                TaskData newTaskData = new TaskData()
                     {
                         Name = newTask.Name,
                         StartDate = newTask.StartDate,

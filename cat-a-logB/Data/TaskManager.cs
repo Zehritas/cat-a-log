@@ -86,7 +86,7 @@ namespace cat_a_logB.Data
                     if (progressValue == 100)
                     {
                         taskToUpdate.PointColor = "#CCCCCC";
-                        foreach (var milestone in milestones)
+                        foreach (ProjectMilestone milestone in milestones)
                         {
                             TaskCompletionStatus completionStatus = milestone.GetTaskCompletionStatus();
                             if (completionStatus == TaskCompletionStatus.Completed)
@@ -187,7 +187,7 @@ namespace cat_a_logB.Data
         {
             {
                 TaskData updatedTask = tasks.FirstOrDefault(task => task.Id == updatedTaskId);
-                foreach (var dependency in updatedTask.Dependencies)
+                foreach (Dependency dependency in updatedTask.Dependencies)
                 {
                     TaskData predecessorTask = tasks.FirstOrDefault(task => task.Id == dependency.PredecessorTaskId);
                     TaskData successorTask = tasks.FirstOrDefault(task => task.Id == dependency.SuccessorTaskId);
@@ -282,19 +282,19 @@ namespace cat_a_logB.Data
        where T : TaskData
        where U : Dependency
         {
-            var graph = new Dictionary<int, List<int>>();
-            var inDegree = new Dictionary<int, int>();
+            Dictionary<int, List<int>> graph = new Dictionary<int, List<int>>();
+            Dictionary<int, int> inDegree = new Dictionary<int, int>();
 
             // Build the graph and calculate in-degrees
-            foreach (var task in tasks)
+            foreach (TaskData task in tasks)
             {
                 graph[task.Id] = new List<int>();
                 inDegree[task.Id] = 0;
             }
 
-            foreach (var task in tasks)
+            foreach (TaskData task in tasks)
             {
-                foreach (var dependency in task.Dependencies)
+                foreach (Dependency dependency in task.Dependencies)
                 {
                     if (graph.ContainsKey(dependency.SuccessorTaskId) && task.Id != dependency.SuccessorTaskId) // Check if the key exists
                     {
@@ -310,17 +310,17 @@ namespace cat_a_logB.Data
             }
 
 
-            var sortedTasks = new List<T>();
-            var queue = new Queue<int>(inDegree.Where(entry => entry.Value == 0).Select(entry => entry.Key));
+            List<T> sortedTasks = new List<T>();
+            Queue<int> queue = new Queue<int>(inDegree.Where(entry => entry.Value == 0).Select(entry => entry.Key));
 
             while (queue.Count > 0)
             {
-                var currentTaskId = queue.Dequeue();
-                var currentTask = tasks.First(task => (task as TaskData).Id == currentTaskId);
+                int currentTaskId = queue.Dequeue();
+                T currentTask = tasks.First(task => (task as TaskData).Id == currentTaskId);
 
                 sortedTasks.Add(currentTask);
 
-                foreach (var dependentTaskId in graph[currentTaskId])
+                foreach (int dependentTaskId in graph[currentTaskId])
                 {
                     inDegree[dependentTaskId]--;
                     if (inDegree[dependentTaskId] == 0)
@@ -351,7 +351,7 @@ namespace cat_a_logB.Data
 
             currentlyVisiting.Add(currentTask);
 
-            foreach (var dependency in currentTask.Dependencies)
+            foreach (Dependency dependency in currentTask.Dependencies)
             {
                 TaskData successorTask = project.FirstOrDefault(t => t.Id == dependency.SuccessorTaskId);
 
@@ -364,7 +364,7 @@ namespace cat_a_logB.Data
             currentlyVisiting.Remove(currentTask);
             visited.Add(currentTask);
 
-            return false; // No cycle detected
+            return false; 
         }
 
         // Call this function from your AddDependency or wherever appropriate
@@ -429,7 +429,7 @@ namespace cat_a_logB.Data
 
                     List<TaskData> sortedTasks = SortTasksByDependencies<TaskData, Dependency>(project);
                     await Reschedule(predecessorTask.Id, sortedTasks, chart);
-                    foreach (var task in sortedTasks)
+                    foreach (TaskData task in sortedTasks)
                     {
                         Console.WriteLine(task.Name);
                     }
@@ -467,11 +467,11 @@ namespace cat_a_logB.Data
                 }
 
                 errorMessage = "";
-                var selectedTeam = teams.FirstOrDefault(t => t.Name == selectedTeamName);
+                ProjectTeam selectedTeam = teams.FirstOrDefault(t => t.Name == selectedTeamName);
 
                 if (selectedTeam != null)
                 {
-                    var newTaskData = new TaskData()
+                    TaskData newTaskData = new TaskData()
                     {
                         Name = newTask.Name,
                         StartDate = newTask.StartDate,
@@ -507,11 +507,11 @@ namespace cat_a_logB.Data
             if (selectedData != null && selectedData.DataPoint != null &&
             selectedData.DataPoint.Items.First().Id is int selectedTaskId)
             { // Use LINQ to create a new list of tasks
-                var taskToRemove = project.FirstOrDefault(task => task.Id == selectedTaskId);
+                TaskData taskToRemove = project.FirstOrDefault(task => task.Id == selectedTaskId);
 
                 if (taskToRemove != null)
                 {
-                    taskDataService.RemoveTask(taskToRemove.Id);
+                    //taskDataService.RemoveTask(taskToRemove.Id);
                     project.Remove(taskToRemove);
                     taskDataService.RemoveTask(taskToRemove.Id);
                 }

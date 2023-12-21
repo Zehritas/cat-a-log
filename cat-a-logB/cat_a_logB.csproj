@@ -16,7 +16,6 @@
     <None Include="Pages\Counter.razor" />
     <None Include="Pages\CreateNewTask.razor" />
     <None Include="Pages\EditTaskCommentsModal.razor" />
-    <None Include="Pages\EditTaskDependenciesModal.razor" />
     <None Include="Pages\EditTaskNameInput.razor" />
     <None Include="Pages\EditTaskProgressInput.razor" />
     <None Include="Pages\EditTaskTimeInput.razor" />

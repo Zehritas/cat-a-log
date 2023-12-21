@@ -131,7 +131,6 @@ namespace cat_a_logB_UnitTests
             //act
             taskManagerWithNullSelectedData.EditTaskName(project, chartMock, null, new EventCallback(), "New Task");
 
-            // Assert no changes in project and no error messages
             NUnit.Framework.Assert.IsEmpty(taskManagerWithNullSelectedData.errorMessage);
             NUnit.Framework.Assert.AreEqual(2, project.Count);
 
@@ -140,7 +139,7 @@ namespace cat_a_logB_UnitTests
             var taskManagerWithInvalidSelectedData = new TaskManager();
             taskManagerWithInvalidSelectedData.EditTaskName(project, chartMock, selectedDataWithoutItems, new EventCallback(), "New Task");
 
-            // Assert no changes in project and no error messages
+        
             NUnit.Framework.Assert.IsEmpty(taskManagerWithInvalidSelectedData.errorMessage);
             NUnit.Framework.Assert.AreEqual(2, project.Count);
         }

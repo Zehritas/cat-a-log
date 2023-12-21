@@ -21,11 +21,11 @@ namespace cat_a_logTests
         public async Task DetectCycle_NoDependencies_ReturnsFalse()
         {
             // Arrange
-            var task = new TaskData { Id = 1, Dependencies = new List<Dependency>() };
-            var taskManager = new TaskManager();
+            TaskData task = new TaskData { Id = 1, Dependencies = new List<Dependency>() };
+            TaskManager taskManager = new TaskManager();
 
             // Act
-            var result = await taskManager.DetectCycleInternal(task, task, new HashSet<TaskData>(), new HashSet<TaskData>());
+            bool result = await taskManager.DetectCycleInternal(task, task, new HashSet<TaskData>(), new HashSet<TaskData>());
 
             // Assert
             NUnit.Framework.Assert.IsFalse(result);

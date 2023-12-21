@@ -24,7 +24,7 @@
             @if (teams != null && teams.Any())
             {
                 <div class="list-group">
-                    @foreach (var team in teams)
+                    @foreach (ProjectTeam team in teams)
                     {
                         <div class="list-group-item d-flex justify-content-between align-items-center">
                             <style>
@@ -135,7 +135,7 @@
                     <h4 class="mb-4 font-weight-bold text-center">Team Members for @selectedTeam.Name</h4>
 
                     <ul>
-                        @foreach (var member in ProjectTeamService.GetTeamMembers(selectedTeam.Id))
+                        @foreach (Member member in ProjectTeamService.GetTeamMembers(selectedTeam.Id))
                         {
                             <li>@member.Name</li>
                         }
@@ -155,12 +155,11 @@
                     </style>
                     <h4 class="mb-4 font-weight-bold text-center">Tasks for @selectedTeam.Name</h4>
                     <div class="list-group">
-                        @foreach (var task in selectedTeam.Tasks)
+                        @foreach (TaskData task in selectedTeam.Tasks)
                         {
                             <div class="list-group-item">
                                 <div class="d-flex w-100 justify-content-between">
                                     <h5 class="mb-1">@task.Name</h5>
-                                    <!-- Add more information if needed -->
                                     <small>Due: @task.EndDate.ToString("yyyy-MM-dd")</small>
                                 </div>
                             </div>

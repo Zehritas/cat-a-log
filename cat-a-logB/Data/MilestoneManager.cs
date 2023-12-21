@@ -60,7 +60,7 @@ namespace cat_a_logB.Data
         {
             await chart.ClearAnnotationsAsync();
 
-            foreach (var milestone in displayedMilestones)
+            foreach (ProjectMilestone milestone in displayedMilestones)
             {
                 await AddMilestoneAnnotation(milestone, chart);
             }
@@ -70,14 +70,14 @@ namespace cat_a_logB.Data
 
         private async Task AddMilestoneAnnotation(ProjectMilestone milestone, ApexChart<TaskData> chart)
         {
-            var XMValue = milestone.TargetDate.ToUnixTimeMilliseconds().ToString();
-            var tasksText = string.Join(" ", milestone.Tasks.Select(t =>
+            String XMValue = milestone.TargetDate.ToUnixTimeMilliseconds().ToString();
+            String tasksText = string.Join(" ", milestone.Tasks.Select(t =>
             {
-                var progressText = (t.Progress == 100) ? "(Complete)" : "";
+                String progressText = (t.Progress == 100) ? "(Complete)" : "";
                 return $"{t.Name}{progressText}";
             }));
 
-            var point = new AnnotationsPoint
+            AnnotationsPoint point = new AnnotationsPoint
             {
                 X = XMValue,
                 Y = 0,
@@ -92,7 +92,7 @@ namespace cat_a_logB.Data
                 },
             };
 
-            var point2 = new AnnotationsXAxis
+            AnnotationsXAxis point2 = new AnnotationsXAxis
             {
                 X = XMValue,
                 StrokeDashArray = 10,
