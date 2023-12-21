@@ -24,7 +24,7 @@ namespace cat_a_logB.Service.Implementation
 
         public bool AddTask(TaskData task)
         {
-            var taskDto = _mapper.Map<TaskDto>(task);
+            TaskDto taskDto = _mapper.Map<TaskDto>(task);
             string data = JsonConvert.SerializeObject(taskDto);
             StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
 
@@ -146,7 +146,7 @@ namespace cat_a_logB.Service.Implementation
 
         public bool UpdateTask(TaskData task)
         {
-            var taskDto = _mapper.Map<TaskDto>(task);
+            TaskDto taskDto = _mapper.Map<TaskDto>(task);
             string data = JsonConvert.SerializeObject(taskDto);
             StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
 
@@ -166,8 +166,8 @@ namespace cat_a_logB.Service.Implementation
 
         public string GetTeamName(int id)
         {
-            var task = _dbContext.TaskData.Find(id);
-            var team = _dbContext.ProjectTeam.Find(task.TeamId);
+            TaskData task = _dbContext.TaskData.Find(id);
+            ProjectTeam team = _dbContext.ProjectTeam.Find(task.TeamId);
 
             return team.Name;
         }

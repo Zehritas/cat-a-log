@@ -1,7 +1,7 @@
-﻿using Cat_a_logAPI.Data;
-using Cat_a_logAPI.Service.Interfaces;
+﻿using CatAPI.Data;
+using CatAPI.Service.Interfaces;
 
-namespace Cat_a_logAPI.Service.Implementation
+namespace CatAPI.Service.Implementation
 {
     public class DependencyService : IDependencyService
     {
@@ -66,7 +66,7 @@ namespace Cat_a_logAPI.Service.Implementation
         public bool Save()
         {
             var saved = _dbContext.SaveChanges();
-            return saved > 0 ? true : false;
+            return saved > 0;
         }
 
         public bool UpdateDependency(Dependency dependency)

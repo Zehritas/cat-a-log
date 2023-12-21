@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Cat_a_logAPI.Data
+namespace CatAPI.Data
 {
     public class TaskData : IComparable<TaskData>
     {
