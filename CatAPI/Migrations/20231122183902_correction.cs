@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Cat_a_logAPI.Migrations
+namespace CatAPI.Migrations
 {
     /// <inheritdoc />
     public partial class correction : Migration

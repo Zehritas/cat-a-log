@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Cat_a_logAPI.Data;
+using CatAPI.Data;
 
 #nullable disable
 
-namespace Cat_a_logAPI.Migrations
+namespace CatAPI.Migrations
 {
     [DbContext(typeof(Cat_a_logBContext))]
     partial class cat_a_logBContextModelSnapshot : ModelSnapshot

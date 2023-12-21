@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using Cat_a_logAPI.Data;
-using Cat_a_logAPI.Dto;
-using Cat_a_logAPI.Service.Interfaces;
+using CatAPI.Data;
+using CatAPI.Dto;
+using CatAPI.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Cat_a_logAPI.Controllers
+namespace CatAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -27,7 +27,7 @@ namespace Cat_a_logAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var dependencies = _mapper.Map<List<DependencyDto>>(_dependencyService.GetDependencies());
+            List<DependencyDto> dependencies = _mapper.Map<List<DependencyDto>>(_dependencyService.GetDependencies());
 
             return Ok(dependencies);
         }
@@ -45,7 +45,7 @@ namespace Cat_a_logAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var dependency = _mapper.Map<DependencyDto>(_dependencyService.GetDependency(Id));
+            DependencyDto dependency = _mapper.Map<DependencyDto>(_dependencyService.GetDependency(Id));
 
             return Ok(dependency);
         }
@@ -63,7 +63,7 @@ namespace Cat_a_logAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var dependencyMap = _mapper.Map<Dependency>(dependencyToUpdate);
+            Dependency dependencyMap = _mapper.Map<Dependency>(dependencyToUpdate);
             _dependencyService.UpdateDependency(dependencyMap);
 
             return NoContent();
@@ -82,7 +82,7 @@ namespace Cat_a_logAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var dependencyMap = _mapper.Map<Dependency>(dependencyToCreate);
+            Dependency dependencyMap = _mapper.Map<Dependency>(dependencyToCreate);
 
             if(!_dependencyService.AddDependency(dependencyMap))
             {

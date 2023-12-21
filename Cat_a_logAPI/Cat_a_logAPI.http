@@ -1,6 +1,0 @@
-@Cat_a_logAPI_HostAddress = http://localhost:5163
-
-GET {{Cat_a_logAPI_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

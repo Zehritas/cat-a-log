@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using Cat_a_logAPI.Data;
-using Cat_a_logAPI.Dto;
-using Cat_a_logAPI.Service.Interfaces;
+using CatAPI.Data;
+using CatAPI.Dto;
+using CatAPI.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Cat_a_logAPI.Controllers
+namespace CatAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -27,7 +27,7 @@ namespace Cat_a_logAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var projects = _mapper.Map<List<ProjectDto>>(_projectService.GetProjects());
+            List<ProjectDto> projects = _mapper.Map<List<ProjectDto>>(_projectService.GetProjects());
 
             return Ok(projects);
         }
@@ -45,7 +45,7 @@ namespace Cat_a_logAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var project = _mapper.Map<ProjectDto>(_projectService.GetProject(Id));
+            ProjectDto project = _mapper.Map<ProjectDto>(_projectService.GetProject(Id));
 
             return Ok(project);
         }
@@ -63,7 +63,7 @@ namespace Cat_a_logAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var projectMap = _mapper.Map<Project>(projectToUpdate);
+            Project projectMap = _mapper.Map<Project>(projectToUpdate);
             _projectService.UpdateProject(projectMap);
 
             return NoContent();
@@ -77,7 +77,7 @@ namespace Cat_a_logAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var project = _projectService.GetProjects()
+            Project project = _projectService.GetProjects()
                .Where(p => p.Name == projectToCreate.Name).FirstOrDefault();
 
             if (project != null)
@@ -91,7 +91,7 @@ namespace Cat_a_logAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var projectMap = _mapper.Map<Project>(projectToCreate);
+            Project projectMap = _mapper.Map<Project>(projectToCreate);
 
             if (!_projectService.AddProject(projectMap))
             {

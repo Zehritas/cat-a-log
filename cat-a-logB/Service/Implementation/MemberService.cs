@@ -24,7 +24,7 @@ namespace cat_a_logB.Service.Implementation
 
         public bool AddMember(Member member)
         {
-            var memberDto = _mapper.Map<MemberDto>(member);
+            MemberDto memberDto = _mapper.Map<MemberDto>(member);
             string data = JsonConvert.SerializeObject(memberDto);
             StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
 
@@ -102,7 +102,7 @@ namespace cat_a_logB.Service.Implementation
 
         public bool UpdateMember(Member member)
         {
-            var memberDto = _mapper.Map<MemberDto>(member);
+            MemberDto memberDto = _mapper.Map<MemberDto>(member);
             string data = JsonConvert.SerializeObject(memberDto);
             StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
 

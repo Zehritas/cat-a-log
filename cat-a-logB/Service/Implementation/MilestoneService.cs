@@ -23,7 +23,7 @@ namespace cat_a_logB.Service.Implementation
 
         public bool AddMilestone(ProjectMilestone milestone)
         {
-            var milestoneDto = _mapper.Map<MilestoneDto>(milestone);
+            MilestoneDto milestoneDto = _mapper.Map<MilestoneDto>(milestone);
             string data = JsonConvert.SerializeObject(milestoneDto);
             StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
 
@@ -109,7 +109,7 @@ namespace cat_a_logB.Service.Implementation
 
         public bool UpdateMilestone(ProjectMilestone milestone)
         {
-            var milestoneDto = _mapper.Map<ProjectMilestone>(milestone);
+            MilestoneDto milestoneDto = _mapper.Map<MilestoneDto>(milestone);
             string data = JsonConvert.SerializeObject(milestoneDto);
             StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
 

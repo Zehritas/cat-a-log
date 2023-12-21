@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using Cat_a_logAPI.Data;
-using Cat_a_logAPI.Dto;
-using Cat_a_logAPI.Service.Interfaces;
+using CatAPI.Data;
+using CatAPI.Dto;
+using CatAPI.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Cat_a_logAPI.Controllers
+namespace CatAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -27,7 +27,7 @@ namespace Cat_a_logAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var milestones = _mapper.Map<IEnumerable<MilestoneDto>>(_milestoneService.GetMilestones());
+            List<MilestoneDto> milestones = _mapper.Map<List<MilestoneDto>>(_milestoneService.GetMilestones());
 
             return Ok(milestones);
         }
@@ -45,7 +45,7 @@ namespace Cat_a_logAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var milestone = _mapper.Map<MilestoneDto>(_milestoneService.GetMilestone(Id));
+            MilestoneDto milestone = _mapper.Map<MilestoneDto>(_milestoneService.GetMilestone(Id));
 
             return Ok(milestone);
         }
@@ -63,7 +63,7 @@ namespace Cat_a_logAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var milestoneMap = _mapper.Map<ProjectMilestone>(milestoneToUpdate);
+            ProjectMilestone milestoneMap = _mapper.Map<ProjectMilestone>(milestoneToUpdate);
             _milestoneService.UpdateMilestone(milestoneMap);
 
             return NoContent();
@@ -77,7 +77,7 @@ namespace Cat_a_logAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var milestone = _milestoneService.GetMilestones()
+            ProjectMilestone milestone = _milestoneService.GetMilestones()
                 .Where(m => m.Name == milestoneToCreate.Name).FirstOrDefault();
 
             if (milestone != null)
@@ -96,7 +96,7 @@ namespace Cat_a_logAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var milestoneMap = _mapper.Map<ProjectMilestone>(milestoneToCreate);
+            ProjectMilestone milestoneMap = _mapper.Map<ProjectMilestone>(milestoneToCreate);
 
             if (!_milestoneService.AddMilestone(milestoneMap))
             {

@@ -1,5 +1,5 @@
 ﻿
-namespace Cat_a_logAPI.Dto
+namespace CatAPI.Dto
 {
     public class TaskDto
     {

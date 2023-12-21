@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using Cat_a_logAPI.Data;
-using Cat_a_logAPI.Dto;
-using Cat_a_logAPI.Service.Interfaces;
+using CatAPI.Data;
+using CatAPI.Dto;
+using CatAPI.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Cat_a_logAPI.Controllers
+namespace CatAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -27,7 +27,7 @@ namespace Cat_a_logAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var users = _mapper.Map<List<UserDto>>(_userService.GetUsers());
+            List<UserDto> users = _mapper.Map<List<UserDto>>(_userService.GetUsers());
 
             return Ok(users);
         }
@@ -45,7 +45,7 @@ namespace Cat_a_logAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = _mapper.Map<UserDto>(_userService.GetUser(Id));
+            UserDto user = _mapper.Map<UserDto>(_userService.GetUser(Id));
 
             return Ok(user);
         }
@@ -63,7 +63,7 @@ namespace Cat_a_logAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var userMap = _mapper.Map<User>(userToUpdate);
+            User userMap = _mapper.Map<User>(userToUpdate);
             _userService.UpdateUser(userMap);
 
             return NoContent();
@@ -77,7 +77,7 @@ namespace Cat_a_logAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = _userService.GetUsers()
+            User user = _userService.GetUsers()
                .Where(u => u.Name == userToCreate.Name).FirstOrDefault();
 
             if (user != null)
@@ -91,7 +91,7 @@ namespace Cat_a_logAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var userMap = _mapper.Map<User>(userToCreate);
+            User userMap = _mapper.Map<User>(userToCreate);
 
             if (!_userService.AddUser(userMap))
             {

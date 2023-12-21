@@ -1,6 +1,6 @@
-﻿using Cat_a_logAPI.Data;
+﻿using CatAPI.Data;
 
-namespace Cat_a_logAPI.Service.Interfaces
+namespace CatAPI.Service.Interfaces
 {
     public interface IMilestoneService
     {
