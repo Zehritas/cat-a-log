@@ -35,7 +35,7 @@ builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-var proxyGenerator = new ProxyGenerator();
+/*var proxyGenerator = new ProxyGenerator();
 var logFilePath = "cat-a-logB/Data/cat_a_log.log";
 builder.Services.AddScoped<TaskDataService>();
 builder.Services.AddScoped<ITaskDataService>(provider =>
@@ -45,7 +45,7 @@ builder.Services.AddScoped<ITaskDataService>(provider =>
 
 
     return proxyGenerator.CreateInterfaceProxyWithTarget<ITaskDataService>(taskDataService, interceptor);
-});
+});*/
 
 
 
