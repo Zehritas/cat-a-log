@@ -77,7 +77,7 @@ namespace CatAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            Project project = _projectService.GetProjects()
+            Project? project = _projectService.GetProjects()
                .Where(p => p.Name == projectToCreate.Name).FirstOrDefault();
 
             if (project != null)

@@ -41,7 +41,7 @@ namespace CatAPI.Service.Implementation
 
         public bool RemoveMember(int userId, int teamId)
         {
-            Member member = _dbContext.Member.Where(m => m.UserId == userId && m.TeamId == teamId).FirstOrDefault();
+            Member? member = _dbContext.Member.Where(m => m.UserId == userId && m.TeamId == teamId).FirstOrDefault();
             _dbContext.Member.Remove(member);
             return Save();
         }

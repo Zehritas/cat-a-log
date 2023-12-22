@@ -77,7 +77,7 @@ namespace CatAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            ProjectMilestone milestone = _milestoneService.GetMilestones()
+            ProjectMilestone? milestone = _milestoneService.GetMilestones()
                 .Where(m => m.Name == milestoneToCreate.Name).FirstOrDefault();
 
             if (milestone != null)

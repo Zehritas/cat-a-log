@@ -37,7 +37,7 @@ namespace CatAPI.Service.Implementation
 
         public bool RemoveTeam(int id)
         {
-            ProjectTeam projectTeam = _dbContext.ProjectTeam.Find(id);
+            ProjectTeam? projectTeam = _dbContext.ProjectTeam.Find(id);
             List<TaskData> teamTasks = _dbContext.TaskData.Where(t => t.TeamId == projectTeam.Id).ToList();
 
             for (int i = teamTasks.Count - 1; i >= 0; i--)

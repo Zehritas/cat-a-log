@@ -1,7 +1,4 @@
-﻿using System;
-using System.IO;
-
-public class ExceptionLogger
+﻿public class ExceptionLogger
 {
     private const string logFilePath = "exception_log.txt";
 

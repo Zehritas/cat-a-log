@@ -77,7 +77,7 @@ namespace CatAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            Member member = _memberService.GetMembers()
+            Member? member = _memberService.GetMembers()
                 .Where(m => m.Name == memberToCreate.Name).FirstOrDefault();
 
             if (member != null)

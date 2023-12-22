@@ -26,7 +26,7 @@ namespace CatAPI.Service.Implementation
 
         public bool RemoveUser(int id)
         {
-            User user = _dbContext.User.Find(id);
+            User? user = _dbContext.User.Find(id);
             _dbContext.User.Remove(user);
             return Save();
         }
@@ -39,7 +39,7 @@ namespace CatAPI.Service.Implementation
 
         public User GetUser(int id)
         {
-            User user = _dbContext.User.Find(id);
+            User? user = _dbContext.User.Find(id);
             return user;
         }
 

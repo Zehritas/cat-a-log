@@ -20,7 +20,7 @@ namespace CatAPI.Service.Implementation
 
         public bool RemoveTask(int id)
         {
-            TaskData taskToRemove = _dbContext.TaskData.Find(id);
+            TaskData? taskToRemove = _dbContext.TaskData.Find(id);
             List<Dependency> dependenciesToRemove;
             List<ProjectTeam> allTeams = _dbContext.ProjectTeam.ToList();
             foreach (ProjectTeam team in allTeams)
@@ -66,14 +66,14 @@ namespace CatAPI.Service.Implementation
 
         public void SyncColorWithTeam(TaskData task)
         {
-            ProjectTeam projectTeam = _dbContext.ProjectTeam.Where(t => task.TeamId == t.Id).FirstOrDefault();
+            ProjectTeam? projectTeam = _dbContext.ProjectTeam.Where(t => task.TeamId == t.Id).FirstOrDefault();
             task.PointColor = projectTeam.Color;
             _dbContext.SaveChanges();
         }
 
         public string GetTaskName(int Id)
         {
-            TaskData task;
+            TaskData? task;
             task = _dbContext.TaskData.Find(Id);
 
             return task.Name;
@@ -81,28 +81,28 @@ namespace CatAPI.Service.Implementation
 
         public void ChangeTaskComment(int taskId, string newComment)
         {
-            TaskData task = _dbContext.TaskData.Find(taskId);
+            TaskData? task = _dbContext.TaskData.Find(taskId);
             task.Comments = newComment;
             _dbContext.SaveChanges();
         }
 
         public void ChangeTaskStartDate(int taskId, DateTime newStartDate)
         {
-            TaskData task = _dbContext.TaskData.Find(taskId);
+            TaskData? task = _dbContext.TaskData.Find(taskId);
             task.StartDate = newStartDate;
             _dbContext.SaveChanges();
         }
 
         public void ChangeTaskEndDate(int taskId, DateTime newEndDate)
         {
-            TaskData task = _dbContext.TaskData.Find(taskId);
+            TaskData? task = _dbContext.TaskData.Find(taskId);
             task.EndDate = newEndDate;
             _dbContext.SaveChanges();
         }
 
         public void ChangeTaskName(int taskId, string newName)
         {
-            TaskData task = _dbContext.TaskData.Find(taskId);
+            TaskData? task = _dbContext.TaskData.Find(taskId);
             task.Name = newName;
             _dbContext.SaveChanges();
         }

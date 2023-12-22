@@ -41,7 +41,7 @@ namespace CatAPI.Service.Implementation
 
         public bool RemoveProject(int id)
         {
-            Project project = _dbContext.Project.Find(id);
+            Project? project = _dbContext.Project.Find(id);
             _dbContext.Project.Remove(project);
             return Save();
         }

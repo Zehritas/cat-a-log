@@ -27,20 +27,6 @@ namespace cat_a_logB.Data
 
         [NotMapped]
         public List<String> Members {  get ; set; }
-        //{
-        //    get { return members; }
-        //    set
-        //    {
-        //        if (value != null && value.Distinct().Count() == value.Count)
-        //        {
-        //            members = value;
-        //        }
-        //        else
-        //        {
-        //            throw new ArgumentException("Members list must be non-null and contain unique names.");
-        //        }
-        //    }
-        //}
 
         public ProjectTeam(string color, string name, List<String> members)
         {
@@ -50,12 +36,6 @@ namespace cat_a_logB.Data
             Members = members;
         }
 
-        public ProjectTeam(string color, string name)
-        {
-            Color = color;
-            Name = name;
-            Tasks = new List<TaskData>();
-        }
         public ProjectTeam()
         {
         }
