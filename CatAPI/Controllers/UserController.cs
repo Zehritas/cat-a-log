@@ -77,7 +77,7 @@ namespace CatAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            User user = _userService.GetUsers()
+            User? user = _userService.GetUsers()
                .Where(u => u.Name == userToCreate.Name).FirstOrDefault();
 
             if (user != null)

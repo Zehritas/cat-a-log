@@ -20,11 +20,11 @@ namespace CatAPI.Service.Implementation
 
         public void RemoveDependency(int id)
         {
-            Dependency dependency = _dbContext.Dependency.Find(id);
+            Dependency? dependency = _dbContext.Dependency.Find(id);
             _dbContext.Dependency.Remove(dependency);
             _dbContext.SaveChanges();
 
-            Dependency newDependency = _dbContext.Dependency.Where(d => d.PredecessorTaskId == d.SuccessorTaskId).FirstOrDefault();
+            Dependency? newDependency = _dbContext.Dependency.Where(d => d.PredecessorTaskId == d.SuccessorTaskId).FirstOrDefault();
             if (newDependency != null)
             {
                 _dbContext.Dependency.Remove(newDependency);

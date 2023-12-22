@@ -76,7 +76,7 @@ namespace CatAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            ProjectTeam team = _teamService.GetTeams()
+            ProjectTeam? team = _teamService.GetTeams()
                .Where(t => t.Name == teamToCreate.Name).FirstOrDefault();
 
             if (team != null)

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CatAPI.Data
 {
-    public class TaskData : IComparable<TaskData>
+    public class TaskData
     {
         [Key]
         public int Id { get; set; }
@@ -28,7 +28,7 @@ namespace CatAPI.Data
         public int? MilestoneId { get; set; }
 
         [Required]
-        public int Progress { get; set; } // Add a Progress property
+        public int Progress { get; set; }
 
         public double DayProgress { get; set; }
 
@@ -42,29 +42,6 @@ namespace CatAPI.Data
         public ProjectMilestone? Milestone { get; set; }
 
         public List<Dependency> Dependencies { get; set; } = new List<Dependency>();
-        public int CompareTo(TaskData other)
-        {
-            return this.Progress.CompareTo(other.Progress);
-        }
-
-        public TaskData()
-        {
-            StartDate = DateTime.Now.Date;
-            EndDate = DateTime.Now.Date;
-            PointColor = "#000000";
-            Progress = 0;
-            Comments = "";
-        }
-        public TaskData(string name, DateTime startDate, DateTime endDate, ProjectTeam team, int progress, string comments)
-        {
-            Name = name;
-            StartDate = startDate;
-            EndDate = endDate;
-            Team = team;
-            Progress = progress;
-            PointColor = team.Color; // Assuming 'color' is a property of the ProjectTeam class
-            Comments = comments;
-        }
-
+       
     }
 }

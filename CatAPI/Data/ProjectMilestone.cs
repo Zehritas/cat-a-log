@@ -28,16 +28,7 @@ namespace CatAPI.Data
             this.TargetDate = targetDate;
             this.Color = color;
         }
-        public ProjectMilestone(string name)
-        {
-            Name = name;
-            Tasks = new List<TaskData>();
 
-        }
-
-        public ProjectMilestone()
-        {
-        }
 
         public void LoadMilestoneTasks(List<TaskData> allTasks)
         {

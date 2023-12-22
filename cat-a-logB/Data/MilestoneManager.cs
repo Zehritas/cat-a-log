@@ -1,9 +1,5 @@
 ﻿using ApexCharts;
-using cat_a_logB.Pages;
-using cat_a_logB.Service;
 using cat_a_logB.Service.Interfaces;
-using Microsoft.AspNetCore.Components;
-
 
 namespace cat_a_logB.Data
 {
@@ -22,8 +18,6 @@ namespace cat_a_logB.Data
             milestoneService = _milestoneService;
         }
 
-        public MilestoneManager() { }
-
         public ProjectMilestone clickedMilestone;
         public List<TaskData> project;
         public ApexChart<TaskData> chart;
@@ -36,7 +30,7 @@ namespace cat_a_logB.Data
 
         public DateTime milestoneDate { get; set; }
         public string errorMessage { get; private set; }
-        public async Task ShowMilestone(ApexChart<TaskData> chart, SelectedData<ProjectMilestone> data, ProjectMilestone clickedMilestone, List<ProjectMilestone> displayedMilestones)
+        public async Task ShowMilestone(ApexChart<TaskData> chart, SelectedData<ProjectMilestone> data, ProjectMilestone? clickedMilestone, List<ProjectMilestone> displayedMilestones)
         {
             clickedMilestone = data?.DataPoint?.Items?.FirstOrDefault();
 
@@ -103,7 +97,7 @@ namespace cat_a_logB.Data
             await chart.AddPointAnnotationAsync(point, false);
 
         }
-        public async void CreateMilestone(List<TaskData> selectedTasks, List<ProjectMilestone> milestones, ProjectMilestone newMilestone, string milestoneName, DateTime milestoneDate)
+        public void CreateMilestone(List<TaskData> selectedTasks, List<ProjectMilestone> milestones, ProjectMilestone newMilestone, string milestoneName, DateTime milestoneDate)
         {
 
             errorMessage = ""; // Clear any previous error message

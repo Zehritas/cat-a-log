@@ -75,7 +75,7 @@ namespace CatAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            TaskData task = _taskDataService.GetTasks()
+            TaskData? task = _taskDataService.GetTasks()
                .Where(t => t.Name == taskToCreate.Name).FirstOrDefault();
 
             if (task != null)

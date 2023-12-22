@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace cat_a_logB.Data
 {
-    public class TaskData : IComparable<TaskData>
+    public class TaskData
     {
         [Key]
         public int Id { get; set; }
@@ -42,10 +42,6 @@ namespace cat_a_logB.Data
         public ProjectMilestone? Milestone { get; set; }
 
         public List<Dependency> Dependencies { get; set; } = new List<Dependency>();
-        public int CompareTo(TaskData other)
-        {
-            return this.Progress.CompareTo(other.Progress);
-        }
 
         public TaskData()
         {

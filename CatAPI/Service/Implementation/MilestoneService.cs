@@ -20,7 +20,7 @@ namespace CatAPI.Service.Implementation
 
         public bool RemoveMilestone(int id)
         {
-            ProjectMilestone milestone = _dbContext.ProjectMilestone.Find(id);
+            ProjectMilestone? milestone = _dbContext.ProjectMilestone.Find(id);
             _dbContext.ProjectMilestone.Remove(milestone);
             return Save();
         }
@@ -55,7 +55,7 @@ namespace CatAPI.Service.Implementation
 
         public void ChangeMilestoneColor(int id, string color)
         {
-            ProjectMilestone milestone = _dbContext.ProjectMilestone.Find(id);
+            ProjectMilestone? milestone = _dbContext.ProjectMilestone.Find(id);
             milestone.Color = color;
             _dbContext.SaveChanges();
         }
